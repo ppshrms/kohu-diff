@@ -144,6 +144,7 @@ begin
               ||indx_dtemthpay||','
               ||indx_numperiod||');';
 
+--insert_temp2('AAA','AAA',99,v_stmt,null,null,null,null,null,null,null,to_char(sysdate,'dd/mm/yyyy hh24:mi'));
     dbms_job.submit(a_jobno(i),v_stmt,sysdate,v_interval); commit;
   end loop;
   --
@@ -249,16 +250,17 @@ procedure cal_process (p_codapp   	in  varchar2,
 
   cursor c_tgltabi is
     select b.codaccdr,b.scodaccdr,decode(b.costcentdr,null,'Y','N') as flgpostdr,b.costcentdr,
-	         b.codacccr,b.scodacccr,decode(b.costcentcr,null,'Y','N') as flgpostcr,b.costcentcr
+           b.codacccr,b.scodacccr,decode(b.costcentcr,null,'Y','N') as flgpostcr,b.costcentcr
 	    from tgltabi a, tglhtabi b
-	   where a.codcompy = p_codcompy
+     where a.codcompy = p_codcompy
        and a.apcode   = v_apcode
-	     and codpay     = v_codpay
+       and a.codpay   = v_codpay
        and a.apcode   = b.apcode
        and a.apgrpcod = b.apgrpcod
        and a.codcompy = b.codcompy
 	order by a.apcode,codpay;
 
+    
 begin
 
   if p_dteyrepay > 2500 then
@@ -293,7 +295,7 @@ begin
     for r_ttaxcur in c_ttaxcur loop
       v_codcomp   := r_ttaxcur.codcomp;
       v_numperiod := r_ttaxcur.numperiod;
-
+/*
 --<<user14||STA3590278
       for i in 1..50 loop
 --for i in 1..20 loop
@@ -316,7 +318,13 @@ begin
         v_amt(x)     := r_tsincexp.amtpay;
         --v_typamt(x)  := r_tsincexp.typamt;
       end loop; -- r_tsincexp
+*/
+      v_codpay := null; v_amtgl := 0;
+      for r_tsincexp in c_tsinexct loop
+        v_codpay  := r_tsincexp.codpay;  
+        v_amtgl	  := r_tsincexp.amtpay;
 
+      
       if (r_ttaxcur.typpaymt = 'BK') and (v_bankcd is not null) and (nvl(r_ttaxcur.bankfee,0) + nvl(r_ttaxcur.bankfee2,0) > 0) then
         v_flgfee := 'N';
       else
@@ -324,31 +332,50 @@ begin
       end if;
       v_taccap := false;
 
+--insert into a(a) values (v_codempid ||'+'||v_codpay); commit;
       v_apcode := r_ttaxcur.codgrpgl;
       for r_taccap in c_taccap loop
         v_apcode := r_taccap.apcode;
         v_flgcal := true;
-        if (r_taccap.typpaymt <> 'ALL' ) and (r_taccap.typpaymt <> r_ttaxcur.typpaymt)   then
+        if r_taccap.typpaymt <> 'ALL' and r_taccap.typpaymt <> r_ttaxcur.typpaymt   then
           v_flgcal := false;
         end if;
         if v_flgcal then
           v_taccap := true;
-          for j in 1..v_max loop
+          for r_tgltabi in c_tgltabi loop
+            v_tgltabi := true;
+                begin
+                  select costcent into v_cent
+                    from tcenter
+                   where codcomp = r_tsincexp.codcomp;
+                exception when no_data_found then
+                  v_cent := null;
+                end;
+
+                cal_gl(v_codcomp,r_ttaxcur.codempid,p_codcompy,
+                       p_dteyrepay,p_dtemthpay,v_numperiod,
+                       v_apcode,v_cent,r_tgltabi.costcentdr,
+                       r_tgltabi.codaccdr,v_codpay,'DR',
+                       v_amtgl,r_tgltabi.flgpostdr,r_taccap.typpaymt,
+                       p_coduser,v_tsecdepdr);
+                       
+                cal_gl(v_codcomp,r_ttaxcur.codempid,p_codcompy,
+                       p_dteyrepay,p_dtemthpay,v_numperiod,
+                       v_apcode,v_cent,r_tgltabi.costcentcr,
+                       r_tgltabi.codacccr,v_codpay,'CR',
+                       v_amtgl,r_tgltabi.flgpostcr,r_taccap.typpaymt,
+                       p_coduser,v_tsecdepcr);      
+          end loop;
+          /*for j in 1..v_max loop
             if v_flg(j) is null then
               v_tgltabi := false;
               v_codpay  := v_cdpay(j);
               v_amtgl   := v_amt(j);
               for r_tgltabi in c_tgltabi loop
                 v_flg(j)  := 'Y';
-                v_chk     := v_chk + 1;
+                --v_chk     := v_chk + 1;
                 v_tgltabi := true;
-                /*begin
-                  select codcompgl into v_cent
-                    from tsecdep
-                   where codcomp = v_comp(j);
-                exception when no_data_found then
-                  v_cent := null;
-                end;*/
+
                 begin
                   select costcent into v_cent
                     from tcenter
@@ -356,12 +383,14 @@ begin
                 exception when no_data_found then
                   v_cent := null;
                 end;
+
                 cal_gl(v_codcomp,r_ttaxcur.codempid,p_codcompy,
                        p_dteyrepay,p_dtemthpay,v_numperiod,
                        v_apcode,v_cent,r_tgltabi.costcentdr,
                        r_tgltabi.codaccdr,r_tgltabi.scodaccdr,'DR',
                        v_amtgl,r_tgltabi.flgpostdr,r_taccap.typpaymt,
                        p_coduser,v_tsecdepdr);
+                       
                 cal_gl(v_codcomp,r_ttaxcur.codempid,p_codcompy,
                        p_dteyrepay,p_dtemthpay,v_numperiod,
                        v_apcode,v_cent,r_tgltabi.costcentcr,
@@ -371,23 +400,17 @@ begin
 
               end loop; -- for c_tgltabi
             end if;
-          end loop; -- loop v_max
+          end loop; -- loop v_max*/
           -- Bank Fee
+
           if v_flgfee = 'N' then
             v_tgltabi := false;
             v_codpay  := v_bankcd;
             v_amtgl   := nvl(r_ttaxcur.bankfee,0) + nvl(r_ttaxcur.bankfee2,0);
             v_codcomp := r_ttaxcur.codcomp;
             for r_tgltabi in c_tgltabi loop
-              v_chk     := v_chk + 1;
+              --v_chk     := v_chk + 1;
               v_tgltabi := true;
-              /*begin
-                select codcompgl into v_cent
-                  from tsecdep
-                 where codcomp = v_codcomp;
-              exception when no_data_found then
-                v_cent := null;
-              end;*/
               begin
                 select costcent into v_cent
                   from tcenter
@@ -417,7 +440,7 @@ begin
         end if;
 
       end loop; -- for c_taccap
-
+/*
       for k in 1..v_max loop
         if nvl(v_flg(k),'N') = 'N' then
           v_numerr := nvl(v_numerr,0) + 1;
@@ -438,7 +461,8 @@ begin
                values        (p_coduser,para_codapp||p_numproc,v_numerr,
                               r_ttaxcur.codempid,v_bankcd,v_amtgl,
                               'N');
-      end if;
+      end if;*/
+      end loop; --tsincexpt
     end loop; -- for c_ttaxcur
   end loop;   -- for emp
 
@@ -484,11 +508,18 @@ procedure cal_gl ( p_codcomp	  in	varchar2,
                    p_coduser    in	varchar2,
                    p_tsecdep	 	in  out	boolean) is
 
-  v_exist				boolean;
-  v_costcent  	varchar2(10 char);
-  v_typpaymt		varchar2(2 char);
-  v_amtgl				number;
-  v_flgdrcr			varchar2(2 char);
+    v_exist			boolean;
+    v_costcent  	varchar2(10 char);
+    v_typpaymt		varchar2(2 char);
+    v_amtgl			number;
+    v_flgdrcr		varchar2(2 char);
+
+    v_poskeydb      taccodb.poskeydb%type;
+    v_poskeycr      taccodb.poskeycr%type;
+    v_poskey        taccodb.poskeycr%type;
+    v_scodacc       tgltrans.scodacc%type;
+    v_codpay        varchar2(10 char);  
+    v_apgrpcod      varchar2(10 char);  
 
   cursor c_tgltrans is
     select rowid,flgdrcr,amtgl
@@ -497,10 +528,18 @@ procedure cal_gl ( p_codcomp	  in	varchar2,
        and dteyrepay = (p_dteyrepay - para_zyear)
        and dtemthpay = p_dtemthpay
        and numperiod = p_numperiod
-       and apcode		 = p_apcode
+       and apcode	 = p_apcode
+       and costcent  = nvl(v_costcent,' ')
+       and codacc    = p_codacc
+       --and scodacc   = nvl(p_scodacc,' ')
+       and scodacc   = nvl(v_scodacc,' ')
+       and typpaymt	 = v_typpaymt
+       and postkey   = nvl(v_poskey,' ');
+/*
+       and apcode	 = p_apcode
        and costcent  = v_costcent
        and codacc    = p_codacc
-      and scodacc    = nvl(p_scodacc,' ');
+      and scodacc    = nvl(p_scodacc,' ');*/
 
 begin
   if p_dteyrepay > 2500 then
@@ -509,21 +548,121 @@ begin
     para_zyear  := 0;
   end if;
 
-v_err_step  := 2000;
+v_err_step  := 2000;        
 
 	if p_codacc is not null then
-		v_costcent := null;
-		if p_flgpost = 'Y' then
-      v_costcent := p_trcent;
-		  p_tsecdep  := true;
-		else
-		  v_costcent := p_costcent;
-			p_tsecdep  := true;
-		end if;
+        v_costcent := null;
+        if p_flgpost = 'Y' then
+            v_costcent := p_trcent;
+            p_tsecdep  := true;
+        else
+            v_costcent := p_costcent;
+            p_tsecdep  := true;
+        end if;
+
+		begin
+			select decode(p_flgdrcr,'DR',poskeydb,'CR',poskeycr,null) 
+			  into v_poskey
+			  from taccodb
+			 where codacc = p_codacc;
+		exception when no_data_found then
+			v_poskey := null;
+		end;
 
 v_err_step  := 2100;
 
-		if v_costcent is not null then
+        if p_typpaymt = 'CS' then
+            v_typpaymt := '1';
+        elsif p_typpaymt = 'BK' then
+            v_typpaymt := '2';
+        else
+            v_typpaymt := '3';
+        end if;
+
+        /*if p_codacc in  ('120800','121300','165919','165938','167120','167201','167368','167369',
+                         '168412','192026','203800','212100','216845','231027','9935880','9951307') then  */      
+        if p_codacc in ('165919','165938','167120','167201','167368','167369','203800','192026','212100',
+                        '216845','231027','9935880','9951307','120800','121300') then
+           --insert into a(a) values(p_codacc||'+'||v_costcent); commit;
+        --if p_codacc in ('165919','167120') then
+           v_costcent := ' ';
+        end if; 
+
+        v_exist   := false;
+        v_flgdrcr := p_flgdrcr;  
+        
+        begin
+            select codpay,apgrpcod into v_codpay,v_apgrpcod
+              from tgltabi
+             where codcompy = p_codcompy
+               and apcode   = p_apcode
+               and codpay   = p_scodacc;
+        exception when no_data_found then
+            v_codpay   := null;
+            v_apgrpcod := null;
+        end;
+        
+        v_scodacc := p_apcode;
+        
+        if v_apgrpcod in ('0444','0445') then
+            if v_codpay = 'Z2' then
+                v_scodacc := '6000';
+            elsif v_codpay = 'Z1' then
+                v_scodacc := '7000';
+            end if;
+        elsif v_apgrpcod in ('0446','0447') then
+            if v_codpay = 'Z2' then
+                v_scodacc := '8000';
+            elsif v_codpay = 'Z1' then
+                v_scodacc := '9000';
+            end if;
+        elsif v_apgrpcod in ('0448','0449') then
+            if v_codpay = 'Z2' then
+                v_scodacc := 'A000';
+            elsif v_codpay = 'Z1' then
+                v_scodacc := 'B000';
+            end if;        
+        elsif v_apgrpcod in ('0450','0451') then
+            if v_codpay = 'Z2' then
+                v_scodacc := 'C000';
+            elsif v_codpay = 'Z1' then
+                v_scodacc := 'D000';
+            end if;  
+        elsif v_apgrpcod in ('0452','0453') then
+            if v_codpay = 'Z2' then
+                v_scodacc := 'E000';
+            elsif v_codpay = 'Z1' then
+                v_scodacc := 'F000';
+            end if; 
+        end if;
+        
+        for r_tgltrans in c_tgltrans loop
+            v_exist := true;
+            v_amtgl := stddec(r_tgltrans.amtgl,p_codcompy,para_chken) + p_amtgl;
+            update tgltrans set amtgl   = stdenc(v_amtgl,p_codcompy,para_chken),
+                                coduser = p_coduser
+            where rowid = r_tgltrans.rowid;    
+        end loop;
+
+v_err_step  := 2200;
+    
+        if not v_exist then
+v_err_step  := 2120;
+            
+            insert into tgltrans (codcompy,dteyrepay,dtemthpay,
+                                  numperiod,apcode,costcent,
+                                  codacc,scodacc,typpaymt,
+                                  flgdrcr,amtgl,dtetrans,
+                                  postkey,coduser)
+            values              (p_codcompy,(p_dteyrepay - para_zyear),p_dtemthpay,
+                                 p_numperiod,p_apcode,nvl(v_costcent,' '),
+                                 p_codacc,nvl(v_scodacc,' '),v_typpaymt,
+                                 v_flgdrcr,stdenc(p_amtgl,p_codcompy,para_chken),trunc(sysdate),
+                                 nvl(v_poskey,' '),p_coduser);
+        end if;
+
+/*
+		--if v_costcent is not null then
 			if p_typpaymt = 'CS' then
 				v_typpaymt := '1';
 			elsif p_typpaymt = 'BK' then
@@ -531,51 +670,58 @@ v_err_step  := 2100;
 			else
 				v_typpaymt := '3';
 			end if;
+            
+            if p_codacc in  ('120800','121300','165919','165938','167120','167201','167368','167369',
+                              '168412','192026','203800','212100','216845','231027','9935880','9951307') then        
+               v_costcent := ' ';
+            end if;  
 
-      v_exist   := false;
-			v_flgdrcr := p_flgdrcr;
-      for r_tgltrans in c_tgltrans loop
-				v_exist := true;
 
+            v_exist   := false;
+            v_flgdrcr := p_flgdrcr;  
+            
+            for r_tgltrans in c_tgltrans loop
+                v_exist := true;
+    
 v_err_step  := 2120;
 
-				if r_tgltrans.flgdrcr = v_flgdrcr then
-					v_amtgl := stddec(r_tgltrans.amtgl,p_codcompy,para_chken) + p_amtgl;
-				else
-					v_amtgl := stddec(r_tgltrans.amtgl,p_codcompy,para_chken) - p_amtgl;
-					if v_amtgl < 0 then
-						v_amtgl := abs(v_amtgl);
-					else
-						v_flgdrcr := r_tgltrans.flgdrcr;
-					end if;
-				end if;
+                if r_tgltrans.flgdrcr = v_flgdrcr then
+                    v_amtgl := stddec(r_tgltrans.amtgl,p_codcompy,para_chken) + p_amtgl;
+                else
+                    v_amtgl := stddec(r_tgltrans.amtgl,p_codcompy,para_chken) - p_amtgl;
+                    if v_amtgl < 0 then
+                        v_amtgl := abs(v_amtgl);
+                    else
+                        v_flgdrcr := r_tgltrans.flgdrcr;
+                    end if;
+                end if;
 
-				if v_amtgl = 0 then
-					delete tgltrans where rowid = r_tgltrans.rowid;
-				else
-					update tgltrans
-						set amtgl   = stdenc(v_amtgl,p_codcompy,para_chken),
-								flgdrcr = v_flgdrcr,
-						    coduser = p_coduser
-						where rowid = r_tgltrans.rowid;
-				end if;
-      end loop;
-
+                if v_amtgl = 0 then
+                   delete tgltrans where rowid = r_tgltrans.rowid;
+                else
+                    update tgltrans
+                    set amtgl   = stdenc(v_amtgl,p_codcompy,para_chken),
+                        --flgdrcr = v_flgdrcr,
+                        coduser = p_coduser
+                    where rowid = r_tgltrans.rowid;
+                end if;
+          end loop;
+    
 v_err_step  := 2200;
-
-      if not v_exist then
-				insert into tgltrans (codcompy,dteyrepay,dtemthpay,
-                              numperiod,apcode,costcent,
-                              codacc,scodacc,typpaymt,
-                              flgdrcr,amtgl,dtetrans,
-                              coduser)
-				       values        (p_codcompy,(p_dteyrepay - para_zyear),p_dtemthpay,
-                              p_numperiod,p_apcode,v_costcent,
-                              p_codacc,nvl(p_scodacc,' '),v_typpaymt,
-                              p_flgdrcr,stdenc(p_amtgl,p_codcompy,para_chken),trunc(sysdate),
-                              p_coduser);
-      end if;
-		end if; -- v_costcent is not null
+    
+            if not v_exist then
+                insert into tgltrans (codcompy,dteyrepay,dtemthpay,
+                                        numperiod,apcode,costcent,
+                                        codacc,scodacc,typpaymt,
+                                        flgdrcr,amtgl,dtetrans,
+                                        postkey,coduser)
+                values              (p_codcompy,(p_dteyrepay - para_zyear),p_dtemthpay,
+                                    p_numperiod,p_apcode,nvl(v_costcent,' '),
+                                    nvl(p_codacc,' '),nvl(p_scodacc,' '),v_typpaymt,
+                                    v_flgdrcr,stdenc(p_amtgl,p_codcompy,para_chken),trunc(sysdate),
+                                    nvl(v_poskey,' '),p_coduser);
+            end if;
+    --end if; -- v_costcent is not null*/
 v_err_step  := 2299;
 	end if; -- p_codacc is not null
 end;

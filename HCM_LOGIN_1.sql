@@ -10,6 +10,25 @@
       return utl_raw.cast_to_varchar2(utl_encode.base64_encode(utl_raw.cast_to_raw(t)));
   end base64_encode;
 
+--  new prem line
+  function get_password(p_coduser in varchar2) return varchar2 is
+      v_chken      varchar2(4000 char);
+      v_pwdenc     varchar2(4000 char);
+    begin
+      v_chken := hcm_secur.get_v_chken;
+      begin
+        select pwddec(codpswd, coduser, v_chken)
+          into v_pwdenc
+          from tusrprof
+         where coduser = p_coduser
+           and flgact  = '1';
+      exception when no_data_found then
+        v_pwdenc := '';
+      end;
+      return v_pwdenc;
+    end get_password;
+-- end new prem
+
   function base64_decode(t in varchar2) return varchar2 is
     begin
       return utl_raw.cast_to_varchar2(utl_encode.base64_decode(utl_raw.cast_to_raw(t)));
@@ -72,6 +91,7 @@
         v_date_gen := 0;
     end;
 
+
     v_sum := to_char(((v_dd * v_mm * v_yy ) + v_date_gen) mod 10000);
     a := ascii(nvl(substr(v_sum,1,1),' ')) mod 9;
     b := ascii(nvl(substr(v_sum,2,1),' ')) mod 8;
@@ -79,6 +99,7 @@
     d := ascii(nvl(substr(v_sum,4,1),' ')) mod 6;
     v_tail := to_char(ascii(to_char((a*b*c*d) mod 10)) mod 10);
     v_codpass := a||b||c||d||v_tail;
+
     return base64_encode(v_codpass);
   end;
   --
@@ -338,7 +359,6 @@
         null;
       end;
 
-
       if bool_active then
         --check license
         if v_lcodrun in ('MENU','LOGIN','PROFILEIMG') then
@@ -364,7 +384,7 @@
                 v_license_used := 0;
               end;
             end if;          
-            if v_license_used < v_license_max then
+            if v_license_used < v_license_max or v_license_max = 999 then
               bool_license := true;
             end if;
           end if;
@@ -447,6 +467,7 @@
           v_result := base64_encode(DBMS_RANDOM.string('x',5)||v_result||DBMS_RANDOM.string('x',5));
           v_result := replace(DBMS_RANDOM.string('x',5)||v_result||DBMS_RANDOM.string('x',5),'==');
           -->> for security Pentest
+
         end if;
         if v_lcodsub = 'PM' then
           v_logpm := v_license_used + 1;
@@ -743,7 +764,7 @@
     json_str_output   := get_response_message('400',param_msg_error,'102');
   end check_catch_authentication;
 
-  function get_user(json_str_input in clob) return varchar2 is
+  function get_user(json_str_input in clob) return clob is
     obj_data             json_object_t;
     obj_data_comp        json_object_t;
     json_obj             json_object_t;
@@ -795,6 +816,9 @@
     v_codcomp_by_level   tcenter.codcomp%type;
 
     v_typeuser           tusrprof.typeuser%type;
+
+    -- line login
+    v_lineuserid         temploy1.lineuserid%type;
 
     -- license
     obj_row_license      json_object_t;
@@ -851,6 +875,7 @@
       global_v_lang  := upper(hcm_util.get_string_t(json_obj,'p_lang'));
       v_flg_act      := (hcm_util.get_string_t(json_obj,'p_flg_act'));
       v_loginid      := hcm_util.get_string_t(json_obj,'p_loginid'); --username
+      v_lineuserid   := hcm_util.get_string_t(json_obj,'p_lineuserid'); --username
 
   -- check user status
     begin
@@ -947,6 +972,17 @@
       v_lcodsub      := null;
 
       v_lterminal    := substr(essenc(hcm_util.get_string_t(json_obj,'p_codpswd')),1,30); --key for encode decode
+
+      -- update line user id when login by liff line
+      if v_lineuserid is not null then
+        begin
+          update temploy1
+            set lineuserid = v_lineuserid
+           where codempid = p_codempid;
+        end;
+        commit;
+      end if;
+
       begin
         insert into tlogin (
           lrunning,     luserid,      loginid,    ldtein,
@@ -1170,6 +1206,8 @@
     v_runno       varchar2(4000 char) := hcm_util.get_string_t(json_obj,'p_runno');
     v_round       number := 1;
     v_flg_exists  boolean := false;
+    v_codpswd_hash  varchar2(4000 char);-- user22 : 03/10/2023 : ST11 ||
+    v_codempid      varchar2(500 char);-- user22 : 03/10/2023 : ST11 ||
 
     cursor c1 is
       select coduser,codapp,codlang
@@ -1187,8 +1225,8 @@
 
     if v_flg_exists then
       begin
-        select codpswd
-          into v_codpswdenc
+        select codpswd, codempid-- user22 : 03/10/2023 : ST11 ||select codpswd
+          into v_codpswdenc, v_codempid-- user22 : 03/10/2023 : ST11 ||select codpswdinto v_codpswdenc
           from tusrprof
          where coduser = v_coduser;
       exception when no_data_found then
@@ -1216,6 +1254,22 @@
       begin
         delete from tmaillog where runno = v_runno;
       end;
+
+      --<< user22 : 03/10/2023 : ST11 ||
+      begin
+        v_codpswd_hash := call_api_backend(get_tsetup_value('PATHAPI')||'api/login/genPassword/'||v_codpswddec);
+        begin
+          insert into users (name, email, password, is_client, created_at, updated_at, username, codempid)
+                    values (v_coduser, v_coduser, v_codpswd_hash, '1', sysdate, sysdate, v_coduser, v_codempid);       
+        exception when dup_val_on_index then
+          update users 
+             set password = v_codpswd_hash
+           where email    = v_coduser;
+        end;   
+      exception when others then null;
+      end;
+-->> user22 : 03/10/2023 : ST11 ||
+
       commit;
 
     end if;
@@ -2010,6 +2064,8 @@
     v_coduserenc    varchar2(1000 char);
     v_codpswdenc    varchar2(1000 char);
     v_maxuser       users.id%type;
+    v_codpswddec    varchar2(4000 char);  -- user22 : 03/10/2023 : ST11 ||   
+    v_codpswd_hash  varchar2(4000 char);  -- user22 : 03/10/2023 : ST11 ||  
   begin
     json_obj        := json_object_t(json_str_input);
     global_v_lang   := hcm_util.get_string_t(json_obj,'p_lang');
@@ -2090,6 +2146,7 @@
             insert into tusrproc (coduser,codproc,rcupdid,flgauth) values(p_coduser,'8.TR',p_coduser,'2');
             insert into tusrproc (coduser,codproc,rcupdid,flgauth) values(p_coduser,'9.ES',p_coduser,'2');
             insert into tusrproc (coduser,codproc,rcupdid,flgauth) values(p_coduser,'A.MS',p_coduser,'2');
+            insert into tusrproc (coduser,codproc,rcupdid,flgauth) values(p_coduser,'B.EL',p_coduser,'2');
           end if;
           insert into tusrproc (coduser,codproc,rcupdid,flgauth) values(p_coduser,'SC',p_coduser,'2');
           insert into tusrproc (coduser,codproc,rcupdid,flgauth) values(p_coduser,'CO',p_coduser,'2');
@@ -2110,8 +2167,8 @@
     else
       -- check user ad
       begin
-        select userdomain,coduser,codpswd
-          into v_userdomain,v_coduser,v_codpswd
+        select userdomain,coduser,codpswd,codempid-- user22 : 03/10/2023 : ST11 || select userdomain,coduser,codpswd
+          into v_userdomain,v_coduser,v_codpswd,v_codempid-- user22 : 03/10/2023 : ST11 || into v_userdomain,v_coduser,v_codpswd
           from tusrprof
          where userdomain is not null
            and userdomain = p_coduser
@@ -2126,6 +2183,22 @@
         exception when others then
             v_codpswdenc := null;
         end;
+
+--<< user22 : 03/10/2023 : ST11 ||
+        v_codpswddec := pwddec(v_codpswd, v_coduser, v_chken);
+        begin
+          v_codpswd_hash := call_api_backend(get_tsetup_value('PATHAPI')||'api/login/genPassword/'||v_codpswddec);
+          begin
+            insert into users (name, email, password, is_client, created_at, updated_at, username, codempid)
+                      values (v_coduser, v_coduser, v_codpswd_hash, '1', sysdate, sysdate, v_coduser, v_codempid);    
+          exception when dup_val_on_index then
+            update users 
+               set password = v_codpswd_hash
+             where email    = v_coduser;
+          end;   
+        exception when others then null;
+        end;
+-->> user22 : 03/10/2023 : ST11 ||  
         if v_codpswdenc <> v_codpswd then  -- check password for coduser
             v_flgerror := check_user_domain(v_userdomain,p_codpswd);
 
@@ -2322,17 +2395,22 @@
     v_codempid          temploy1.codempid%type;
     v_lang              temploy1.maillang%type;
     v_redirect_url      varchar2(1000 char);
+    v_codapp            varchar2(30 char);
+    v_count_login       number := 0;
 
     cursor c_tusrprof is
         select a.codempid,decode(lower(a.maillang),'en','101','th','102',a.maillang) lang,b.coduser
           from temploy1 a,tusrprof b
-         where a.codempid = b.codempid
-           and a.email = v_email
-           and b.flgact = '1'
+         where a.codempid     = b.codempid
+           and lower(a.email) = lower(v_email)
+           and b.flgact       = '1'
+           and a.staemp       <> '9'
+           and b.coduser not in ('PPSIMP','PPSADM','TJS00001')
         order by decode(b.typeuser,'4','A','1','B','3','C','2','D','Z'),b.coduser;
   begin
     json_obj    := json_object_t(json_str_input);
     v_email     := hcm_util.get_string_t(json_obj,'p_email');
+    v_codapp     := hcm_util.get_string_t(json_obj,'p_codapp');
 
     for r_tusrprof in c_tusrprof loop
         v_codempid := r_tusrprof.codempid;
@@ -2347,12 +2425,25 @@
 
     v_redirect_url := get_tsetup_value('PATHMOBILE');
     if v_coduser is not null then
+        -- check first login
+        begin
+            select count(*) into v_count_login
+              from thislogin
+             where luserid = v_coduser
+               and rownum  = 1;
+        exception when others then
+            v_count_login := 0;
+        end;
+        if v_count_login > 0 then
+            v_lang := null;
+        end if;
+
         <<cal_loop>>
         loop
           v_runno := round(dbms_random.value(1,10000000000000));
           begin
---            insert into tmaillog(runno,coduser,codapp,codlang) values(v_runno,v_coduser,null,v_lang);
-            insert into tmaillog(runno,coduser,codapp,codlang) values(v_runno,v_coduser,null,null); -- use lang from login screen
+            insert into tmaillog(runno,coduser,codapp,codlang) values(v_runno,v_coduser,null,v_lang); -- use lang from recieve mail
+--            insert into tmaillog(runno,coduser,codapp,codlang) values(v_runno,v_coduser,v_codapp,null); -- use lang from login screen
             exit cal_loop;
           exception when dup_val_on_index then null;
           end;
@@ -2381,6 +2472,16 @@
     obj_data.put('coderror', '200');
     obj_data.put('loginsaml2', nvl(get_tsetup_value('LOGINSAML2'),'N'));
     obj_data.put('flgel', nvl(get_tsetup_value('FLGEL'),'Y'));
+    obj_data.put('timeout', nvl(get_tsetup_value('TIMEOUTPHP'),'10'));
+    obj_data.put('bg', get_tsetup_value('PATHAPI')||get_tsetup_value('PATHWORKPHP')||'hcm_login/hcm-bg-login-pc.jpg');
+    obj_data.put('bgMobile', get_tsetup_value('PATHAPI')||get_tsetup_value('PATHWORKPHP')||'hcm_login/hcm-bg-login-mobile.jpg');
+    obj_data.put('logo', get_tsetup_value('PATHAPI')||get_tsetup_value('PATHWORKPHP')||'hcm_login/hcm-company-logo.png');
+    obj_data.put('contentMain1', get_label_name('LOGIN', global_v_lang, '360'));
+    obj_data.put('contentMain2', get_label_name('LOGIN', global_v_lang, '370'));
+    obj_data.put('contentSub1', get_label_name('LOGIN', global_v_lang, '380'));
+    obj_data.put('contentSub2', get_label_name('LOGIN', global_v_lang, '390'));
+    obj_data.put('contentSub3', get_label_name('LOGIN', global_v_lang, '400'));
+    obj_data.put('contentSub4', get_label_name('LOGIN', global_v_lang, '410'));
     json_str_output := obj_data.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;

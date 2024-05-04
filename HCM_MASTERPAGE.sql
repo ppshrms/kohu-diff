@@ -2,201 +2,81 @@
 --  DDL for Package HCM_MASTERPAGE
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "HCM_MASTERPAGE" IS
- /* Cust-Modify: KOHU-SM2301 */
- -- last update: 02/04/2024 17:14
-    PARAM_MSG_ERROR      VARCHAR2(4000 CHAR);
-    GLOBAL_V_CODUSER     VARCHAR2(100 CHAR);
-    GLOBAL_V_CODPSWD     VARCHAR2(100 CHAR);
-    GLOBAL_V_CODEMPID    VARCHAR2(100 CHAR);
-    GLOBAL_V_CODCOMP     VARCHAR2(100 CHAR);
-    GLOBAL_V_LANG        VARCHAR2(10 CHAR) := '102';
-    GLOBAL_V_ZYEAR       NUMBER := 0;
-    GLOBAL_V_ZMINLVL     NUMBER;
-    GLOBAL_V_ZWRKLVL     NUMBER;
-    GLOBAL_V_NUMLVLSALST NUMBER;
-    GLOBAL_V_NUMLVLSALEN NUMBER;
-    GLOBAL_V_ZUPDSAL     VARCHAR2(100 CHAR);
-    P_CODAPP             VARCHAR2(100 CHAR);
-    P_MAIN_COLOR         VARCHAR2(100 CHAR);
-    P_ADVANCE_COLOR      VARCHAR2(100 CHAR);
-    P_FILE_NAME          VARCHAR2(100 CHAR);
-    P_MAILLANG           VARCHAR2(100 CHAR);
-    V_LIMIT              NUMBER;
-    V_START              NUMBER;
-    V_CODEMPID           VARCHAR2(4000 CHAR);
-    V_STAAPPR            VARCHAR2(100 CHAR);
-    V_CODAPP             VARCHAR2(100 CHAR);
-    V_CODCOMP            VARCHAR2(100 CHAR);
-    TYPE ARR_1D IS
-        TABLE OF VARCHAR2(4000 CHAR) INDEX BY BINARY_INTEGER;
-    V_ARR_STAAPPR        ARR_1D;
+  CREATE OR REPLACE EDITIONABLE PACKAGE "HCM_MASTERPAGE" is
 
-    PROCEDURE GET_FAVORITE(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  param_msg_error   varchar2(4000 char);
+  global_v_coduser  varchar2(100 char);
+  global_v_codpswd  varchar2(100 char);
+  global_v_codempid varchar2(100 char);
+  global_v_codcomp  varchar2(100 char);
+  global_v_lang     varchar2(10 char) := '102';
+  global_v_zyear            number := 0;
+  global_v_zminlvl          number;
+  global_v_zwrklvl          number;
+  global_v_numlvlsalst      number;
+  global_v_numlvlsalen      number;
+  global_v_zupdsal          varchar2(100 char);
 
-    PROCEDURE SAVE_FAVORITE(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  p_codapp                  varchar2(100 char);
+  p_main_color              varchar2(100 char);
+  p_advance_color           varchar2(100 char);
+  p_file_name               varchar2(100 char);
+  p_maillang                 varchar2(100 char);
 
-    PROCEDURE SAVE_THEME(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  v_limit             number;
+  v_start             number;
+  v_codempid          varchar2(4000 char);
+  v_staappr           varchar2(100 char);
+  v_codapp            varchar2(100 char);
+  v_codcomp           varchar2(100 char);
 
-    PROCEDURE SAVE_LOGO(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  type arr_1d is table of varchar2(4000 char) index by binary_integer;
+  v_arr_staappr       arr_1d;
 
-    PROCEDURE GET_SETTING(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  procedure get_favorite(json_str_input in clob, json_str_output out clob);
+  procedure save_favorite(json_str_input in clob, json_str_output out clob);
 
-    PROCEDURE SAVE_EMAIL_LANGUAGE(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  procedure save_theme(json_str_input in clob, json_str_output out clob);
 
-    PROCEDURE GET_ALL_ACCOUNT(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
- -------------------------- Approve Message -----------------------------
-    PROCEDURE GET_APPROVE(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
+  procedure save_logo(json_str_input in clob, json_str_output out clob);
 
-    FUNCTION CHKAPPROVEHRES71E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
+  procedure get_setting(json_str_input in clob, json_str_output out clob);
 
-    FUNCTION CHKAPPROVEHRES74E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
+  procedure save_email_language(json_str_input in clob, json_str_output out clob);
 
-    FUNCTION CHKAPPROVEHRES77E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
+  procedure get_all_account(json_str_input in clob, json_str_output out clob);
 
-    FUNCTION CHKAPPROVEHRES32E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
+  -------------------------- Approve Message -----------------------------
+  procedure get_approve(json_str_input in clob, json_str_output out clob);
+	function  chkapprovehres71e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres74e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres77e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres32e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres34e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres36e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres62e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres6ae(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres6ie(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres6ke(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres81e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres88e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres6de(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres86e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres3be(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehress2e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehress4e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres6me(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres95e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres84e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres91e(p_codapp in varchar2,p_codappr in varchar2) return number;
+	function  chkapprovehres93e(p_codapp in varchar2,p_codappr in varchar2) return number;
 
-    FUNCTION CHKAPPROVEHRES34E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
+  ------------------------------ Request Message -------------------------
 
-    FUNCTION CHKAPPROVEHRES36E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
+  procedure get_request_total(json_str_input in clob, json_str_output out clob);
+  procedure get_request(json_str_input in clob, json_str_output out clob);
+  function explode(p_delimiter varchar2, p_string long, p_limit number)return arr_1d;
 
-    FUNCTION CHKAPPROVEHRES62E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES6AE(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES6IE(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES6KE(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES81E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES88E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES6DE(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES86E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES3BE(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRESS2E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRESS4E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES6ME(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES95E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES84E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES91E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
-
-    FUNCTION CHKAPPROVEHRES93E(
-        P_CODAPP IN VARCHAR2,
-        P_CODAPPR IN VARCHAR2
-    ) RETURN NUMBER;
- ------------------------------ Request Message -------------------------
-    PROCEDURE GET_REQUEST_TOTAL(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
-
-    PROCEDURE GET_REQUEST(
-        JSON_STR_INPUT IN CLOB,
-        JSON_STR_OUTPUT OUT CLOB
-    );
-
-    FUNCTION EXPLODE(
-        P_DELIMITER VARCHAR2,
-        P_STRING LONG,
-        P_LIMIT NUMBER
-    )RETURN ARR_1D;
-END;
+end;
 
 /

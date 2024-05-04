@@ -742,7 +742,7 @@
 
     std_al.cal_tlateabs(p_codempid,p_dtework,p_typwork,p_codshift,p_dtein,p_timin,
                         p_dteout,p_timout,global_v_coduser,'N',
-                        v_timlate,v_timback,v_timabsen,v_rec);
+                        v_timlate,v_timback,v_timabsen,v_rec,'Y');
     --
     obj_data.put('coderror', 200);
     obj_data.put('timlate', hcm_util.convert_minute_to_hour(v_timlate));

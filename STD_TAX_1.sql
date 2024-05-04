@@ -2879,9 +2879,10 @@ begin
                 /*if v_codpay = tcontrpy_codtax then -- ภาษีเงินได้จ่ายครั้งเดียว
                     v_taxcmpstn := v_amtpay;
                 else
-                    --		c_amttax := nvl(c_amttax,0) + v_amtpay;
+                    --c_amttax := nvl(c_amttax,0) + v_amtpay;
                     v_amttaxadj := nvl(v_amttaxadj,0) + v_amtpay;
                 end if;*/
+                
               -->> 28/04/2022 By S
               v_amttaxadj_oth := nvl(v_amttaxadj_oth,0) + v_amtpay;
                 goto loop_next; -- ถ้าเป็น code ภาษีให้ข้าม
@@ -2898,7 +2899,7 @@ begin
 
             if v_typpay = '6' then -- 6-รหัสภาษี
               -- c_amttax := nvl(c_amttax,0) + v_amtpay;
-                v_amttaxadj_oth := nvl(v_amttaxadj_oth,0) + v_amtpay; -- v_amttaxadj เหมือนจะไม่ได้ใช้ทำอะไรต่อ 28/04/2022 By S
+                v_amttaxadj_oth := nvl(v_amttaxadj_oth,0) + v_amtpay; -- v_amttaxadj เหมือนจะไม่ได้ใช้ทำอะไรต่อ 28/04/2022 By S              
                 goto loop_next;
             elsif v_typpay = '7' then -- 7-สำหรับการลงบัญชี
                 goto loop_next;
@@ -4126,10 +4127,10 @@ msg_err('# เงินได้พึงประเมินทั้งปี
                       if v_taxprd > ( v_taxa /  v_device_ex) then -- ภาษีรายได้ประจำงวดนี้ > (ภาษีรายได้ประจำ / จำนวนงวดทำงาน)
                          v_taxprd   := round(( v_taxa /  v_device_ex),2) ;
                          v_taxpayi4 := v_amttax - v_taxprd ;
-                         if v_taxpayi4 > 0 then
-                           c_amttax := c_amttax + nvl(v_taxpayi4,0) ;
+                         if v_taxpayi4 > 0 then                                                 
                            --msg_err('# ภาษีรายได้อื่นๆค้างจ่ายเดือนนี้ =  '||v_taxpayi4);
                            upd_tsincexp(tcontrpy_codpaypy10,'1',true,v_taxpayi4);
+                           c_amttax := c_amttax + nvl(v_taxpayi4,0) ;  ---#1926 Pratya 23/04/2024
                          end if;
                       end if;
                    else -- ปกติ
@@ -4147,25 +4148,25 @@ msg_err('# เงินได้พึงประเมินทั้งปี
 --<<user46 05/01/2022 Ref. NXP
 --                           c_amttax := c_amttax + nvl(v_taxpayi4,0) ;
 --                           upd_tsincexp(tcontrpy_codpaypy10,'1',true,v_taxpayi4);
-                          if tcontrpy_typededtax = '1' then -- ภาษีค้างจ่าย 1 = จ่ายเดือนนี้
-                            c_amttax    := c_amttax + nvl(v_taxpayi4,0) ;
+                          if tcontrpy_typededtax = '1' then -- ภาษีค้างจ่าย 1 = จ่ายเดือนนี้                         
 --NMT-660032
                             if temploy3_flgtax = '1' then
                                 upd_tsincexp(tcontrpy_codpaypy10,'1',true,v_taxpayi4);
                             else
                                 upd_tsincexp(tcontrpy_codpaypy11,'1',true,v_taxpayi4);
                             end if;
+                            c_amttax    := c_amttax + nvl(v_taxpayi4,0) ;---#1926 Pratya 23/04/2024
 --                            upd_tsincexp(tcontrpy_codpaypy10,'1',true,v_taxpayi4);
 --NMT-660032                          
                           elsif tcontrpy_typededtax = '3' then -- ภาษีค้างจ่าย 3 = เฉลี่ย
-                            v_taxpayi4  := v_taxpayi4/b_var_balperd;
-                            c_amttax    := c_amttax + nvl(v_taxpayi4,0) ;                            
+                            v_taxpayi4  := v_taxpayi4/b_var_balperd;                                                      
 --NMT-660032
                             if temploy3_flgtax = '1' then
                                 upd_tsincexp(tcontrpy_codpaypy10,'1',true,v_taxpayi4);
                             else
                                 upd_tsincexp(tcontrpy_codpaypy11,'1',true,v_taxpayi4);
                             end if;
+                            c_amttax    := c_amttax + nvl(v_taxpayi4,0) ; ---#1926 Pratya 23/04/2024
 --                            upd_tsincexp(tcontrpy_codpaypy10,'1',true,v_taxpayi4);
 --NMT-660032                                     
                           end if;
@@ -4175,9 +4176,9 @@ msg_err('# เงินได้พึงประเมินทั้งปี
                               v_taxpayi5 := v_taxpayi5 + v_taxpayi6 - c_amttax;
                               if v_taxpayi5 < 0 then
                                  v_taxpayi5 := 0 ;
-                              end if;
-                              c_amttax := c_amttax + nvl(v_taxpayi5,0) ;
+                              end if;                              
                               upd_tsincexp(tcontrpy_codpaypy4,'1',true,v_taxpayi5);
+                              c_amttax := c_amttax + nvl(v_taxpayi5,0) ;---#1926 Pratya 23/04/2024
                            end if;
                         end if;
                        end if;
@@ -4195,15 +4196,15 @@ msg_err('# เงินได้พึงประเมินทั้งปี
             c_amtgrstx := c_amtgrstx + round(v_taxgrs2,2) + round(v_taxgrs3,2);
       end if;
 
-            if v_taxprd > 0 then
-                upd_tsincexp(tcontrpy_codpaypy1,'1',true,v_taxprd);
-                c_amttax := c_amttax + v_taxprd;
-                if temploy3_flgtax in ('2') then    -- ออกให้
-                    c_amtgrstx := c_amtgrstx + v_taxprd;
-                elsif temploy3_flgtax in ('3') then -- ออกให้ครั้งเดียว
-                    c_amtgrstx := m_amtgrstxt_1 ;
-                end if;
+        if v_taxprd > 0 then
+            upd_tsincexp(tcontrpy_codpaypy1,'1',true,v_taxprd);
+            c_amttax := c_amttax + v_taxprd;
+            if temploy3_flgtax in ('2') then    -- ออกให้
+                c_amtgrstx := c_amtgrstx + v_taxprd;
+            elsif temploy3_flgtax in ('3') then -- ออกให้ครั้งเดียว
+                c_amtgrstx := m_amtgrstxt_1 ;
             end if;
+        end if;
 
     end if;
 
@@ -4224,6 +4225,7 @@ msg_err('### ภาษี Adjust รายได้อื่นๆ  =  '||v_amtt
   c_amttax := c_amttax  + nvl(v_amttaxadj,0) + nvl(v_amttaxadj_oth,0) ; ---+ nvl(v_amttaxadj,0); 
   v_net_ded := nvl(c_amtcal,0) + nvl(c_amtincc,0) + nvl(c_amtincl,0) + nvl(c_amtincn,0) - (nvl(c_amtexpl,0) + nvl(c_amtexpc,0)) ; -->> user46 04/05/2022
 --msg_err('### ภาษีที่หักทั้งหมดงวดนี้  =  '||c_amttax);
+--insert into a(a) values(c_amttax); 
   if  v_maxded > 0  then
      for i in 1..v_maxded loop
         /*if std_tax.declare_var_dedinc(i) = tcontrpy_codpaypy12 then
@@ -4529,7 +4531,7 @@ msg_err('### ภาษี Adjust รายได้อื่นๆ  =  '||v_amtt
 			  amtexpct = stdenc(nvl(stddec(amtexpct,temploy1_codempid,v_chken),0) + nvl(c_amtexpc,0),temploy1_codempid,v_chken),
 			  amtexpnt = stdenc(nvl(stddec(amtexpnt,temploy1_codempid,v_chken),0) + nvl(c_amtexpn,0),temploy1_codempid,v_chken),
 			  --amttaxt	= stdenc(nvl(stddec(amttaxt,temploy1_codempid,v_chken),0) + nvl(c_amttax,0),temploy1_codempid,v_chken),
-        amttaxt	= stdenc(nvl(stddec(amttaxt,temploy1_codempid,v_chken),0) + nvl(c_amttax,0)+ nvl(c_amttaxothcal,0),temploy1_codempid,v_chken),
+              amttaxt	= stdenc(nvl(stddec(amttaxt,temploy1_codempid,v_chken),0) + nvl(c_amttax,0)+ nvl(c_amttaxothcal,0),temploy1_codempid,v_chken),
 			  amtgrstxt = stdenc(nvl(m_amtgrstxt,0),temploy1_codempid,v_chken),
 			  amtsoct	= stdenc(nvl(stddec(amtsoct,temploy1_codempid,v_chken),0) + nvl(c_amtsoc,0),temploy1_codempid,v_chken),
 			  amtsocat = stdenc(nvl(stddec(amtsocat,temploy1_codempid,v_chken),0) + nvl(c_amtsoca,0),temploy1_codempid,v_chken),
@@ -4726,6 +4728,7 @@ BEGIN
 		  v_amtpay	 := proc_round(v_flgfml,v_amtpay);
 		  v_amtpay_e := proc_round(v_flgfml,v_amtpay_e);
 		end if;
+        
 		if v_amtpay <> 0 then
 			v_exist := false;
 			for r_tsincexp in c_tsincexp loop

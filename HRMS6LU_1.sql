@@ -1319,6 +1319,11 @@
     v_dtestrtwk     date;
     v_dtestrtwk2    date;
     v_typalert      tcontrot.typalert%type;
+    
+    --
+    vv_codcompy          temploy1.codcomp%type;
+    vv_loop              number;
+    vv_count             number;
 
   begin
     v_staappr :=  p_status;
@@ -1487,8 +1492,40 @@
 
       if rq_chk = 'E' and p_status = 'A' then
         v_staappr := 'Y';
-        v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear);
-        std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,'');
+        -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (bk)
+        -- v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear);
+        -- std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,'');
+        -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (bk)
+        
+         -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (add)
+            begin
+                select get_codcompy(codcomp)
+                into vv_codcompy
+                from temploy1
+                where codempid = p_codempid;
+            exception when no_data_found then 
+                vv_codcompy := null;
+            end;
+        
+        vv_loop := 0;
+        loop
+            vv_loop := vv_loop + 1;
+            
+            v_numotreq 	:= std_al.gen_req ('OTRQ','TOTREQST','NUMOTREQ',v_zyear,vv_codcompy,'') ;
+            std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,vv_codcompy,'');
+            
+            begin
+                select count(*)
+                into vv_count
+                from totreqst
+                where numotreq = v_numotreq;
+            exception when no_data_found then
+                null;
+            end;
+            
+            exit when (vv_count = 0 or vv_loop = 100);
+        end loop;
+        -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (add)
 
         insert_data(v_ttotreq,v_staemp,v_dteeffex,
                    v_numotreq,v_codeappr,to_date(p_dteappr,'dd/mm/yyyy'),-- user22 : 04/07/2016 : STA4590287 || v_numotreq,p_codappr,to_date(p_dteappr,'dd/mm/yyyy'),
@@ -1653,7 +1690,7 @@
       v_seqno     := to_number(hcm_util.get_string_t(json_obj2, 'p_numseq'));
       v_codempid  := hcm_util.get_string_t(json_obj2, 'p_codempid');
       v_dtereq    := hcm_util.get_string_t(json_obj2, 'p_dtereq');
-      
+
       v_staappr := nvl(v_staappr, 'A');
       approve(global_v_coduser,global_v_lang,to_char(v_rowcount),v_staappr,p_remark_appr,p_remark_not_appr,to_char(sysdate,'dd/mm/yyyy'),v_appseq,v_chk,v_codempid,v_seqno,v_dtereq);
       exit when param_msg_error is not null;

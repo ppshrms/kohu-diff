@@ -148,7 +148,7 @@
                 into v_flgtrnbank
                 from ttaxcur
                where codempid = v_codempid
-                 and to_date(numperiod||'/'||dtemthpay||'/'||dteyrepay) =  to_date(p_numperiod||'/'||p_month||'/'||p_year)
+                 and numperiod||'/'||dtemthpay||'/'||dteyrepay =  p_numperiod||'/'||p_month||'/'||p_year
                  and rownum = 1;
             exception when no_data_found then
               v_flgtrnbank := 'N';
@@ -239,7 +239,7 @@
         into v_flgtrnbank
         from ttaxcur
        where codempid = p_codempid
-         and to_date(numperiod||'/'||dtemthpay||'/'||dteyrepay) =  to_date(p_numperiod||'/'||p_month||'/'||p_year)
+         and numperiod||'/'||dtemthpay||'/'||dteyrepay =  p_numperiod||'/'||p_month||'/'||p_year
          and rownum = 1;
     exception when no_data_found then
       v_flgtrnbank := 'N';

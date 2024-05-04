@@ -9,7 +9,7 @@
 	error date	: 16/11/2020 17:17
 */
 
-  para_numproc 		  number := nvl(get_tsetup_value('QTYPARALLEL'),2);
+  para_numproc 		  number := 1;--nvl(get_tsetup_value('QTYPARALLEL'),2);
   para_chken        varchar2(4 char):= check_emp(get_emp) ;
   para_chkreg 			varchar2(100 char);
   para_zyear        number:= 0;

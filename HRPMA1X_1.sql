@@ -3,6 +3,8 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "HRPMA1X" is
+/* Cust-Modify: KOHU-HE2301 */
+-- last update: 17/04/2024 09:51 
 --ST11 redmine649/SEA-HR2201||03/02/2023||17:16
   procedure initial_value(json_str_input in clob) as
     json_obj          json_object_t;
@@ -556,7 +558,7 @@
           end if;
 
 --in sert_temp2('PMA1X','AAA','C',i,v_stmt_query,null,null,null,null,null,null,null);
-
+insert_temp2('YYY','YYY',1,v_stmt_query,null,null,null,null,null,null,null,to_char(sysdate,'dd/mm/yyyy hh24:mi'));
           dbms_sql.parse(v_cursor_query,v_stmt_query,dbms_sql.native);
           dbms_sql.define_column(v_cursor_query,1,v_data_exec,2000);
           v_dummy     := dbms_sql.execute(v_cursor_query);
@@ -841,6 +843,33 @@ SEA-HR2201 03/02/2023 backup */
         return 'text';
     end if;
   end get_item_property;
+-- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1799
+  procedure post_delete_codrep(json_str_input in clob,json_str_output out clob) is
+  begin
+    initial_value(json_str_input);
+    if param_msg_error is null then
+      gen_delete_codrep(json_str_output);
+    else
+      json_str_output := get_response_message(null,param_msg_error,global_v_lang);
+    end if;
+  exception when others then
+    param_msg_error   := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
+  end post_delete_codrep;
+  procedure gen_delete_codrep(json_str_output out clob) is
+  begin
+    BEGIN
+      delete trepdsph where codapp ='HRPMA1X' and codrep = p_codrep;
+      delete trepdspd where codapp ='HRPMA1X' and codrep = p_codrep;
+      commit;
+      param_msg_error := get_error_msg_php('HR2425', global_v_lang);
+      json_str_output := get_response_message(null, param_msg_error, global_v_lang);
+    exception when others then
+      param_msg_error   := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+      json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
+    end;
+  end gen_delete_codrep;
+-- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1799
 END HRPMA1X;
 
 /

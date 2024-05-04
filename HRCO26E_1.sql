@@ -1310,10 +1310,12 @@
 
 
             if not v_flgDelete then
+/*
                 if v_grade is null or v_score is null or v_fscore is null then
                     param_msg_error := get_error_msg_php('CO0042',global_v_lang);
                     exit;
                 end if;
+*/
                 begin
                     insert into tjobposskil (codpos,codcomp,codtency,codskill,grade
                                 ,score,fscore,dtecreate,codcreate,dteupd,coduser)
@@ -1372,10 +1374,11 @@
                         end;
                     end if;
                 end loop;
-
+/*
                 if v_count_child = 0 then
                     param_msg_error := get_error_msg_php('CO0043',global_v_lang);
                 end if;
+*/
             end if;
         end loop;
     exception when others then

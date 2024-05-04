@@ -250,7 +250,7 @@
 --    commit;
     -- text1.txt file write /read
     v_filename := hcm_batchtask.gen_filename(lower('HRPY70B'||'_'||global_v_coduser),'txt',global_v_batch_dtestrt);
-    
+
     std_deltemp.upd_ttempfile(v_filename,'A'); --'A' = Insert , update ,'D'  = delete
     if utl_file.Is_Open(out_file) then
       utl_file.Fclose(out_file);
@@ -367,7 +367,7 @@
           obj_row_temp.put(to_char(v_count),obj_data);
           v_count := v_count + 1;
 					v_fstbank := 'N';
-				end if;
+        end if;
         for i in 1..2 loop
           v_flg := 'N';
           if (i = 1) and (r_ttaxcur.codbank = v_codbank) then
@@ -412,32 +412,30 @@
               v_codbkserv := ' ';
             end;
             -- create head
-
             if v_first = 'Y' then
               v_first := 'N';
               bank_exp.head(p_typbank,v_codbkserv,v_numacct,
                                      hcm_util.get_codcomp_level(r_ttaxcur.codcomp,1),v_totamt,
                                       v_totemp,v_paid_date,p_dtepay,
-                                      0,global_v_lang,data_file,v_rec);
-
+                                      0,global_v_lang,data_file,v_rec); 
               if p_typbank = '55' then
-                utl_file.Put_line(out_file,substr(data_file,1,96));
-                data_file := substr(data_file,97);
+--                utl_file.Put_line(out_file,substr(data_file,1,96));
+--                data_file := substr(data_file,97);
+                  data_file := substr(data_file,1,96);
               end if;
-              v_sumrec := v_sumrec + nvl(v_rec,0);
+--              v_sumrec := v_sumrec + nvl(v_rec,0);
+
               if data_file is not null then
                  utl_file.Put_line(out_file,data_file);
               end if;
-
+              v_sumrec := v_sumrec + nvl(v_rec,0);
             end if;
-
             -- create detail
             bank_exp.body(p_typbank,v_codbkserv,v_numacct,v_sumrec,
                           v_codempid,v_codbank2,v_numbank,v_amtpay,v_paid_date,
                           hcm_util.get_codcomp_level(r_ttaxcur.codcomp,1),v_totemp,
                           v_totamt,p_dtepay,r_tbnkmdi1.codmedia,
                           0,global_v_lang,data_file);
-
             v_count_proc := v_count_proc + 1; -- for background process
             obj_data := json_object_t();
 --            obj_data.put('numseq'     ,to_char(v_count + 1));
@@ -501,7 +499,7 @@
     end if;
     utl_file.Fclose(out_file);
     sync_log_file(v_filename);
-    
+
     if v_flgsomeover = 'Y' then
           begin
             insert into ttemprpt
@@ -533,7 +531,7 @@
           global_v_batch_qtyproc := v_count_proc;
           global_v_batch_filename := v_filename;
           global_v_batch_pathfile := p_file_path || v_filename; 
-          
+
          if  v_sumrec = 0 and v_secure = 0 then
               obj_rows.put('coderror','400');
               obj_rows.put('flgprocess','Y');
@@ -564,7 +562,7 @@
               global_v_batch_pathfile := null; 
           end if;
           json_str_output := obj_rows.to_clob;
-          
+
           return;
 
 --    elsif  v_secure = 0 then --user37 #2013 Final Test Phase 1 V11 07/02/2021 and v_sumrec <>0 then 

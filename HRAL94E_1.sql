@@ -717,6 +717,7 @@
       return;
     end if;
 
+/*
     begin
       select 'Y'
         into v_code
@@ -727,6 +728,7 @@
          and rownum     = 1;
        param_msg_error  := get_error_msg_php('AL0074',global_v_lang);
     exception when no_data_found then null; end;
+*/
 
 --    param_msg_error := checkTcodec('tinexinf', v_codrtawrd);
 --    if param_msg_error is not null then

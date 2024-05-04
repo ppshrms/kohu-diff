@@ -987,6 +987,7 @@
               return;
           end if;
 --2364 ถ้าระบุวันที่ลาออกย้อนหลัง ในเดือนที่คำนวณภาษีไปแล้ว
+/*
           begin
               select 'X' into v_temp
                 from tdtepay t1 ,ttaxcur t2
@@ -1001,6 +1002,7 @@
               return;
           exception when no_data_found then null;
           end;
+          */
 --2364
       elsif v_flgemp_old = '2' and v_flgemp = '1' then
           -- หากระบุวันที่สมัครในช่วงวันที่ลาออกให้   Alert Alert PY0050 - วันที่สมัครสมาชิกต้องไม่อยู่ในช่วงวันที่สมัครและลาออกเดิม
@@ -1044,12 +1046,12 @@
             null;
           end;
         end if;
-
+/*
         if v_count > 0 then
             param_msg_error := get_error_msg_php('PY0072',global_v_lang);
             return;
         end if;
-
+*/
       end if;
 
     end validate_save;

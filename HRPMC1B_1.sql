@@ -54,7 +54,7 @@
     hcm_secur.get_global_secur(global_v_coduser, global_v_zminlvl, global_v_zwrklvl, global_v_numlvlsalst, global_v_numlvlsalen);
   end;
   --
-  
+
   --
   function check_dteyre (p_date in varchar2)
   return date is
@@ -384,7 +384,7 @@
     v_response      varchar2(5000);
     v_checkapp      boolean := false;
     v_check         varchar2(20);
-    
+
     v_codcompy      tcompny.codcompy%type;
     v_json_input    clob;
     v_json_codincom clob;
@@ -393,7 +393,7 @@
     type t_number is table of number index by binary_integer;
     v_amtmax        t_number;
     v_codincom      text;
-    
+
     cursor c_ttmovemt is
       select dteeffec,codtrn,codcomp,codpos,codjob,
              numlvl,codbrlc,codcalen,flgatten,stapost2,
@@ -413,7 +413,7 @@
          and dteeffec  = v_dteeffec
         -- and codtrn    = v_codtrn
          and numseq    = v_seq ;
-         
+
       cursor c_ttmovemt2 is
       select dteeffec,staupd,numseq
         from ttmovemt
@@ -502,7 +502,9 @@
         if v_error then
           v_remark := v_remark||','||get_errorm_name('HR6591',global_v_lang)||' ('||v_head(i)||' Max: '||v_max||')';
         end if;
+        
         v_error := hcm_validate.check_tcodcodec('tcodmove','codcodec = '''||v_text(i)||''' ');
+  
         if v_error then
           v_remark := v_remark||','||get_errorm_name('HR2010',global_v_lang)||' (TCODMOVE)';
         else
@@ -525,7 +527,7 @@
         if v_error then
           v_remark	:= v_remark||','||get_errorm_name('HR6591',global_v_lang)||' ('||v_head(i)||' Max: '||v_max||')';
         end if;
-        v_error := hcm_validate.check_tcodcodec('tcenter','codcomp = '''||v_text(i)||''' ');
+       -- v_error := hcm_validate.check_tcodcodec('tcenter','codcomp = '''||v_text(i)||''' ');
         if v_error then
           v_remark := v_remark||','||get_errorm_name('HR2010',global_v_lang)||' (TCENTER)';
         end if;
@@ -563,7 +565,7 @@
           if v_error then
             v_remark	:= v_remark||','||get_errorm_name('HR6591',global_v_lang)||' ('||v_head(i)||' Max: '||v_max||')';
           end if;
-          v_error := hcm_validate.check_tcodcodec(v_codtable,'codcodec = '''||v_text(i)||''' ');
+        --  v_error := hcm_validate.check_tcodcodec(v_codtable,'codcodec = '''||v_text(i)||''' ');
         end if;
         if v_error then
           v_remark := v_remark||','||get_errorm_name('HR2010',global_v_lang)||' ('''||v_codtable||''') value = '||v_text(i);
@@ -592,7 +594,7 @@
           v_remark := v_remark||','||v_head(i)||' '||get_errorm_name('HR2057',global_v_lang)||' (''Y'',''N'')';
         end if;
       end if;
-    
+
       if i = 17 then -- STAPOST2
 --        v_typmove := null;
 --        begin
@@ -620,7 +622,7 @@
       end if;
 
     end loop; -- end check key
-    
+
       --> Peerasak || SEA-HR2201 || 03022023
       if v_text(17) is null then
         v_error   := true;
@@ -705,13 +707,13 @@
           v_remark := v_remark||','||get_errorm_name('HR2816',global_v_lang)||' ('||v_head(i)||' - '||v_text(i)||')';
         end if;
       end loop;
-      
+
       v_checkapp := chk_flowmail.check_approve ('HRPM4DE', v_codempid, v_approvno, null, null, null, v_check);
       if not v_checkapp and v_check = 'HR2010' then
         v_error   := true;
         v_remark := v_remark||','||get_errorm_name('HR2010',global_v_lang)||' (TFWMAILC)';
       end if;
-    
+
     v_codcompy        := hcm_util.get_codcomp_level(v_text(5),1);
     v_json_input      := '{"p_codcompy":"'||v_codcompy||'","p_dteeffec":"'||to_char(sysdate,'ddmmyyyy')||'","p_codempmt":"'||v_codempmtt||'","p_lang":"'||global_v_lang||'"}';
     v_json_codincom   := hcm_pm.get_codincom(v_json_input);
@@ -721,7 +723,7 @@
       v_amtmax(i + 1)     := hcm_util.get_string_t(param_json_row,'amtmax');
       v_codincom(i + 1)   := hcm_util.get_string_t(param_json_row,'codincom');
     end loop;
-    
+
     --<<user36 STA3590210 02/02/2016
     for i in 1..10 loop
 /*      if nvl(v_text(22 + i),0) > 0 and v_amtmax(i) is not null and v_codincom is not null then
@@ -745,7 +747,7 @@
           exit;
         end;
     end loop;
-    
+
     if v_error then
       v_flg_error := 'Y';
       v_rec_error := v_rec_error + 1;
@@ -835,7 +837,7 @@
 --            end if;
 --          end if;
 --      end loop;
-      
+
       if not v_flgpass then
         v_flg_error := 'Y';
         v_rec_error := v_rec_error + 1;
@@ -1038,7 +1040,7 @@
         v_dteduepr  := check_dteyre(v_rec_text(i)(19));
       end if;
       v_seq   := v_rec_text(i)(3);
-      
+
       v_pkey  := to_char(v_dteeffec,'dd/mm/yyyy')||','||v_rec_text(i)(4);
       if v_rec_text(i)(33) = 'Y' then
         insert_timprtlog2(v_numseq,'4',v_codempid,v_rec_text(i)(34),v_pkey);
@@ -1138,7 +1140,7 @@
                 end if;
             end if;
         end loop;
-      
+
         if not v_exist  or v_update = 'Y' then
             v_flgpass := true ;
             v_sumhur	:= 0;
@@ -1295,7 +1297,7 @@
                             insert_timprtlog2(v_numseq,'1',v_codempid,v_remark,v_pkey);
                 p_new   := p_new + 1;
               else
-              
+
                  update ttmovemt
                  set    codcomp = v_rec_text(i)(5),
                         codpos = v_rec_text(i)(6),
@@ -1346,7 +1348,7 @@
                   and   dteeffec = v_dteeffec ;
 
               insert_timprtlog2(v_numseq,'2',v_codempid,v_remark,v_pkey);
-              
+
               p_update   := p_update + 1;
             end if;
         end if;

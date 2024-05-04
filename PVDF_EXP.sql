@@ -8,6 +8,7 @@
    							 p_numcomp			in varchar2,
    							 p_numfund  		in varchar2,
    							 p_dtepay				in date,
+   							 p_numperiod	in number,
    							 p_dtemthpay		in varchar2,
    							 p_dteyrepay		in number,
    							 p_totamtprove 	in number,

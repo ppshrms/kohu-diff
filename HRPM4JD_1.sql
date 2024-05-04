@@ -209,7 +209,8 @@
     param_json_row  json_object_t;
   begin
     initial_value(json_str_input);
-    param_json    := json_object_t(hcm_util.get_string_t(json_object_t(json_str_input),'json_input_str'));
+--    param_json    := json_object_t(hcm_util.get_string_t(json_object_t(json_str_input),'json_input_str'));
+    param_json    := hcm_util.get_json_t(json_object_t(json_str_input),'json_input_str');
     for i in 0..param_json.get_size-1 loop
       v_rcnt  := i;
       param_json_row    := hcm_util.get_json_t(param_json,to_char(i));

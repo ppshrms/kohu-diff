@@ -781,7 +781,7 @@
               obj_data.put('desc_amtlepay','');
               obj_data.put('flgdisplay','N');
             end if;            
-            
+
             obj_data.put('coderror','200');
             obj_rows.put(to_char(p_numrec),obj_data);
             p_numrec := p_numrec + 1;
@@ -968,14 +968,14 @@
           obj_data.put('desc_amtlepay','');
           obj_data.put('flgdisplay','N');
         end if;
-                        
+
         obj_data.put('coderror','200');
         obj_rows.put(to_char(v_count),obj_data);
         v_count := v_count + 1;
       end if;
 
     end loop;
-    
+
     p_data := v_data;
     if p_flgreq <> 'E' then
       if p_flgreq = 'Y' then
@@ -1805,7 +1805,7 @@
 
         p_codempid   := hcm_util.get_string_t(json_obj,'codempid');
         p_dteyear    := hcm_util.get_string_t(json_obj,'dteyear');
-        p_dtereq     := hcm_util.get_string_t(json_obj,'dtereq');
+        p_dtereq     := to_date(hcm_util.get_string_t(json_obj,'dtereq'),'dd/mm/yyyy');
         p_flgreq     := hcm_util.get_string_t(json_obj,'flgreq');
         p_amtlepay   := hcm_util.get_string_t(json_obj,'amtlepay');
         p_day        := hcm_util.get_string_t(json_obj,'day');

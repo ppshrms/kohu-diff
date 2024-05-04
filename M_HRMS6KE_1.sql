@@ -1493,7 +1493,7 @@
     v_codcompy          temploy1.codcomp%type;
     v_loop              number;
     v_count             number;
-
+    
   begin
     v_msgerror  := null;
     initial_value(json_str_input);
@@ -1514,7 +1514,7 @@
             -- ttotreqst_numotgen := replace(v_numotgen,'-',null) ;
             -- std_al.upd_req('TTOT',v_numotgen,global_v_coduser,global_v_zyear,'');
         -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 16/04/2024 | 4449#1887 (add)
-
+        
          -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 16/04/2024 | 4449#1887 (add)
         if ttotreqst_codcomp is null then
             begin
@@ -1528,15 +1528,15 @@
         else
             v_codcompy := hcm_util.get_codcompy(ttotreqst_codcomp);
         end if;
-
+        
         v_loop := 0;
         loop
             v_loop := v_loop + 1;
-
+            
             v_numotgen 	:= std_al.gen_req ('TTOT','TTOTREQST','NUMOTGEN',global_v_zyear,v_codcompy,'') ;
             ttotreqst_numotgen := replace(v_numotgen,'-',null) ;
             std_al.upd_req('TTOT',v_numotgen,global_v_coduser,global_v_zyear,v_codcompy,'');
-
+            
             begin
                 select count(*)
                 into v_count
@@ -1545,7 +1545,7 @@
             exception when no_data_found then
                 null;
             end;
-
+            
             exit when (v_count = 0 or v_loop = 100);
         end loop;
         -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 16/04/2024 | 4449#1887 (add)
@@ -1963,11 +1963,11 @@
         param_msg_error := get_error_msg_php('HR2010',global_v_lang);
         return;
     end;
-
-    if ttotreq_dtestrt not between ttotreqst_dtestrt and ttotreqst_dteend then
-        param_msg_error := get_error_msg_php('AL0021',global_v_lang);
-        return;
-    end if;
+-- teae test
+--    if ttotreq_dtestrt not between ttotreqst_dtestrt and ttotreqst_dteend then
+--        param_msg_error := get_error_msg_php('AL0021',global_v_lang);
+--        return;
+--    end if;
 
     begin
         select qtymxotwk, qtymxallwk, nvl(typalert,'N')
@@ -3579,7 +3579,6 @@
         exception when no_data_found then
             v_codcompw := null;
         end;
-        insert into a (b) values (v_codcompw);commit;
         if v_codcompw is not null then
           begin  
           select costcent into v_cost_center
@@ -3845,7 +3844,7 @@
     v_codappr2      TEMPFLOW.codappr2%type;
     v_codappr3      TEMPFLOW.codappr3%type;
     v_codappr4      TEMPFLOW.codappr4%type;
-
+    
     v_loop              number;
     v_count             number;
     --
@@ -4001,7 +4000,6 @@
                     exit cal_loop;
                 end if;
             end if;
--- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 03/04/2024 | Fix issue 4449: #1847
 
             if v_text(4) is not null or v_text(5) is not null then
                 if v_text(4) is null then
@@ -4047,7 +4045,6 @@
                 end if;
                 v_flg_t := 'a';
             end if;
-
             for i in 10..10 loop
                 if v_text(i) is null and i <> 11 then
                     v_error	 	:= true;
@@ -4376,7 +4373,7 @@
                 -- end if;
                 -- std_al.upd_req('OTRQ',v_numotreq,global_v_coduser,global_v_zyear,hcm_util.get_codcompy(v_codcomp),v_typ_grp);
             -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 16/04/2024 | 4449#1887 (bk)
-
+            
             -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 16/04/2024 | 4449#1887 (add)
             if v_flg_dup = 'N' then
                 v_loop := 0;
@@ -4384,7 +4381,7 @@
                     v_loop := v_loop + 1;
                     v_numotreq := replace(std_al.gen_req('TTOT','TTOTREQST','NUMOTGEN',global_v_zyear,hcm_util.get_codcompy(v_codcomp),''),'-',null);
                     std_al.upd_req('TTOT',v_numotreq,global_v_coduser,global_v_zyear,hcm_util.get_codcompy(v_codcomp),'');
-
+                  
                     begin
                         select count(*)
                         into v_count
@@ -4393,7 +4390,7 @@
                     exception when no_data_found then
                         null;
                     end;
-
+                
                     exit when (v_count = 0 or v_loop = 100);
                 end loop;   
             -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 16/04/2024 | 4449#1887 (add)

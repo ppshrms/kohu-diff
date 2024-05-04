@@ -29,7 +29,7 @@
   type arr_1d is table of varchar2(4000 char) index by binary_integer;
 
   function check_pwd2 return varchar2;
-  function get_user(json_str_input in clob) return varchar2;
+  function get_user(json_str_input in clob) return clob;
   procedure get_autologin(json_str_input in clob,json_str_output out clob);
 
   procedure change_password(json_str_input in clob,json_str_output out clob);
@@ -57,6 +57,8 @@
 
   procedure login_pin(json_str_input in clob,json_str_output out clob);
 
+--  new prem line
+  function get_password(p_coduser in varchar2) return varchar2;
 end;
 
 /

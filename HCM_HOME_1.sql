@@ -35,10 +35,10 @@
     p_codcomp_level		  := hcm_util.get_codcomp_level(p_codcomp, 1);
     p_codapp			      := hcm_util.get_string_t(json_obj,'p_codapp');
     p_comlevel          := hcm_util.get_string_t(json_obj,'p_complvl');
-    
+
     p_dtestrt           := to_date(hcm_util.get_string_t(json_obj,'p_dtestrt'),'dd/mm/yyyy');
     p_dteend            := to_date(hcm_util.get_string_t(json_obj,'p_dteend'),'dd/mm/yyyy');
-    
+
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
 
   end initial_value;
@@ -55,7 +55,7 @@
     obj_data          json_object_t;
     obj_row_events    json_object_t;
     obj_data_events   json_object_t;
-      
+
     cursor c_holiday is
       select  decode(global_v_lang ,'101',desholdye
                                    ,'102',desholdyt
@@ -81,7 +81,7 @@
           and   att.codcalen = hol.codcalen
           and   hol.codcomp = get_tgholidy_codcomp(att.codcomp,att.codcalen,to_char(v_dtework,'yyyy'))
           and   hol.dtedate = v_dtework;
-    
+
     cursor c_leave is
       select * from (
         select get_tleavecd_name(a.codleave,global_v_lang)                  title,
@@ -125,7 +125,7 @@
            and dtework  = v_dtework
       )
       order by timstrt,timend;
-    
+
     cursor c_appointment is
       select get_tlistval_name('TYPAPPTY', a.TYPAPPTY, global_v_lang) title,
              ''                                                       qtymin,
@@ -144,7 +144,7 @@
          and a.numappl  = b.numappl(+)
          and a.dteappoi = v_dtework
     order by a.dteappoi,a.numappl,a.numapseq;
-    
+
     cursor c_training is
       select get_tcourse_name(p.codcours, global_v_lang)  title,
              ''                                           qtymin,
@@ -163,13 +163,26 @@
          and p.dtetrst is not null
          and v_dtework between trunc(p.dtetrst) and trunc(p.dtetren)
       order by p.codcours, p.numclseq;
-    
+
+      Cursor c_todolist is
+        select  to_char(todo.dtework, 'dd/mm/yyyy') dtework,
+                todo.NUMSEQ                         numseq,
+                todo.TIMSTRT                        timstrt,
+                todo.TIMEND                         timend,
+                todo.TITLE                          title,
+                todo.DETAIL                         detail,
+                todo.FLGCHK                         flgchk
+         from   ttodolist todo
+        where   todo.codempid = global_v_codempid
+          and   todo.dtework = v_dtework
+        order by todo.numseq;
+
   begin
     initial_value(json_str_input);
-    
+
     v_dtestrt := to_date('01/'||p_month||'/'||p_year,'dd/mm/yyyy');
     v_dteend  := last_day(v_dtestrt);
-    
+
     v_row := 0;
     obj_row := json_object_t();
     v_dtework := v_dtestrt;
@@ -178,7 +191,7 @@
       v_flgdata       := false;
       v_row_event     := 0;
       obj_row_events  := json_object_t();
-      
+
       for r_holiday in c_holiday loop
         v_row_event := v_row_event + 1;
         v_flgdata := true;
@@ -195,7 +208,7 @@
         obj_data_events.put('timend',r_holiday.timend);
         obj_row_events.put(to_char(v_row_event-1),obj_data_events);
       end loop;
-      
+
       for r_leave in c_leave loop
         v_row_event := v_row_event + 1;
         v_flgdata := true;
@@ -212,7 +225,7 @@
         obj_data_events.put('timend',r_leave.timend);
         obj_row_events.put(to_char(v_row_event-1),obj_data_events);
       end loop;
-      
+
       for r_appointment in c_appointment loop
         v_row_event := v_row_event + 1;
         v_flgdata := true;
@@ -229,7 +242,7 @@
         obj_data_events.put('timend',r_appointment.timend);
         obj_row_events.put(to_char(v_row_event-1),obj_data_events);
       end loop;
-      
+
       for r_training in c_training loop
         v_row_event := v_row_event + 1;
         v_flgdata := true;
@@ -246,7 +259,24 @@
         obj_data_events.put('timend',r_training.timend);
         obj_row_events.put(to_char(v_row_event-1),obj_data_events);
       end loop;
-      
+
+      for r_todolist in c_todolist loop
+        v_row_event := v_row_event + 1;
+        v_flgdata := true;
+        obj_data_events := json_object_t();
+        obj_data_events.put('v_type','todolist');
+        obj_data_events.put('numtype','5');
+        obj_data_events.put('dtestrt',r_todolist.dtework); 
+        obj_data_events.put('dteend', r_todolist.dtework);
+        obj_data_events.put('numseq', r_todolist.numseq);
+        obj_data_events.put('timstrt',r_todolist.timstrt);
+        obj_data_events.put('timend', r_todolist.timend);
+        obj_data_events.put('title',  r_todolist.title);
+        obj_data_events.put('detail', r_todolist.detail);
+        obj_data_events.put('flgchk', r_todolist.flgchk);
+        obj_row_events.put(to_char(v_row_event-1),obj_data_events);
+      end loop;
+
       if v_flgdata then
         v_row   := v_row + 1;
         obj_data := json_object_t();
@@ -262,12 +292,12 @@
     end loop;
 
     json_str_output := obj_row.to_clob;
-    
+
     return json_str_output;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+    return json_str_output;
   end;
 
   function count_leave_month return varchar2 is
@@ -355,21 +385,30 @@
   end;
 
   function get_calendar_manager(json_str_input in clob) return clob is
-    json_str_output   clob;
-    v_dtestrt         date;
-    v_dteend          date;
-    v_dtework         date;
-    v_row             number;
-    v_row_event       number;
-    v_flgdata         boolean;
-    obj_row           json_object_t;
-    obj_data          json_object_t;
-    obj_row_events    json_object_t;
-    obj_data_events   json_object_t;
-    
+    json_str_output     clob;
+    v_dtestrt           date;
+    v_dteend            date;
+    v_dtework           date;
+    v_row               number;
+    v_row_event         number;
+    v_flgdata           boolean;
+    obj_row             json_object_t;
+    obj_data            json_object_t;
+    obj_row_events      json_object_t;
+    obj_data_events     json_object_t;
+
+    r_operate           number;
+    r_codempid          clob;
+    r_typeabs1          varchar2(100 char):= get_tlistval_name('TYPEABS', '1', global_v_lang);
+    r_typeabs2          varchar2(100 char):= get_tlistval_name('TYPEABS', '2', global_v_lang);
+    r_typeabs3          varchar2(100 char):= get_tlistval_name('TYPEABS', '3', global_v_lang);
+    v_timin             varchar2(10 char);
+    v_timout            varchar2(10 char);
+
     cursor c1 is
       select v_type,
-             hcm_util.count_temphead_codempid(global_v_codempid) operate,
+             r_operate operate,
+             --
              codempid,
              get_temploy_name(codempid, global_v_lang) title,
              get_tpostn_name(hcm_util.get_temploy_field(codempid, 'codpos'), '102') detail,
@@ -378,32 +417,46 @@
         -- late
         select 'late' v_type,
                tlat.codempid,
-               get_tlistval_name('TYPEABS', '1', global_v_lang) || ' : (' || hcm_util.convert_minute_to_hour(tlat.qtylate) || ')' remark,
+               r_typeabs1 || ' : (' || hcm_util.convert_minute_to_hour(tlat.qtylate) || ')' remark,
+               --
                tlat.qtylate as qtymin,
-               tatt.timin timstrt,
-               tatt.timout timend,
+               null as timstrt,
+               null as timend,
                tlat.dtework
-          from tlateabs tlat, tattence tatt  
-         where instr(hcm_util.get_temphead_codempid(global_v_codempid), tlat.codempid) > 0
+          from tlateabs tlat
+         where instr(r_codempid, tlat.codempid) > 0
+         --
            and tlat.dtework = v_dtework
            and tlat.qtylate > 0
-           and tlat.codempid = tatt.codempid
-           and tlat.dtework  = tatt.dtework
         union
         -- early
         select 'early' v_type,
                tlat.codempid,
-               get_tlistval_name('TYPEABS', '2', global_v_lang) || ' : (' || hcm_util.convert_minute_to_hour(tlat.qtyearly) || ')' remark,
+               r_typeabs2 || ' : (' || hcm_util.convert_minute_to_hour(tlat.qtyearly) || ')' remark,
+               --
                tlat.qtyearly as qtymin,
-               tatt.timin timstrt,
-               tatt.timout timend,
+               null as timstrt,
+               null as timend,
                tlat.dtework
-          from tlateabs tlat, tattence tatt
-         where instr(hcm_util.get_temphead_codempid(global_v_codempid), tlat.codempid) > 0
+          from tlateabs tlat
+         where instr(r_codempid, tlat.codempid) > 0
            and tlat.dtework = v_dtework
            and tlat.qtyearly > 0
-           and tlat.codempid = tatt.codempid
-           and tlat.dtework  = tatt.dtework
+        union
+        -- absence
+        select 'absence' v_type,
+               tlat.codempid,
+               r_typeabs3 || ' : (' || hcm_util.convert_minute_to_hour(tlat.qtyabsent) || ')' remark,
+               --
+               tlat.qtyabsent as qtymin,
+               null as timstrt,
+               null as timend,
+               tlat.dtework
+          from tlateabs tlat
+         where instr(r_codempid, tlat.codempid) > 0
+         --
+           and tlat.dtework  = v_dtework
+           and tlat.qtyabsent > 0
         union
         -- leave
         select 'leave' v_type,
@@ -414,23 +467,9 @@
                timend,
                dtework
           from tleavetr
-         where instr(hcm_util.get_temphead_codempid(global_v_codempid), codempid) > 0
-           and dtework = v_dtework
-        union
-        -- absence
-        select 'absence' v_type,
-               tlat.codempid,
-               get_tlistval_name('TYPEABS', '3', global_v_lang) || ' : (' || hcm_util.convert_minute_to_hour(tlat.qtyabsent) || ')' remark,
-               tlat.qtyabsent as qtymin,
-               tatt.timin timstrt,
-               tatt.timout timend,
-               tlat.dtework
-          from tlateabs tlat, tattence tatt
-         where instr(hcm_util.get_temphead_codempid(global_v_codempid), tlat.codempid) > 0
-           and tlat.dtework  = v_dtework
-           and tlat.qtyabsent > 0
-           and tlat.codempid = tatt.codempid
-           and tlat.dtework  = tatt.dtework
+         where instr(r_codempid, codempid) > 0
+         --
+           and dtework = v_dtework      
         union
         -- ot
         select 'ot' v_type,
@@ -441,25 +480,29 @@
                timend,
                dtework
           from tovrtime
-         where instr(hcm_util.get_temphead_codempid(global_v_codempid), codempid) > 0
-            and dtework = v_dtework
+         where instr( r_codempid , codempid) > 0
+         --
+            and dtework = v_dtework    
       );
 
   begin
     initial_value(json_str_input);
+    r_operate     := hcm_util.count_temphead_codempid(global_v_codempid);
+    r_codempid    := hcm_util.get_temphead_codempid(global_v_codempid);
 
     v_dtestrt := to_date('01/'||p_month||'/'||p_year,'dd/mm/yyyy');
     v_dteend  := last_day(v_dtestrt);
-    
+
     v_row := 0;
     obj_row := json_object_t();
     v_dtework := v_dtestrt;
+
     while v_dtework <= v_dteend
     loop
       v_flgdata       := false;
       v_row_event     := 0;
       obj_row_events  := json_object_t();
-      
+
       for r1 in c1 loop
         v_row_event := v_row_event + 1;
         v_flgdata := true;
@@ -471,12 +514,26 @@
         obj_data_events.put('detail',r1.detail);
         obj_data_events.put('remark',r1.remark);
         obj_data_events.put('qtymin',r1.qtymin);
-        obj_data_events.put('timstrt',r1.timstrt);
-        obj_data_events.put('timend',r1.timend);
+        if r1.v_type in ('late','early','absence') then   
+          v_timin := null; v_timout := null; 
+          begin
+            select timin,timout
+              into v_timin,v_timout
+              from tattence
+             where codempid = r1.codempid
+               and dtework  = to_date(r1.dtework,'dd/mm/yyyy');
+          exception when no_data_found then null;
+          end;
+          obj_data_events.put('timstrt',v_timin);
+          obj_data_events.put('timend',v_timout);          
+        else
+          obj_data_events.put('timstrt',r1.timstrt);
+          obj_data_events.put('timend',r1.timend);
+        end if;
         obj_data_events.put('dtework',r1.dtework);
         obj_row_events.put(to_char(v_row_event-1),obj_data_events);
       end loop;
-      
+
       if v_flgdata then
         v_row   := v_row + 1;
         obj_data := json_object_t();
@@ -491,27 +548,20 @@
       v_dtework := v_dtework + 1;
     end loop;
 
--- not use
---    obj_row.put('count_leave_month',count_leave_month);
---    obj_row.put('count_late_month',count_late_month);
---    obj_row.put('count_early_month',count_early_month);
---    obj_row.put('count_absence_month',count_absence_month);
---    obj_row.put('count_ot_month',count_ot_month);
-
     json_str_output := obj_row.to_clob;
-    
+
     return json_str_output;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+    return json_str_output;
   end;
 
   function get_announcement(json_str_input in clob) return clob IS
     obj_row 		    json_object_t;
    	obj_data		    json_object_t;
-   	v_row			      number := 0;
-    json_str_output clob;
+   	v_row			    number := 0;
+    json_str_output     clob;
 
 	cursor cl is
   	  select  rowid id,
@@ -530,8 +580,9 @@
               (select folder from tfolderd where codapp = 'HRCO1BE')||'/'|| filename as attachfile, filename as filenameReal
         from  tannounce
        where  codcomp like p_codcomp_level||'%'
-         and  dteeffec <= sysdate
-		     and  typemsg ='A'
+         and trunc(dteeffec) <= trunc(sysdate)
+         and (trunc(dteeffecend) >= trunc(sysdate) or dteeffecend is null)
+		 and  typemsg ='A'
     order by  dteeffec desc,numseq ;
 
   begin
@@ -556,18 +607,18 @@
      end if;
     end loop; -- end while
     return obj_row.to_clob;
-	exception when others then
-		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
-		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+  exception when others then
+    param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    return json_str_output;
   end;
 
  function get_knowledge(json_str_input in clob) return clob IS
-    obj_row 		      json_object_t;
-   	obj_data		      json_object_t;
-   	v_row			        number := 0;
-    json_str_output   clob;
-    v_codcompy        tcompny.codcompy%type;
+    obj_row 		    json_object_t;
+   	obj_data		    json_object_t;
+   	v_row			    number := 0;
+    json_str_output     clob;
+    v_codcompy          tcompny.codcompy%type;
 
 	cursor cl is
   	  select  rowid  id,
@@ -610,17 +661,17 @@
 	    obj_row.put(to_char(v_row-1),obj_data);
     end loop; -- end while
     return obj_row.to_clob;
-	exception when others then
-		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
-		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+  exception when others then
+    param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    return json_str_output;
   end;
 
   function get_warning(json_str_input in clob) return clob is
   	obj_row 		    json_object_t;
    	obj_data		    json_object_t;
-   	v_row			      number := 0;
-    json_str_output clob;
+   	v_row			    number := 0;
+    json_str_output     clob;
 
 	cursor cl is
   	  select  get_tcenter_name(codcompy, global_v_lang) company,
@@ -657,16 +708,16 @@
     end loop;
     return obj_row.to_clob;
   exception when others then
-		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
-		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+    param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    return json_str_output;
   end;
 
   function get_news(json_str_input in clob) return clob is
    	obj_row 		    json_object_t;
    	obj_data		    json_object_t;
-   	v_row			      number := 0;
-    json_str_output clob;
+   	v_row			    number := 0;
+    json_str_output     clob;
 
 	cursor cl is
    	  select  get_tcenter_name(codcomp, global_v_lang) company,
@@ -685,8 +736,9 @@
 							url
         from  tannounce
        where  codcomp like p_codcomp_level||'%'
-         and  dteeffec <= sysdate
-		     and  typemsg ='N'
+         and trunc(dteeffec) <= trunc(sysdate)
+         and (trunc(dteeffecend) >= trunc(sysdate) or dteeffecend is null)
+		 and  typemsg ='N'
     order by  dteeffec desc,numseq;
 
   begin
@@ -708,18 +760,18 @@
       end if;
       end loop;
     return obj_row.to_clob;
-    exception when others then
-		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
-		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+  exception when others then
+    param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    return json_str_output;
   end;
 
   function get_banner(json_str_input in clob) return clob is
-    obj_row 		      json_object_t;
-   	obj_data		      json_object_t;
-   	v_row			        number := 0;
-    json_str_output   clob;
-    v_folder          tfolderd.folder%type;
+    obj_row             json_object_t;
+   	obj_data	        json_object_t;
+   	v_row			    number := 0;
+    json_str_output     clob;
+    v_folder            tfolderd.folder%type;
 	cursor cl is
 	  select  get_tcenter_name(codcompy, global_v_lang) company,
             get_temploy_name(global_v_codempid, global_v_lang) name,
@@ -765,17 +817,17 @@
     end loop;
     return obj_row.to_clob;
   exception when others then
-		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
-		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+    param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    return json_str_output;
   end;
 
    function get_profile_img(json_str_input in clob) return clob is
     obj_row 		    json_object_t;
    	obj_data		    json_object_t;
-    json_obj        json_object_t;
-   	v_row			      number := 0;
-    json_str_output clob;
+    json_obj            json_object_t;
+   	v_row			    number := 0;
+    json_str_output     clob;
 
     cursor cl IS
         SELECT (SELECT folder FROM tfolderd WHERE codapp = 'PROFILEIMG')||'/'|| VALUE img
@@ -798,14 +850,14 @@
     end loop;
     return obj_row.to_clob;
   exception when others then
-		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
-		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
-		return json_str_output;
+    param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    return json_str_output;
   end;
 
   function change_profile_img(json_str_input in clob) return clob is
     obj_row 				json_object_t;
-    json_str_output clob;
+    json_str_output         clob;
    	PRAGMA AUTONOMOUS_TRANSACTION;
   begin
 	  initial_value(json_str_input);
@@ -831,8 +883,8 @@
   procedure insert_group_contact(json_str_input in clob) is
     PRAGMA AUTONOMOUS_TRANSACTION;
     v_grpname_count		number := 0;
-    v_lastseq		number := 0;
-	  v_grpseq		number := 0;
+    v_lastseq		    number := 0;
+    v_grpseq		    number := 0;
   begin
 		initial_value(json_str_input);
 		if (upper(p_grpnam) = 'SUBORDINATE') then
@@ -900,7 +952,7 @@
     v_child_obj_row     json_object_t;
     v_parent_obj_data   json_object_t;
     v_parent_obj_row    json_object_t;
-    
+
     cursor c_group is
         select numseq groupseq, namgrp groupname 
           from tusrconth 
@@ -909,7 +961,7 @@
         select 0 groupseq,'Subordinate' groupname 
           from dual 
         order by groupseq;
-        
+
     cursor c_contact is
         select emp.codempid,
                get_tcenter_name(emp.codcomp, global_v_lang) company,
@@ -1000,7 +1052,7 @@
       values (global_v_coduser, v_grpseq, 'people', sysdate, global_v_coduser);
       commit;
     end if;
-    
+
     v_parent_obj_row := json_object_t();
     for r_group in c_group loop
         v_groupseq := r_group.groupseq;
@@ -1021,21 +1073,21 @@
             v_child_obj_data.put('nicknam', nvl(r_contact.nicknam,''));
             v_child_obj_data.put('nummobile', nvl(r_contact.nummobile,''));
             v_child_obj_data.put('numtelof', nvl(r_contact.numtelof,''));
-            
+
             v_child_obj_row.put(to_char(v_child_row - 1), v_child_obj_data);
         end loop;
         v_parent_obj_data := json_object_t();
         v_parent_obj_data.put('groupseq',r_group.groupseq);
         v_parent_obj_data.put('groupname',r_group.groupname);
         v_parent_obj_data.put('lists',v_child_obj_row);
-        
+
         v_row := v_row + 1;
         v_parent_obj_row.put(to_char(v_row - 1),v_parent_obj_data);
     end loop;
 
     json_str_output := v_parent_obj_row.to_clob;
     return json_str_output;
-    
+
   exception when others then
 		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -1378,7 +1430,7 @@
 
   begin
     initial_value(json_str_input);
-    
+
     begin
         select hcm_util.get_codcompy(b.codcomp)
           into v_codcompy
@@ -1388,7 +1440,7 @@
     exception when no_data_found then
         v_codcompy := null;
     end;
-    
+
     obj_row := json_object_t();
     for rl in cl loop
       v_row := v_row + 1;
@@ -1411,13 +1463,13 @@
 
   procedure get_default_position_wg is
     v_codcompy       varchar2(100 char);
-    
+
 --    cursor cl is
 --  		select codwg, flgdefault, positionmetric
 --  		from   twidget
 --      where (case when module = 'STD' then 999 else get_license('', module) end) > 0;
     cursor cl is
-  		select b.codwg, b.flgdefault, b.positionmetric
+  		select a.codwg, a.flgdefault, b.positionmetric
   		  from twidgetcom a,twidget b
          where a.codwg    = b.codwg
            and a.codcompy = v_codcompy
@@ -1433,7 +1485,7 @@
     exception when no_data_found then
         v_codcompy := null;
     end;
-    
+
     for r1 in cl loop
       begin
         insert into twidgetusr
@@ -1575,7 +1627,8 @@
                desclabelt,
                desclabel3,
                desclabel4,
-               desclabel5
+               desclabel5,
+               numseq
           from tapplscr
          where codapp = upper(p_codapp)
       order by numseq asc;
@@ -1596,15 +1649,15 @@
     obj_dashboard_105  := json_object_t();
     for rl in cl loop
       v_row := v_row + 1;
-      obj_dashboard_en.put(to_char(v_row),rl.desclabele);
+      obj_dashboard_en.put(to_char(rl.numseq),rl.desclabele);
       obj_data_en.put(upper(p_codapp),obj_dashboard_en);
-      obj_dashboard_th.put(to_char(v_row),rl.desclabelt);
+      obj_dashboard_th.put(to_char(rl.numseq),rl.desclabelt);
       obj_data_th.put(upper(p_codapp),obj_dashboard_th);
-      obj_dashboard_103.put(to_char(v_row),rl.desclabel3);
+      obj_dashboard_103.put(to_char(rl.numseq),rl.desclabel3);
       obj_data_103.put(upper(p_codapp),obj_dashboard_103);
-      obj_dashboard_104.put(to_char(v_row),rl.desclabel4);
+      obj_dashboard_104.put(to_char(rl.numseq),rl.desclabel4);
       obj_data_104.put(upper(p_codapp),obj_dashboard_104);
-      obj_dashboard_105.put(to_char(v_row),rl.desclabel5);
+      obj_dashboard_105.put(to_char(rl.numseq),rl.desclabel5);
       obj_data_105.put(upper(p_codapp),obj_dashboard_105);
     end loop;
     obj_row.put('objLang1',obj_data_en);
@@ -1619,7 +1672,7 @@
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 		return json_str_output;
   end;
-  
+
   procedure get_atktest(json_str_input in clob,json_str_output out clob) as
     obj_data            json_object_t;
     arr_labels          json_array_t;
@@ -1635,7 +1688,7 @@
     v_pcr_detected      number := 0;
     v_pcr_not_detected  number := 0;
     v_total_detected    number := 0;
-    
+
     cursor c_tatkpcr is
         select count(*) count_emp,
                count( case when typetest = '1' and result = 'Y' then 'x' end ) count_atk_y,
@@ -1654,7 +1707,7 @@
 
   begin
     initial_value(json_str_input);
-    
+
     arr_labels          := json_array_t();
     arr_datasets_atk    := json_array_t();
     arr_datasets_pcr    := json_array_t();
@@ -1663,7 +1716,7 @@
     for i in 1..to_number(to_char(last_day(to_date(lpad(p_month,2,'0')||lpad(p_year,4,'0'),'mmyyyy')),'dd')) loop 
         v_dtetest := to_date(lpad(i,2,'0')||'/'||lpad(p_month,2,'0')||'/'||lpad(p_year,4,'0'),'dd/mm/yyyy');
         arr_labels.append(to_char(v_dtetest,'dd/mm/yyyy'));
-        
+
         v_count_atk := 0;
         v_count_pcr := 0;
         for r_tatkpcr in c_tatkpcr loop
@@ -1674,7 +1727,7 @@
         arr_datasets_pcr.append(v_count_pcr);
         arr_datasets_total.append(v_count_atk + v_count_pcr);
     end loop;
-    
+
     v_atk_detected      := 0;
     v_atk_not_detected  := 0;
     v_pcr_detected      := 0;
@@ -1687,7 +1740,7 @@
         v_pcr_detected      := r_tatkpcr.count_pcr_y;
         v_pcr_not_detected  := r_tatkpcr.count_pcr_n;
     end loop;
-    
+
     -- total
     begin
         select count(*)
@@ -1715,7 +1768,7 @@
     obj_data.put('pcrNotDetected', to_char(v_pcr_not_detected,'fm999,999,990'));
     obj_data.put('totalDetected', to_char(v_total_detected,'fm999,999,990'));
     obj_data.put('labels', arr_labels);
-    
+
     arr_data := json_array_t();
     arr_data.append(arr_datasets_atk);
     arr_data.append(arr_datasets_pcr);
@@ -1727,7 +1780,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   function explode(p_delimiter varchar2, p_string varchar2, p_limit number default 1000) return arr_1d as
     v_str1        varchar2(4000 char);
     v_comma_pos   number := 0;
@@ -1756,7 +1809,7 @@
     end loop;
     return arr_result;
   end explode;
-  
+
   procedure get_atktest_department(json_str_input in clob,json_str_output out clob) as
     obj_data            json_object_t;
     arr_labels          json_array_t;
@@ -1765,9 +1818,9 @@
     arr_datasets_atk    json_array_t;
     arr_datasets_pcr    json_array_t;
     arr_datasets_total  json_array_t;
-    
+
     arr_label           arr_1d;
-    
+
     cursor c_tatkpcr is
         select hcm_util.get_codcomp_level(codcomp,p_comlevel) codcomp,
                count( case when typetest = '1' and result = 'Y' then 'x' end ) count_atk_y,
@@ -1785,10 +1838,10 @@
             group by a.typetest,a.result,a.codempid,b.codcomp)
         group by hcm_util.get_codcomp_level(codcomp,p_comlevel)
         order by hcm_util.get_codcomp_level(codcomp,p_comlevel);
-    
+
   begin
     initial_value(json_str_input);
-    
+
     arr_labels          := json_array_t();
     arr_datasets_atk    := json_array_t();
     arr_datasets_pcr    := json_array_t();
@@ -1813,7 +1866,7 @@
     arr_data.append(arr_datasets_atk);
     arr_data.append(arr_datasets_pcr);
 --    arr_data.append(arr_datasets_total);
-    
+
     obj_data := json_object_t();
     obj_data.put('coderror', '200');
     obj_data.put('desc_coderror', '');
@@ -1825,6 +1878,90 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
+
+  procedure insert_todo_list(json_str_input in clob,json_str_output out clob) is
+        v_row_in    json_object_t;
+        obj_row     json_object_t;
+        v_grpseq    number;
+        v_lastseq   number;
+    begin
+        initial_value(json_str_input);
+
+        v_row_in   := json_object_t(json_str_input);
+        v_flgsta    := hcm_util.get_string_t(v_row_in,'flgsta');
+        v_dtework   := to_date(hcm_util.get_string_t(v_row_in,'dtework'),'DDMMYYYY');
+        v_nummseq   := hcm_util.get_number_t(v_row_in,'numseq');
+
+        begin
+            select nvl(max(numseq),0) into v_lastseq
+             from ttodolist
+            where dtework = v_dtework
+              and codempid = global_v_codempid;
+        exception when others then
+            v_lastseq := 0;
+        end;
+
+		v_grpseq := v_lastseq+1;
+        if v_nummseq = 0 then
+            v_grpseq := v_grpseq;
+        else
+            v_grpseq := v_nummseq;
+        end if;
+
+        v_timstrt   := replace(hcm_util.get_string_t(v_row_in,'timstrt'),':','');
+        v_timend    := replace(hcm_util.get_string_t(v_row_in,'timend'),':','');
+        v_title     := hcm_util.get_string_t(v_row_in,'title');
+        v_detail    := hcm_util.get_string_t(v_row_in,'detail');
+        v_flgchk    := hcm_util.get_string_t(v_row_in,'flgchk');
+
+        begin
+            insert into ttodolist (codempid, dtework, numseq, timstrt, timend, title, detail, flgchk, dtecreate, codcreate) 
+            values (global_v_codempid,v_dtework,v_grpseq,v_timstrt,v_timend,v_title,v_detail,v_flgchk,sysdate,global_v_coduser);
+            param_msg_error := get_error_msg_php('HR2401',global_v_lang);
+        exception when dup_val_on_index then
+            update ttodolist 
+             set timstrt  = v_timstrt, 
+                 timend   = v_timend, 
+                 title    = v_title, 
+                 detail   = v_detail,
+                 dteupd   = sysdate,
+                 coduser  = global_v_coduser,
+                 flgchk   = v_flgchk
+           where codempid = global_v_codempid 
+             and dtework  = v_dtework
+             and numseq   = v_grpseq;
+            param_msg_error := get_error_msg_php('HR2410',global_v_lang);
+        end;
+        json_str_output := get_response_message(null,param_msg_error,global_v_lang);
+        commit;  
+    exception when others then
+        param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+        json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+    END;
+
+    procedure delete_todo_list(json_str_input in clob,json_str_output out clob) is
+        v_row_in    json_object_t;
+        obj_row     json_object_t;
+      begin
+        initial_value(json_str_input);
+
+        v_row_in   := json_object_t(json_str_input);
+        v_flgsta    := hcm_util.get_string_t(v_row_in,'flgsta');
+        v_dtework   := to_date(hcm_util.get_string_t(v_row_in,'dtework'),'DDMMYYYY');
+        v_nummseq   := hcm_util.get_number_t(v_row_in,'numseq');
+
+        delete from ttodolist 
+         where codempid = global_v_codempid
+          and dtework   = v_dtework
+          and numseq    = v_nummseq;
+
+        param_msg_error := get_error_msg_php('HR2425',global_v_lang);
+        json_str_output := get_response_message(null,param_msg_error,global_v_lang);
+        commit;  
+        exception when others then
+            param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
+            json_str_output := get_response_message('400',param_msg_error,global_v_lang);
+      end;
 
 END HCM_HOME;
 

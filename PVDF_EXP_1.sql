@@ -3,12 +3,39 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "PVDF_EXP" IS
+--------------
+procedure msg_err2(p_error in varchar2) is
+  v_numseq    number;
+  v_codapp    varchar2(30):= 'MSG';
+
+begin
+		null;
+/*
+    begin
+      select max(numseq) into v_numseq
+        from ttemprpt
+       where codapp   = v_codapp
+         and codempid = v_codapp;
+    end;
+    v_numseq  := nvl(v_numseq,0) + 1;
+    insert into ttemprpt(codempid,codapp,numseq, item1)
+                  values(v_codapp,v_codapp,v_numseq, p_error);
+		commit;
+--*/
+end;
+--------------
+/* Cust-Modify: KOHU-HR2201 */
+-- last update: 15/02/2024 12:25
+-- last update: 23/07/2022 06:25
 -- last update: 30/09/2020 18:00
    procedure head(p_pvdf				in number,
    							  p_typpayroll	in varchar2,
    							  p_numcomp			in varchar2,
    							  p_numfund  		in varchar2,
    							  p_dtepay			in date,
+--klkl
+   							  p_numperiod		in number,
+--klkl
    							  p_dtemthpay		in varchar2,
    							  p_dteyrepay		in number,
    							  p_totamtprove in number,
@@ -18,7 +45,33 @@
   							 	p_global			in number,
   							 	p_codlang			in varchar2,
   							 	p_text				out varchar2) is
-   v_dtepay  date;
+    v_dtepay        date;
+    v_codplan1      varchar2(30);
+    v_totamtprove   number:= 0;
+    v_totamtprovc   number:= 0;
+    s_amtpvefun1    number:= 0;
+    s_amtpvcfun1    number:= 0;
+    s_amtpvefun2_1  number:= 0;
+    s_amtpvefun2_2  number:= 0;
+    s_amtpvcfun2_1  number:= 0;
+    s_amtpvcfun2_2  number:= 0;
+    
+    v_totamtprove_sum  number:= 0;
+    v_totamtprovc_sum  number:= 0;
+    
+    v_amt_total_1   number:= 0;
+    v_amt_total_2   number:= 0;
+    v_amt_total_3   number:= 0;
+    v_amt_total_4   number:= 0;
+    v_totamtprove_total   number:= 0;
+    v_totamtprovc_total   number:= 0;
+    v_scodplan1      number:= 0;
+    v_stotamtprove   number:= 0; 
+    v_stotamtprovc   number:= 0;
+    v_dcodplan1      number:= 0;
+    v_dtotamtprove   number:= 0;
+    v_dtotamtprovc   number:= 0;
+
    begin
       if p_pvdf = 1 then					-- ??????????????
 				 p_text := 'A'||substr(p_typpayroll,1,1)||
@@ -51,6 +104,182 @@
          p_text := null;
       elsif p_pvdf = 9 then
          p_text := null;
+
+msg_err2('IN head ----1 -- 9 ----0');
+/* KOHU670004
+     		 begin
+                select  a.codplan , sum(stddec(AMTPROVE,b.codempid,'5639')) , sum(stddec(AMTPROVC,b.codempid,'5639'))
+                    into v_codplan1 , v_totamtprove , v_totamtprovc
+                    from tpfmemb a , ttaxcur b
+                    where a.codempid = b.codempid
+                    and dteyrepay = p_dteyrepay
+                    and dtemthpay = p_dtemthpay
+--klkl                    and numperiod = 1
+                    numperiod  = p_numperiod
+--klkl
+                    and (pctemppf > 0 or pctcompf > 0)
+                    and codplan is not null
+                    group by  a.codplan;
+             exception when no_data_found then
+                    v_codplan1 := null; 
+                    v_totamtprove := 0;
+                    v_totamtprovc := 0; 					 
+             end;
+
+            if  v_codplan1 = '01' then 
+                 s_amtpvefun1 :=  v_totamtprove;
+                 s_amtpvcfun1 :=  v_totamtprovc;
+            end if;
+
+            if  v_codplan1 = '02' then 
+                 s_amtpvefun2_1 :=  v_totamtprove * 0.8;
+                 s_amtpvefun2_2 :=  v_totamtprove * 0.2;
+                 s_amtpvcfun2_1 :=  v_totamtprovc * 0.8;
+                 s_amtpvcfun2_2 :=  v_totamtprovc * 0.2;
+            end if;
+KOHU670004 */
+--KOHU670004 (codplan = '01')
+                    s_amtpvefun1   := 0;
+                    s_amtpvcfun1   := 0;
+                    s_amtpvefun2_1 := 0;
+                    s_amtpvefun2_2 := 0;
+                    s_amtpvcfun2_1 := 0;
+                    s_amtpvcfun2_2 := 0;
+                    v_totamtprove_sum :=0;
+                    v_totamtprovc_sum :=0;
+                    v_totamtprove_total :=0;
+                    v_totamtprovc_total :=0;
+                    v_stotamtprove   :=0;
+                    v_stotamtprovc   :=0;
+                    v_dtotamtprove   :=0;
+                    v_dtotamtprovc   :=0;
+
+     		 begin
+                select  a.codplan , sum(stddec(AMTPROVE,b.codempid,'5639')) , sum(stddec(AMTPROVC,b.codempid,'5639'))
+                    into v_codplan1 , v_totamtprove , v_totamtprovc
+                    from tpfmemb a , ttaxcur b
+                    where a.codempid = b.codempid
+                    and dteyrepay = p_dteyrepay
+                    and dtemthpay = p_dtemthpay
+                    and b.typpayroll = nvl(p_typpayroll,b.typpayroll)
+--klkl                    and numperiod = 3
+                    and numperiod  = p_numperiod
+--klkl
+                    and (pctemppf > 0 or pctcompf > 0)
+                    and codplan = '01'
+                    group by  a.codplan;
+             exception when no_data_found then
+                    v_codplan1 := null; 
+                    v_totamtprove := 0;
+                    v_totamtprovc := 0; 					 
+             end;
+             s_amtpvefun1 :=  v_totamtprove;
+             s_amtpvcfun1 :=  v_totamtprovc;
+--KOHU670004 (codplan = '01')
+
+--KOHU670004 (codplan = '02')
+     		 begin
+                select  a.codplan , sum(stddec(AMTPROVE,b.codempid,'5639')) , sum(stddec(AMTPROVC,b.codempid,'5639'))
+                    into v_codplan1 , v_totamtprove , v_totamtprovc
+                    from tpfmemb a , ttaxcur b
+                    where a.codempid = b.codempid
+                    and dteyrepay = p_dteyrepay
+                    and dtemthpay = p_dtemthpay
+                    and b.typpayroll = nvl(p_typpayroll,b.typpayroll)
+--klkl                    and numperiod = 3
+                    and numperiod  = p_numperiod
+--klkl
+                    and (pctemppf > 0 or pctcompf > 0)
+                    and codplan = '02'
+                    group by  a.codplan;
+             exception when no_data_found then
+                    v_codplan1 := null; 
+                    v_totamtprove := 0;
+                    v_totamtprovc := 0; 					 
+             end;
+             
+             v_totamtprove_sum := s_amtpvefun1 + v_totamtprove;
+             v_totamtprovc_sum := s_amtpvcfun1 + v_totamtprovc;
+             
+             
+             
+             s_amtpvefun2_1 :=  v_totamtprove * 0.8;
+             s_amtpvefun2_2 :=  v_totamtprove * 0.2;
+             s_amtpvcfun2_1 :=  v_totamtprovc * 0.8;
+             s_amtpvcfun2_2 :=  v_totamtprovc * 0.2;
+--KOHU670004 (codplan = '02')
+
+            s_amtpvefun1 := nvl(s_amtpvefun1,0) + nvl(s_amtpvefun2_1,0);
+            s_amtpvcfun1 := nvl(s_amtpvcfun1,0) + nvl(s_amtpvcfun2_1,0);
+            
+
+            
+     		 begin
+                select  a.codplan , sum(stddec(AMTPROVE,b.codempid,'5639')) , sum(stddec(AMTPROVC,b.codempid,'5639'))
+                    into v_dcodplan1 , v_dtotamtprove , v_dtotamtprovc
+                    from tpfmemb a , ttaxcur b
+                    where a.codempid = b.codempid
+                    and dteyrepay = p_dteyrepay
+                    and dtemthpay = p_dtemthpay
+--klkl                    and numperiod = 3
+                    and numperiod  = p_numperiod
+--klkl
+                    and (pctemppf > 0 or pctcompf > 0)
+                    and codplan = '01'
+                    group by  a.codplan;
+             exception when no_data_found then
+                    v_dcodplan1 := null; 
+                    v_dtotamtprove := 0;
+                    v_dtotamtprovc := 0; 					 
+             end;
+
+     		 begin
+                select  a.codplan , sum(stddec(AMTPROVE,b.codempid,'5639')) , sum(stddec(AMTPROVC,b.codempid,'5639'))
+                    into v_scodplan1 , v_stotamtprove , v_stotamtprovc
+                    from tpfmemb a , ttaxcur b
+                    where a.codempid = b.codempid
+                    and dteyrepay = p_dteyrepay
+                    and dtemthpay = p_dtemthpay
+--klkl                    and numperiod = 3
+                    and numperiod  = p_numperiod
+--klkl
+                    and (pctemppf > 0 or pctcompf > 0)
+                    and codplan = '02'
+                    group by  a.codplan;
+             exception when no_data_found then
+                    v_scodplan1 := null; 
+                    v_stotamtprove := 0;
+                    v_stotamtprovc := 0; 					 
+             end;
+            
+            
+             v_amt_total_1 :=  (v_stotamtprove * 0.8) + v_dtotamtprove ;
+             v_amt_total_2 :=  (v_stotamtprove * 0.2) ;
+             v_amt_total_3 :=  (v_stotamtprovc * 0.8) + v_dtotamtprovc ;
+             v_amt_total_4 :=  (v_stotamtprovc * 0.2) ;
+
+
+
+msg_err2('IN head ----1 -- 9 ----10');
+         p_text := rpad(substr(p_numcomp,1,20),20,' ')||';'||												      --àÅ¢·Õè¡Í§·Ø¹
+         					 rpad(substr(p_numfund,1,20),20,' ')||';'||												      --ÃËÑÊºÃÔÉÑ·¡Í§·Ø¹
+         					 '1'||'/'||p_dtemthpay||'/'||(p_dteyrepay+543)||';'|| 				  --§Ç´/à´×Í¹/»Õ	
+         					 lpad(ltrim(to_char(p_totrec,'fm999')),3,' ')||';'||					          --¨Ó¹Ç¹¤¹
+         					 lpad(ltrim(to_char(v_totamtprove_sum,'999999990.99')),12,' ')||';'||	      -- à§Ô¹ÊÁ·º¢Í§¾¹Ñ¡§Ò¹
+                             lpad(ltrim(to_char(v_totamtprovc_sum,'999999990.99')),12,' ')||';'|| 	    -- à§Ô¹ÊÁ·º¢Í§ºÃÔÉÑ·
+                             lpad(ltrim(to_char(nvl(v_amt_total_1,0),'999999990.99')),12,' ')||';'|| -- EE CONT1
+                             lpad(ltrim(to_char(nvl(v_amt_total_3,0),'999999990.99')),12,' ')||';'|| -- ER CONT1
+                             lpad(ltrim(to_char(nvl(v_amt_total_2,0),'999999990.99')),12,' ')||';'|| -- EE CONT2
+                             lpad(ltrim(to_char(nvl(v_amt_total_4,0),'999999990.99')),12,' ')||';'|| -- ER CONT2
+                             lpad(ltrim(to_char(nvl('',0),'999999990.99')),12,' ')||';'|| -- EE CONT3
+                             lpad(ltrim(to_char(nvl('',0),'999999990.99')),12,' ')||';'|| -- ER CONT3
+                             lpad(ltrim(to_char(nvl('',0),'999999990.99')),12,' ')||';'|| -- EE CONT4
+                             lpad(ltrim(to_char(nvl('',0),'999999990.99')),12,' ')||';'|| -- ER CONT4
+                             lpad(ltrim(to_char(nvl('',0),'999999990.99')),12,' ')||';'|| -- EE CONT5
+                             lpad(ltrim(to_char(nvl('',0),'999999990.99')),12,' ')||';'|| -- ER CONT5	
+                             to_char(p_dtepay,'dd')||'/'||to_char(p_dtepay,'mm')||'/'||			      	-- ÇÑ¹·Õè¹ÓÊè§
+                             lpad((to_number(to_char(p_dtepay,'yyyy'))),4,'0')||';';	
+
       elsif p_pvdf = 11 then
          p_text := null;
       elsif p_pvdf = 13 then
@@ -147,6 +376,7 @@
 			v_codempid				varchar2(7);
 			v_SuspendFlag	  	varchar2(1);
 			v_text						varchar2(2);
+			v_codplan3						varchar2(4);
 
          v_codplan     		tpfpcinf.codplan%type;
          v_codplan2    		tpfpcinf.codplan%type;
@@ -201,6 +431,7 @@
 			order by dteyrepay desc ,dtemthpay desc ,numperiod desc;
 
    begin
+msg_err2('IN body ----1');
       if p_pvdf = 1 then		-- ??????????????
 		  	 if (to_char(p_dteeffec,'mm') = p_dtemthpay) and
 		  			(to_char(p_dteeffec,'yyyy') = to_char(p_dteyrepay)) then
@@ -590,13 +821,24 @@
 					v_sex			 := ' ';
 				end;
 
+
+                begin
+                    select  codplan
+                        into    v_codplan3
+                    from tpfmemb
+                    where codempid   = p_codempid ;
+                exception when no_data_found then
+                    v_codplan3 := '';
+                end;
+
 				v_amtmth  := 0;
 				get_wage_income(hcm_util.get_codcomp_level(p_codcomp,1),v_codempmt,
                                     v_amtincom(1),v_amtincom(2),v_amtincom(3),v_amtincom(4),v_amtincom(5),
                                      v_amtincom(6),v_amtincom(7),v_amtincom(8),v_amtincom(9),v_amtincom(10),
                                      v_amthur,v_amtday,v_amtmth);
 
-				 p_text := rpad(substr(v_codplan,1,4),4,' ')||
+				 p_text := rpad(substr(v_codplan3,1,2),2,' ')||
+--				 p_text := rpad(substr(v_codplan,1,4),4,' ')||
                            rpad(substr(p_codempid,1,10),15,' ')||
                            rpad(substr(p_namtitlt,1,15),15,' ')||
                            rpad(substr(p_namfirstt,1,25),25,' ')||										--4.First name
@@ -605,25 +847,27 @@
                            to_char(to_number(to_char(p_dteempmt,'yyyy')) - p_global)||--6.DOE dteempmt
                            to_char(p_dteeffec,'dd')||to_char(p_dteeffec,'mm')||
                            to_char(to_number(to_char(p_dteeffec,'yyyy')) - p_global)||--7.DOP dteeffec
-                           rpad(substr(v_numoffid,1,13),13,' ')||
-                           rpad(substr(v_numtaxid,1,10),10,' ')||											--9.TAX ID
+                           rpad(substr(v_numoffid,1,13),23,' ')||
+                           --rpad(substr(v_numtaxid,1,10),10,' ')||											--9.TAX ID
                            lpad(ltrim(to_char(p_amtprove,'999999990.99')),12,' ')||
                            lpad(ltrim(to_char(p_amtprovc,'999999990.99')),12,' ')||   --11.TOTAL_ER CONT
-                           lpad(ltrim(to_char(v_amtmth,'999999990.00')),12,' ')||			--12.SALARY
-                           rpad(substr(p_codcomp,1,40),40,' ')||rpad(substr(v_sex,1,1),1,' ')||--14.SEX
-                           rpad(substr(v_codpolicy(1),1,4),4,' ')||										--15.FUND1
+                           lpad(ltrim(to_char(v_amtmth,'999999990.99')),12,' ')||			--12.SALARY
+                           rpad(('N'),30,' ')||
+                           rpad(substr(v_sex,1,1),1,' ')||'V1'||--14.SEX
+                           --rpad(substr(p_codcomp,1,40),40,' ')||rpad(substr(v_sex,1,1),1,' ')||--14.SEX
+                           --rpad(substr(v_codpolicy(1),1,4),4,' ')||										--15.FUND1
                            lpad(ltrim(to_char(v_amteaccu(1),'999999990.99')),12,' ')||
                            lpad(ltrim(to_char(v_amtcaccu(1),'999999990.99')),12,' ')||
-                           rpad(substr(v_codpolicy(2),1,4),4,' ')||										--18.FUND2
+                           rpad(substr(v_codpolicy(2),1,2),2,' ')||										--18.FUND2
                            lpad(ltrim(to_char(v_amteaccu(2),'999999990.99')),12,' ')||
                            lpad(ltrim(to_char(v_amtcaccu(2),'999999990.99')),12,' ')||
-                           rpad(substr(v_codpolicy(3),1,4),4,' ')||										--21.FUND3
+                           rpad(substr(v_codpolicy(3),1,2),2,' ')||										--21.FUND3
                            lpad(ltrim(to_char(v_amteaccu(3),'999999990.99')),12,' ')||
                            lpad(ltrim(to_char(v_amtcaccu(3),'999999990.99')),12,' ')||
-                           rpad(substr(v_codpolicy(4),1,4),4,' ')||										--24.FUND4
+                           rpad(substr(v_codpolicy(4),1,2),2,' ')||										--24.FUND4
                            lpad(ltrim(to_char(v_amteaccu(4),'999999990.99')),12,' ')||
                            lpad(ltrim(to_char(v_amtcaccu(4),'999999990.99')),12,' ')||
-                           rpad(substr(v_codpolicy(5),1,4),4,' ')||										--27.FUND5
+                           rpad(substr(v_codpolicy(5),1,2),2,' ')||										--27.FUND5
                            lpad(ltrim(to_char(v_amteaccu(5),'999999990.99')),12,' ')||
                            lpad(ltrim(to_char(v_amtcaccu(5),'999999990.99')),12,' ');
 

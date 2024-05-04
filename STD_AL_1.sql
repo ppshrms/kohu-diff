@@ -3,7 +3,7 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "STD_AL" is
--- last update: 29/04/2024, 21/04/2021 15:00        --redmine895
+-- last update: 21/04/2021 15:00        --redmine895
   procedure gen_tattence(p_codempid   in temploy1.codempid%type,
 											   p_codcalen   in temploy1.codcalen%type,
 											   p_dtework    in date,
@@ -86,7 +86,7 @@
           v_typwork := 'L' ;
         end if;
         v_flgfound := true;
-        if v_log = 'Y' then --user36 ST11 29/04/2024 (KOHU #1908) || if v_log = 'Y' or r_tattence.timin is not null or r_tattence.timout is not null then
+        if v_log = 'Y' or r_tattence.timin is not null or r_tattence.timout is not null then
           if p_flgupd = 'C' then
             null;
           --user14 elsif p_flgupd in ('G','M') then

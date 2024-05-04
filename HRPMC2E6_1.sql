@@ -111,7 +111,7 @@
     v_max_preci         number;
     v_max_scale         number;
     v_codlist           varchar2(100 char);
-    
+
     v_codlist_data      json_object_t;
     v_codlist_data_row  json_object_t;
     v_cod_value         varchar2(20 char);
@@ -602,10 +602,15 @@
     v_stmt_upd        varchar2(4000 char)   := ' ';
     v_col_insert      varchar2(4000 char)   := ' ';
     v_val_insert      varchar2(4000 char)   := ' ';
+    
+    v_pfcomp          number;
+    
     cursor c1 is
       select  '1'
       from    tempothr
       where   numappl   = v_numappl;
+      
+      
   begin
     v_numappl     := get_numappl(p_codempid_query);
     for r1 in c1 loop
@@ -659,7 +664,27 @@
       execute immediate ' insert into tempothr(numappl,codempid,'||v_col_insert||'codcreate,coduser)
                                        values ('''||v_numappl||''','''||p_codempid_query||''','||v_val_insert||''''||global_v_coduser||''','''||global_v_coduser||''') ';
     end if;
-  end; -- end save_tempothr
+    
+     begin
+        select usr_pvf_comp into v_pfcomp
+            from tempothr
+            where numappl = v_numappl 
+            and usr_pvf_comp is not null;
+        exception when others then 
+            v_pfcomp := null;
+      end;
+    
+    
+    
+        if v_pfcomp >= 0 then
+                update tpfmemrt set ratecsbt = v_pfcomp
+                where codempid = p_codempid_query
+                and dteeffec = (select max(dteeffec) from tpfmemrt 
+                                where codempid = p_codempid_query);
+        end if;
+    end;
+    
+  --end; -- end save_tempothr
   --
   procedure get_others_table(json_str_input in clob, json_str_output out clob) is
   begin
@@ -1007,7 +1032,7 @@
     param_json  := json_object_t(json_str_input);
     param_json_others  := hcm_util.get_json_t(param_json,'json_input_str');
     param_json_others  := hcm_util.get_json_t(param_json_others,'rows');
-    
+
 
     save_tempothr(param_json_others);
 

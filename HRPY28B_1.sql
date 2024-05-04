@@ -119,7 +119,7 @@
          and dteyrepay = v_dteyrepay - global_v_zyear
          and dtemthpay = v_dtemthpay
          and numperiod = v_numperiod
-         and codpay    = v_codpay;
+         and codpay    = upper(v_codpay);
         return(false) ;
     exception when no_data_found then
         return(true) ;
@@ -381,13 +381,13 @@
 --      end;
 
       if p_typpay = '1' then
-        check_tothpay(v_codempid,v_codpay,v_dtepaystr,v_dtepay,v_amtpay,v_flgpyctax,v_status,v_reason,v_failcolumn,v_codcompw);
+        check_tothpay(v_codempid,upper(v_codpay),v_dtepaystr,v_dtepay,v_amtpay,v_flgpyctax,v_status,v_reason,v_failcolumn,v_codcompw);
         v_rcnt      := v_rcnt + 1;
         obj_data    := json_object_t();
         obj_data.put('coderror', '200');
         obj_data.put('status', v_status);
         obj_data.put('codempid', v_codempid);
-        obj_data.put('codpay', v_codpay);
+        obj_data.put('codpay', upper(v_codpay));
         if v_failcolumn = 'dtepay' then
             obj_data.put('dtepay',v_dtepaystr);
         else
@@ -416,7 +416,7 @@
           v_amt_sum := v_amt_sum + nvl(to_number(v_amtpay,'fm9,999,999,990.00'),0);
         end if;
       elsif p_typpay = '2' then
-        check_tothinc(v_codempid,v_codpay,v_qtypayda,v_qtypayhr,v_qtypaysc,v_ratepay,
+        check_tothinc(v_codempid,upper(v_codpay),v_qtypayda,v_qtypayhr,v_qtypaysc,v_ratepay,
                       v_amtpay,v_codcompw,v_complete,v_error,v_status,v_reason,v_failcolumn);
         if param_msg_error is null then
           v_rcnt      := v_rcnt + 1;
@@ -424,7 +424,7 @@
           obj_data.put('coderror', '200');
           obj_data.put('status', v_status);
           obj_data.put('codempid', v_codempid);
-          obj_data.put('codpay', v_codpay);
+          obj_data.put('codpay', upper(v_codpay));
           obj_data.put('qtypayda', v_qtypayda);
           obj_data.put('qtypayhr', v_qtypayhr);
           obj_data.put('qtypaysc', v_qtypaysc);
@@ -587,12 +587,13 @@
       v_reason  := replace(v_data_error,'@#$%400','');
       return;
     end if;
-    -- check codpay
+    
+    -- check codpay 
     if v_codpay is not null then
       begin
         select codpay into v_codpay_tmp
           from tinexinf
-        where codpay = v_codpay;
+        where codpay = upper(v_codpay);
       exception when no_data_found then
         v_data_error := 'HR2010 '||get_errorm_name('HR2010',global_v_lang)||' (TINEXINF)';
         v_status := 'N';
@@ -606,7 +607,7 @@
         select codcompy into v_codcompy
           from tinexinfc
          where codcompy = hcm_util.get_codcomp_level(v_codcomp,1)
-           and codpay   = v_codpay;
+           and codpay   = upper(v_codpay);
       exception when no_data_found then
         v_data_error := get_error_msg_php('PY0044',global_v_lang);
         v_status := 'N';
@@ -823,7 +824,7 @@
       begin
         select codpay into v_codpay_tmp
           from tinexinf
-        where codpay = v_codpay;
+        where codpay = upper(v_codpay);
       exception when no_data_found then
         v_data_error := 'HR2010 '||get_errorm_name('HR2010',global_v_lang)||' (TINEXINF)';
         v_status := 'N';
@@ -837,7 +838,7 @@
         select codcompy into v_codcompy
           from tinexinfc
          where codcompy = hcm_util.get_codcomp_level(v_codcomp,1)
-           and codpay   = v_codpay;
+           and codpay   = upper(v_codpay);
       exception when no_data_found then
         v_data_error := get_error_msg_php('PY0044',global_v_lang);
         v_status := 'N';
@@ -868,7 +869,7 @@
       begin
         select count(*) into v_tcontpms
           from tcontpms
-         where v_codpay in (codincom1,codincom2,codincom3,codincom4,codincom5,
+         where upper(v_codpay) in (codincom1,codincom2,codincom3,codincom4,codincom5,
                             codincom6,codincom7,codincom8,codincom9,codincom10)
            and codcompy = v_codcompy
            and dteeffec = (select max(dteeffec)
@@ -890,7 +891,7 @@
       begin
         select count(*) into v_count
           from tcontrpy
-         where codpaypy5 = v_codpay;
+         where codpaypy5 = upper(v_codpay);
       end;
       if v_count > 0 then
         v_data_error := get_error_msg_php('PY0019',global_v_lang);
@@ -916,7 +917,7 @@
          and dteyrepay = p_dteyrepay - global_v_zyear
          and dtemthpay = p_dtemthpay
          and numperiod = p_numperiod
-         and codpay    = v_codpay
+         and codpay    = upper(v_codpay)
          and codcompw  = v_codcompw;
     exception when no_data_found then
       v_qtypayda_tmp  := 0;
@@ -1351,7 +1352,7 @@
 				and	dteyrepay	=	(p_dteyrepay - global_v_zyear)
 				and	dtemthpay	= p_dtemthpay
 				and	numperiod	= p_numperiod
-				and	codpay		= v_codpay
+				and	codpay		= upper(v_codpay)
 				and dtepay    = v_dtepay
 			order by codempid,dteyrepay,dtemthpay,numperiod,codpay
 			for update;
@@ -1410,14 +1411,14 @@
                          and dteyrepay	=	(p_dteyrepay - global_v_zyear)
                          and dtemthpay	= p_dtemthpay
                          and numperiod	= p_numperiod
-                         and codpay		  = v_codpay
+                         and codpay		  = upper(v_codpay)
                          and dtepay     = v_dtepay;
                     end;
                     insert into tothpay(codempid,dteyrepay,dtemthpay,numperiod,codpay,dtepay,
                                         codcomp,typpayroll,typemp,amtpay,
                                         flgpyctax,coduser,dteupd,codcreate,costcent,
                                         codcompw) --08/12/2020--
-                          values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,v_codpay,v_dtepay,
+                          values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,upper(v_codpay),v_dtepay,
                                  r_temploy1.codcomp,r_temploy1.typpayroll,r_temploy1.typemp,stdenc(v_amtpay,v_codempid,v_chken),
                                  v_flgpyctax,global_v_coduser,trunc(sysdate),global_v_coduser,v_costcent,
                                  v_codcompw); --08/12/2020--
@@ -1439,7 +1440,7 @@
                                       codcomp,typpayroll,typemp,amtpay,
                                       flgpyctax,coduser,dteupd,codcreate,costcent,
                                       codcompw) --08/12/2020--
-                          values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,v_codpay,v_dtepay,
+                          values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,upper(v_codpay),v_dtepay,
                                  r_temploy1.codcomp,r_temploy1.typpayroll,r_temploy1.typemp,stdenc(v_amtpay,v_codempid,v_chken),
                                  v_flgpyctax,global_v_coduser,trunc(sysdate),global_v_coduser,v_costcent,
                                  v_codcompw); --08/12/2020--
@@ -1457,7 +1458,7 @@
                   insert into tlogothpay (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                                 dtepay, codcomp, desfld, desold, desnew,
                                 codcreate, coduser)
-                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                                 v_dtepay, r_temploy1.codcomp, 'AMTPAY', v_amtpay_tmp, stdenc(v_amtpay,v_codempid,v_chken),
                                 global_v_coduser, global_v_coduser);
                 end if;
@@ -1467,7 +1468,7 @@
                   insert into tlogothpay (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                                 dtepay, codcomp, desfld, desold, desnew,
                                 codcreate, coduser)
-                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                                 v_dtepay, r_temploy1.codcomp, 'FLGPYCTAX', v_flgpyctax_tmp, v_flgpyctax,
                                 global_v_coduser, global_v_coduser);
                 end if;
@@ -1477,7 +1478,7 @@
                   insert into tlogothpay (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                                 dtepay, codcomp, desfld, desold, desnew,
                                 codcreate, coduser)
-                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                                 v_dtepay, r_temploy1.codcomp, 'CODCOMPW', v_codcompw_tmp, v_codcompw,
                                 global_v_coduser, global_v_coduser);
                 end if;
@@ -1544,7 +1545,7 @@
 				and	dteyrepay	=	(p_dteyrepay - global_v_zyear)
 				and	dtemthpay	= p_dtemthpay
 				and	numperiod	= p_numperiod
-				and	codpay		= v_codpay
+				and	codpay		= upper(v_codpay)
 			order by codempid,dteyrepay,dtemthpay,numperiod,codpay
 			for update;
 
@@ -1555,7 +1556,7 @@
          and dteyrepay = (p_dteyrepay - global_v_zyear)
          and dtemthpay = p_dtemthpay
          and numperiod = p_numperiod
-         and codpay		 = v_codpay
+         and codpay		 = upper(v_codpay)
     group by codempid
     order by codempid;
   begin
@@ -1605,7 +1606,7 @@
                  and dteyrepay = p_dteyrepay - global_v_zyear
                  and dtemthpay = p_dtemthpay
                  and numperiod = p_numperiod
-                 and codpay    = v_codpay
+                 and codpay    = upper(v_codpay)
                  and codcompw  = v_codcompw;
             exception when no_data_found then
               v_codcompw_tmp  := null;
@@ -1645,7 +1646,7 @@
             end if;
 
 
-            v_dup := check_dup_tothinc2(v_codempid,p_dteyrepay,p_dtemthpay,p_numperiod,v_codpay,v_codcompw);
+            v_dup := check_dup_tothinc2(v_codempid,p_dteyrepay,p_dtemthpay,p_numperiod,upper(v_codpay),v_codcompw);
             -- get cost center
             begin
               select costcent into v_costcent
@@ -1660,7 +1661,7 @@
                  tothinc2(codempid,dteyrepay,dtemthpay,numperiod,codpay,
                           codcompw,qtypayda,qtypayhr,qtypaysc,
                           amtpay,costcent,coduser,codcreate,codsys)
-                   values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,v_codpay,
+                   values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,upper(v_codpay),
                           v_codcompw,v_qtypayda,v_qtypayhr,v_qtypaysc,
                           tmp_amtpay,v_costcent,global_v_coduser,global_v_coduser,'PY');
             else -- found false
@@ -1671,13 +1672,13 @@
                    and dteyrepay   = p_dteyrepay - global_v_zyear
                    and dtemthpay   = p_dtemthpay
                    and numperiod   = p_numperiod
-                   and codpay      = v_codpay
+                   and codpay      = upper(v_codpay)
                    and codcompw    = v_codcompw;
 
                 insert into tothinc2(codempid,dteyrepay,dtemthpay,numperiod,codpay,
                             codcompw,qtypayda,qtypayhr,qtypaysc,
                             amtpay,costcent,coduser,codcreate,codsys)
-                     values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,v_codpay,
+                     values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,p_numperiod,upper(v_codpay),
                             v_codcompw,v_qtypayda,v_qtypayhr,v_qtypaysc,
                             tmp_amtpay,v_costcent,global_v_coduser,global_v_coduser,'PY');
               else
@@ -1695,7 +1696,7 @@
                    and dteyrepay   = p_dteyrepay - global_v_zyear
                    and dtemthpay   = p_dtemthpay
                    and numperiod   = p_numperiod
-                   and codpay      = v_codpay
+                   and codpay      = upper(v_codpay)
                    and codcompw    = v_codcompw;
               end if;
             end if;
@@ -1706,7 +1707,7 @@
               insert into
                  tlogothinc (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                             codcomp, desfld, desold, desnew, codcreate, coduser)
-                    values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                    values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                             r_temploy1.codcomp, 'CODCOMPW', v_codcompw_tmp, v_codcompw,
                             global_v_coduser, global_v_coduser);
             end if;
@@ -1716,7 +1717,7 @@
                   insert into
                      tlogothinc (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                                 codcomp, desfld, desold, desnew, codcreate, coduser)
-                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                                 r_temploy1.codcomp, 'QTYPAYDA', v_qtypayda_tmp, v_qtypayda,
                                 global_v_coduser, global_v_coduser);
                 end if;
@@ -1726,7 +1727,7 @@
                   insert into
                      tlogothinc (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                                 codcomp, desfld, desold, desnew, codcreate, coduser)
-                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                                 r_temploy1.codcomp, 'QTYPAYHR', v_qtypayhr_tmp, v_qtypayhr,
                                 global_v_coduser, global_v_coduser);
                 end if;
@@ -1736,7 +1737,7 @@
                   insert into
                      tlogothinc (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                                 codcomp, desfld, desold, desnew, codcreate, coduser)
-                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                        values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                                 r_temploy1.codcomp, 'QTYPAYSC', v_qtypaysc_tmp, v_qtypaysc,
                                 global_v_coduser, global_v_coduser);
                 end if;
@@ -1746,7 +1747,7 @@
               insert into
                  tlogothinc (numseq, codempid, dteyrepay, dtemthpay, numperiod, codpay,
                             codcomp, desfld, desold, desnew, codcreate, coduser)
-                    values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, v_codpay,
+                    values (v_numseq, v_codempid, p_dteyrepay, p_dtemthpay, p_numperiod, upper(v_codpay),
                             r_temploy1.codcomp, 'AMTPAY', v_amtpay_old, tmp_amtpay,
                             global_v_coduser, global_v_coduser);
             end if;
@@ -1770,7 +1771,7 @@
                    and dteyrepay = p_dteyrepay - global_v_zyear
                    and dtemthpay = p_dtemthpay
                    and numperiod = p_numperiod
-                   and codpay    = v_codpay;
+                   and codpay    = upper(v_codpay);
               exception when no_data_found then
                 v_qtypayda_tmp  := 0;
                 v_qtypayhr_tmp  := 0;
@@ -1779,7 +1780,7 @@
               end;
               tmp_ratepay   := stdenc(round(v_ratepay,2),v_codempid,v_chken);
 --              tmp_amtpay    := stdenc(v_amtpay,v_codempid,v_chken);
-              v_dup2 := check_dup_tothinc(v_codempid,p_dteyrepay,p_dtemthpay,p_numperiod,v_codpay);
+              v_dup2 := check_dup_tothinc(v_codempid,p_dteyrepay,p_dtemthpay,p_numperiod,upper(v_codpay));
               if v_dup2 then  --true not found
                 -- Insert tothinc
                 insert into
@@ -1787,7 +1788,7 @@
                            codcomp,typpayroll,qtypayda,qtypayhr,qtypaysc,
                            ratepay,amtpay,codsys,coduser,typemp,codcreate,costcent)
                     values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,
-                           p_numperiod,v_codpay,r_temploy1.codcomp,
+                           p_numperiod,upper(v_codpay),r_temploy1.codcomp,
                            r_temploy1.typpayroll,v_qtypayda,v_qtypayhr,v_qtypaysc,
                            tmp_ratepay,stdenc(r_tothinc2.sum_amtpay,v_codempid,v_chken),'PY',global_v_coduser,r_temploy1.typemp,
                            global_v_coduser,v_costcent);
@@ -1800,13 +1801,13 @@
                        and dteyrepay   = p_dteyrepay - global_v_zyear
                        and dtemthpay   = p_dtemthpay
                        and numperiod   = p_numperiod
-                       and codpay      = v_codpay;
+                       and codpay      = upper(v_codpay);
 
                     insert into tothinc(codempid,dteyrepay,dtemthpay,numperiod,codpay,
                                 codcomp,typpayroll,qtypayda,qtypayhr,qtypaysc,
                                 ratepay,amtpay,codsys,coduser,typemp,codcreate,costcent)
                         values(v_codempid,(p_dteyrepay - global_v_zyear),p_dtemthpay,
-                               p_numperiod,v_codpay,nvl(v_codcompw,r_temploy1.codcomp),
+                               p_numperiod,upper(v_codpay),nvl(v_codcompw,r_temploy1.codcomp),
                                r_temploy1.typpayroll,v_qtypayda,v_qtypayhr,v_qtypaysc,
                                tmp_ratepay,stdenc(r_tothinc2.sum_amtpay,v_codempid,v_chken),'PY',global_v_coduser,r_temploy1.typemp,
                                global_v_coduser,v_costcent);

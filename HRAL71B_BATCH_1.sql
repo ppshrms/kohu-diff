@@ -1597,6 +1597,17 @@
 			 where codempid  = v_codempid
 		     and dtework between nvl(para_dtestr,dtework) and para_dteend
 			   and nvl(dteyrepay,0) = 0
+--<< user22 : 22/03/2024 : ST11 (KOHU #1804) || 
+         and not exists(select codempid
+                          from tpaysum2
+                         where codempid = tovrtime.codempid
+                           and codalw	  = para_codapp
+                           and codpay	  = para_codpay
+                           and dtework	= tovrtime.dtework
+                           and codshift = tovrtime.typot
+                           and dteyrepay||lpad(dtemthpay,2,'0')||lpad(numperiod,2,'0') <>
+                               para_dteyrepay||lpad(para_dtemthpay,2,'0')||lpad(para_numperiod,2,'0'))
+-->> user22 : 22/03/2024 : ST11 (KOHU #1804) || 
 		order by dtework;
 
 		cursor c_totpaydt is
@@ -5358,6 +5369,14 @@
 									       and dtework	= t2.dtework
 									       and dteyrepay||lpad(dtemthpay,2,'0')||lpad(numperiod,2,'0') <>
 											       para_dteyrepay||lpad(para_dtemthpay,2,'0')||lpad(para_numperiod,2,'0'))
+        --
+        and not exists(select a.codempid
+                         from tpaysum2 a, tattence b 
+                        where a.codempid = b.codempid 
+                          and a.dtework  = b.dtework 
+                          and a.codalw   = 'WAGE'
+                          and b.typwork  = 'H'
+                          and a.codempid = p_codempid)
        -->>user36 ST11 20/12/2021
 	order by t2.dtework;
 
@@ -6534,6 +6553,17 @@
 			   and dtework between nvl(para_dtestr,dtework) and para_dteend
 			   and flgotcal  = 'Y'
 			   and dteyreret = 0
+--<< user22 : 22/03/2024 : ST11 (KOHU #1804) || 
+         and not exists(select codempid
+                          from tpaysum2
+                         where codempid = tovrtime.codempid
+                           and codalw	  = para_codapp
+                           and codpay	  = para_codpay
+                           and dtework	= tovrtime.dtework
+                           and codshift = tovrtime.typot
+                           and dteyrepay||lpad(dtemthpay,2,'0')||lpad(numperiod,2,'0') <>
+                               para_dteyrepay||lpad(para_dtemthpay,2,'0')||lpad(para_numperiod,2,'0'))
+-->> user22 : 22/03/2024 : ST11 (KOHU #1804) ||              
 		order by dtework;
 
 		cursor c_totpaydt is

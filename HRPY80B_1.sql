@@ -354,7 +354,8 @@
                 data_numsaid(v_sumrec)   := rpad(nvl(v_numsaid,' '),13,' ');
                 data_prefix(v_sumrec)    := v_prefix;
                 data_namfirstt(v_sumrec) := rpad(substr(nvl(v_namfirstt,' '),1,30),30,' ');
-                data_namlastt(v_sumrec)  := rpad(substr(nvl(v_namlastt,' '),1,35),35,' ');
+                --data_namlastt(v_sumrec)  := rpad(substr(nvl(v_namlastt,' '),1,35),35,' ');
+                data_namlastt(v_sumrec)  := replace(rpad(substr(nvl(v_namlastt,' '),1,35),35,' '),'.','');
                 data_amtsoc(v_sumrec)    := lpad(substr(to_char(v_amtsoc * 100),1,14),14,'0');
                 data_amtsoca(v_sumrec)   := lpad(substr(to_char(v_amtsoca * 100),1,12),12,'0');
                 data_amtsocc(v_sumrec)   := lpad(substr(to_char(v_amtsocc * 100),1,12),12,'0');
@@ -413,7 +414,8 @@
                   data_file := '2'||rpad(nvl(data_numsaid(i),' '),13,' ')||
                                rpad(nvl(data_prefix(i),' '),3,' ')||
                                rpad(substr(nvl(data_namfirstt(i),' '),1,30),30,' ')||
-                               rpad(substr(nvl(data_namlastt(i),' '),1,35),35,' ')||
+                               --rpad(substr(nvl(data_namlastt(i),' '),1,35),35,' ')||
+                               replace(rpad(substr(nvl(data_namlastt(i),' '),1,35),35,' '),'.','')||
                                lpad(substr(data_amtsoc(i),1,14),14,'0')||
                                lpad(substr(data_amtsoca(i),1,12),12,'0');
 
@@ -453,7 +455,9 @@
       data_numsaid(v_sumrec)   := rpad(nvl(v_numsaid,' '),13,' ');
       data_prefix(v_sumrec)    := v_prefix;
       data_namfirstt(v_sumrec) := rpad(substr(nvl(v_namfirstt,' '),1,30),30,' ');
-      data_namlastt(v_sumrec)  := rpad(substr(nvl(v_namlastt,' '),1,35),35,' ');
+      
+      data_namlastt(v_sumrec)  := replace(rpad(substr(nvl(v_namlastt,' '),1,35),35,' '),'.','');
+      --data_namlastt(v_sumrec)  := rpad(substr(nvl(v_namlastt,' '),1,35),35,' ');
       data_amtsoc(v_sumrec)    := lpad(substr(to_char(v_amtsoc * 100),1,14),14,'0');
       data_amtsoca(v_sumrec)   := lpad(substr(to_char(v_amtsoca * 100),1,12),12,'0');
       data_amtsocc(v_sumrec)   := lpad(substr(to_char(v_amtsocc * 100),1,12),12,'0');

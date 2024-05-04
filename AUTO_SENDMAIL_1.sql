@@ -2749,6 +2749,11 @@
 --      data_file  := replace(data_file  ,'<PARAM-LINK>', '<a href="'||v_http||'"><span style="background: #1155cc;color: #fff;padding: 10px 20px;margin-left: 20px;text-align:center;margin-top:10px;"><b>APPROVE</b></span></a>');
       data_file  := replace_with_clob(data_file  ,'<PARAM-LINK>', '<a href="'||v_http||'"><b>APPROVE</b></a>');
     end if;
+    
+    if data_file like ('%&lt;PARAM-LINK&gt;%') then
+     data_file  := replace_with_clob(data_file  ,'&lt;PARAM-LINK&gt;', '<a href="'||v_http||'"><b>APPROVE</b></a>');
+    end if;
+    
     if data_file like ('%<PARAM-TO>%') then
       data_file  := replace_with_clob(data_file  ,'<PARAM-TO>', get_temploy_name(p_codappr,p_lang_mail));
     end if;

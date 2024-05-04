@@ -124,6 +124,21 @@
         return 0 ;
      end ;
      --
+     v_netamt1	:= null;
+     v_netamt2	:= null;
+     v_netamt3	:= null;
+     v_netamt4	:= null;
+     v_netamt5	:= null;
+     v_netamt6	:= null;
+     v_netamt7	:= null;
+     v_netamt8	:= null;
+     v_netamt9	:= null;
+     v_netamt10	:= null;
+     get_wage_income (hcm_util.get_codcomp_level(v_codcomp,'1') , v_codempmt,
+                      nvl(v_netamt1,0), nvl(v_netamt2,0), nvl(v_netamt3,0), nvl(v_netamt4,0), nvl(v_netamt5,0),
+                      nvl(v_netamt6,0), nvl(v_netamt7,0), nvl(v_netamt8,0), nvl(v_netamt9,0), nvl(v_netamt10,0),
+                      v_sumday ,v_sumday,v_total);
+/*                      
      v_netamt1	:= stddec(v_netamt1,p_codempid,v_chken);
      v_netamt2	:= stddec(v_netamt2,p_codempid,v_chken);
      v_netamt3	:= stddec(v_netamt3,p_codempid,v_chken);
@@ -138,6 +153,7 @@
                       nvl(v_netamt1,0), nvl(v_netamt2,0), nvl(v_netamt3,0), nvl(v_netamt4,0), nvl(v_netamt5,0),
                       nvl(v_netamt6,0), nvl(v_netamt7,0), nvl(v_netamt8,0), nvl(v_netamt9,0), nvl(v_netamt10,0),
                       v_sumday ,v_sumday,v_total);
+ */                     
 
      return   v_total;
   end;
@@ -704,8 +720,8 @@
       v_amtincom := stddec(detail3_amtincom(i),b_index_codempid,v_chken);
 
       if detail3_v_code(i) is null then
-        detail3_amtincom(i) := v_amtincom;
-        detail3_v_amt(i) := v_amtincom;
+        detail3_amtincom(i) := 0;
+        detail3_v_amt(i) := 0;
       end if;
     end loop ;
     --
@@ -770,7 +786,7 @@
         obj_data.put('httpcode', '');
         obj_data.put('flg', '');
         obj_data.put('rcnt', to_char(v_rcnt));
-        obj_data.put('code', set_data(detail3_v_code(i)));
+        obj_data.put('code', set_data(0)); --obj_data.put('code', set_data(detail3_v_code(i)));
         obj_data.put('desc_income', set_data(detail3_v_details(i)));
         obj_data.put('unit', set_data(detail3_v_unit(i)));
         obj_data.put('qtyincome', set_data(to_char(detail3_v_amt(i),'fm999,999,990.00')));
@@ -3357,7 +3373,7 @@
             v_max := 0;
      end;
      return(v_max);
-     
+
   end;
   --
   function get_statment (p_table  user_tab_columns.table_name%type) return varchar2 is
@@ -3394,7 +3410,7 @@
     v_num          number;
     v_count        number;
     flg_data       varchar2(1 char):= 'N';
-    
+
   begin
       v_num  := get_max_column('TEMPOTHR');      --want show column_name usr_% only
       if v_num <> 0 Then
@@ -3405,7 +3421,7 @@
         v_statment := 'select '||v_statmt||
                       ' from TEMPOTHR '||
                       ' where '||v_where;
-        
+
         v_cursor   := dbms_sql.open_cursor;
         dbms_sql.parse(v_cursor,v_statment,dbms_sql.native);
 

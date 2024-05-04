@@ -28,7 +28,7 @@
       param_msg_error := get_error_msg_php('HR2045',global_v_lang,'codcomp,codpfinf');
       return;
     end if;
-    
+
     if p_codcomp is not null then
       p_codpfinf := null;
       param_msg_error := hcm_secur.secur_codcomp(global_v_coduser,global_v_lang,p_codcomp);
@@ -54,7 +54,7 @@
     initial_value(json_str_input);
     check_index;
     if param_msg_error is null then
-    
+
         gen_index(json_str_output);
     else
         json_str_output := get_response_message(null,param_msg_error,global_v_lang);
@@ -88,7 +88,7 @@
        and a.dtereti between p_dtestrt and p_dteend
   order by b.codcomp,a.codempid;
 */
-      select a.codempid,b.codcomp ,b.numlvl ,a.dteeffec,
+      select a.codempid,b.codcomp ,b.numlvl ,a.dteeffec,a.codplan,
                a.dtereti ,a.codpfinf,b.dteempmt,b.dteeffex,codreti ,a.rowid
           from tpfregst a,temploy1 b
          where b.codcomp  like p_codcomp || '%'
@@ -118,7 +118,7 @@
         obj_data.put('image'           ,get_emp_img(r1.codempid));
         obj_data.put('codempid'        ,r1.codempid);
         obj_data.put('desc_codempid'   ,get_temploy_name(r1.codempid,global_v_lang));
-        obj_data.put('codpfinf' ,r1.codpfinf);
+        obj_data.put('codpfinf' ,r1.codpfinf||'-'||r1.codplan);
         obj_data.put('desc_codpfinf' ,get_tcodec_name('TCODPFINF', r1 .codpfinf,global_v_lang));
         obj_data.put('codcomp'         ,r1.codcomp);
         obj_data.put('desc_codcomp'    ,get_tcenter_name(r1.codcomp, global_v_lang ));

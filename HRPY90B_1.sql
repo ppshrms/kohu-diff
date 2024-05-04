@@ -291,22 +291,12 @@
 
             if p_sta_group = 'N' then
               -- create head
-              if v_first	= 'Y' then
+--              if v_first	= 'Y' then
                 v_first     := 'N';
                 out_file    := utl_file.fopen(p_file_dir,v_filename, 'w');
 
-                --waite 08/01/08 :report.codempid_desc	:= '  '||v_filename;
-                pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
-                              p_numfund,p_dtepay,p_dtemthpay,
-                              p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
-                              v_namcomt,global_v_zyear,global_v_lang,data_file);
-
---                data_file := convert(data_file,'TH8TISASCII');
-                if data_file is not null then
-                  utl_file.put_line(out_file,data_file);
-                end if;
                 v_totrec :=	0;
-              end if;
+--              end if;
 
               -- create body
               pvdf_exp.body(p_pvdffmt,r_tpfmemb.codempid,r_tpfmemb.dteempmt,
@@ -325,6 +315,20 @@
               if data_file is not null then
                 utl_file.put_line(out_file,data_file);
               end if;
+
+               --waite 08/01/08 :report.codempid_desc	:= '  '||v_filename;
+                pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
+--klkl                              p_numfund,p_dtepay,p_dtemthpay,
+                              p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
+                              p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
+                              v_namcomt,global_v_zyear,global_v_lang,data_file);
+
+--                data_file := convert(data_file,'TH8TISASCII');
+                if data_file is not null then
+                  utl_file.put_line(out_file,data_file);
+                end if;
+
             end if;
 
             -- insert data to block 'data'
@@ -526,7 +530,9 @@
                 out_file := utl_file.fopen(p_file_dir,v_filename, 'w');
 
                 pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
-                              p_numfund,p_dtepay,p_dtemthpay,
+--klkl                              p_numfund,p_dtepay,p_dtemthpay,
+                              p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
                               p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
                               v_namcomt,global_v_zyear,global_v_lang,data_file);
 
@@ -640,32 +646,37 @@
   procedure exp_text_aia(json_str_output out clob) is
     obj_row         json_object_t;
     obj_data        json_object_t;
-    out_file   		  utl_file.file_type;
-    out_file1   	  utl_file.file_type;
-    out_file2   	  utl_file.file_type;
-    data_file 			varchar2(500);
-    data_file1 			varchar2(500);
-    data_file2 			varchar2(500);
-    v_codempid		 	varchar2(20);
-    v_codcomp			  varchar2(50) :=	null;
-    v_secur				  boolean;
-    v_namcomt			  tcompny.namcomt%type;
-    v_codpfinf			tcodpfinf.codcodec%type;
+    out_file   		utl_file.file_type;
+    out_file1   	utl_file.file_type;
+    out_file2   	utl_file.file_type;
+    data_file 		varchar2(500);
+    data_file1 		varchar2(500);
+    data_file2 		varchar2(500);
+    v_codempid		varchar2(20);
+    v_codcomp		varchar2(50) :=	null;
+    v_secur			boolean;
+    v_namcomt		tcompny.namcomt%type;
+    v_codpfinf		tcodpfinf.codcodec%type;
     v_filename      varchar2(255);
     v_filename1     varchar2(255);
     v_filename2     varchar2(255);
-    v_totrec			 	number := 0;
-    v_totamtprove	  number := 0;
-    v_totamtprovc	  number := 0;
-    v_first				  varchar2(1)	:= 'Y';
+    v_totrec		number := 0;
+    v_totamtprove	number := 0;
+    v_totamtprovc	number := 0;
+    v_first			varchar2(1)	:= 'Y';
 
     v_sumrec        number := 0;
     v_chksecure     varchar2(1) := 'N';
     v_datatpfmemb   varchar2(1) := 'N';
+
+--KOHU670005
+    v_typpayroll    varchar2(30);
+--KOHU670005
+
     cursor c_tpfmemb is
       select a.codempid,a.codcomp,a.dteeffec,a.dtereti,a.nummember,a.typpayroll,
              b.numlvl,b.codtitle,b.namfirstt,b.namlastt,b.namempt,b.dteempmt,
-             b.namempe,ltrim(rtrim(b.codposre)) codposre,a.codpfinf
+             b.namempe,ltrim(rtrim(b.codposre)) codposre,a.codpfinf,codsex
         from tpfmemb a,temploy1 b
        where a.codcomp    like p_codcompy||'%'
          and a.typpayroll = nvl(p_typpayroll,a.typpayroll)
@@ -682,7 +693,7 @@
                                             and h.dteeffec <= trunc(sysdate)))
 --                       and rownum <= 1)
                  and  p_codplan is not null  ) or p_codplan is null)
-      order by a.codcomp,a.codempid;
+      order by a.codempid;
 
     cursor c_tsincexp is
       select codempid,
@@ -737,13 +748,19 @@
             r_tpfmemb.namfirstt := nvl(r_tpfmemb.namfirstt,' ');
             r_tpfmemb.namlastt  := nvl(r_tpfmemb.namlastt,' ');
             r_tpfmemb.codcomp   := nvl(r_tpfmemb.codcomp,' ');
-
+--Modify 23/09/2551--
+           --s_amtprovc := s_amtprovc+nvl(to_number(r_tsincexp.v_amtprovc),0);
+           --s_amtprove := s_amtprove+nvl(to_number(r_tsincexp.v_amtprove),0);
+--End Modify 23/09/2551--
             if p_sta_group = 'N' then
               -- create head
+/* KOHU670005
               if v_first = 'Y' then
                 v_first := 'N';
                 pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
-                              p_numfund,p_dtepay,p_dtemthpay,
+--klkl                              p_numfund,p_dtepay,p_dtemthpay,
+                              p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
                               p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
                               v_namcomt,global_v_zyear,global_v_lang,data_file);
 
@@ -751,7 +768,11 @@
                   utl_file.put_line(out_file,data_file);
                 end if;
               end if;
-
+KOHU670005 */
+--KOHU670005
+              v_typpayroll := r_tpfmemb.typpayroll;
+              v_first := 'N';
+--KOHU670005
               -- create body
               pvdf_exp.body(p_pvdffmt,r_tpfmemb.codempid,r_tpfmemb.dteempmt,
                             r_tpfmemb.dteeffec,r_tpfmemb.dtereti,p_dtepay,
@@ -816,6 +837,22 @@
         end loop; --c_tsincexp
       end if; --pass security
     end loop; --c_tpfmemb
+
+-- KOHU670005
+    if v_first = 'N' then
+        v_first := 'N';
+        pvdf_exp.head(p_pvdffmt,v_typpayroll,p_numcomp,
+--klkl                      p_numfund,p_dtepay,p_dtemthpay,
+                      p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
+                      p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
+                      v_namcomt,global_v_zyear,global_v_lang,data_file);
+
+        if data_file is not null then
+          utl_file.put_line(out_file,data_file);
+        end if;
+    end if;
+-- KOHU670005
 
     if v_datatpfmemb = 'N' then
       param_msg_error      := get_error_msg_php('HR2055', global_v_lang, 'TPFMEMB');
@@ -974,7 +1011,9 @@
               if v_first = 'Y' then
                 v_first := 'N';
                 pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
-                              p_numfund,p_dtepay,p_dtemthpay,
+--klkl                              p_numfund,p_dtepay,p_dtemthpay,
+                              p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
                               p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
                               v_namcomt,global_v_zyear,global_v_lang,data_file);
 
@@ -2081,7 +2120,9 @@
                     v_first := 'N';
                     v_namcomt := r_tpfmemb.codcomp  ;
                     pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
-                                  p_numfund,p_dtepay,p_dtemthpay,
+--klkl                                  p_numfund,p_dtepay,p_dtemthpay,
+                                  p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
                                   p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
                                   v_namcomt,global_v_zyear,p_numperiod,data_file);
 
@@ -2287,7 +2328,9 @@
               if v_first = 'Y' then
                 v_first := 'N';
                 pvdf_exp.head(p_pvdffmt,r_tpfmemb.typpayroll,p_numcomp,
-                              p_numfund,p_dtepay,p_dtemthpay,
+--klkl                              p_numfund,p_dtepay,p_dtemthpay,
+                              p_numfund,p_dtepay,p_numperiod,p_dtemthpay,
+--klkl
                               p_dteyrepay,v_totamtprove,v_totamtprovc,v_totrec,
                               v_namcomt,global_v_zyear,global_v_lang,data_file);
 
@@ -2478,6 +2521,6 @@
     return v_response;
   end;
 
-end hrpy90b;
+end;
 
 /

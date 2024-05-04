@@ -332,7 +332,7 @@
       v_stmt := v_stmt || ' and codcomp like ''' || p_codcomp || ''' || ''%''';
       v_stmt := v_stmt || ' and ( ' || v_syncond||' )';
       v_stmt := v_stmt || ' order by codempid ';
-      
+
       -- param_msg_error := v_stmt || '@#$%400';
       v_cursor  := dbms_sql.open_cursor;
       dbms_sql.parse(v_cursor, v_stmt, dbms_sql.native);
@@ -360,7 +360,8 @@
               GOTO stop_process;
             end;
           else
-            v_password := get_pwd(v_coduser, v_codempid);
+            --v_password := get_pwd(v_coduser, v_codempid);
+            v_password :=  v_codempid;
           end if;
           create_user(v_codempid, v_coduser, v_password);
 

@@ -3,8 +3,7 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "HCM_MASTERPAGE" is
-  /* Cust-Modify: KOHU-SM2301 */
-  -- last update: 02/04/2024 17:14
+-- last update : 07/02/2020 10:37
 
   procedure initial_value(json_str in clob) is
     json_obj   json_object_t := json_object_t(json_str);
@@ -319,34 +318,7 @@
 
   procedure change_email_language(json_str_output out clob) as
     v_check   varchar2(100 char);
-    v_oldmail temploy1.maillang%type; -- mo-kohu-sm2301 | Ping OSS0009 | 02/04/2024 17:14
-  begin
-    --<< mo-kohu-sm2301 | Ping OSS0009 | 02/04/2024 17:14
-    -- update get old lang, check lang rn th to 101 102, insert data to tmaillanglog
-    begin
-      select maillang
-        into v_oldmail
-        from temploy1
-       where codempid = global_v_codempid;
-    end;
-
-    if (v_oldmail = 'en') then
-      v_oldmail := '101';
-    elsif (v_oldmail = 'th') then
-      v_oldmail := '102';
-    end if;
-
-    if (p_maillang = 'en') then
-      p_maillang := '101';
-    elsif (p_maillang = 'th') then
-      p_maillang := '102';
-    end if;
-
-    insert into tmaillanglog(codempid, dtetime, coduser, codlango, codlangn)
-         values(global_v_codempid, sysdate, global_v_coduser, v_oldmail, p_maillang);
-    commit;
-    -->> mo-kohu-sm2301 | Ping OSS0009 | 02/04/2024 17:14
-
+   begin
     begin
        update temploy1
           set maillang = lower(p_maillang)
@@ -834,18 +806,20 @@
     begin
           begin
            select count(*)
-           into   v_qty
-           from   ttotreq a,twkflowh b
-           where  a.routeno = b.routeno
-           and    codcomp like '%'
-           and    staappr in ('P','A')
-           and   ('Y' = chk_workflow.check_privilege('HRES6KE',codempid,dtereq,numseq,(nvl(a.approvno,0) + 1),p_codappr)
+           into  v_qty
+           from  ttotreq a     -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1905 | bk --> from   ttotreq a,twkflowh b
+          where  -- a.routeno = b.routeno     -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1905 | bk --> where  a.routeno = b.routeno
+                 codcomp like '%'             -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1905 | bk --> and    codcomp like '%'
+            and  staappr in ('P','A')
+            and  'Y' = chk_workflow.check_privilege('HRES6KE',codempid,dtereq,numseq,(nvl(a.approvno,0) + 1),p_codappr); -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1905 | BK --> and  ('Y' = chk_workflow.check_privilege('HRES6KE',codempid,dtereq,numseq,(nvl(a.approvno,0) + 1),p_codappr)
               -- Replace Approve
-            or ((a.routeno,nvl(a.approvno,0)+ 1) in ( select routeno,numseq
-                                                      from   twkflowde c
-                                                      where  c.routeno  = a.routeno
-                                                      and    c.codempid = p_codappr)
-           and    (((sysdate - nvl(dteapph,dteinput))*1440)) >= (select  hrtotal  from twkflpf where codapp ='HRES6KE'))) ;
+-- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1905
+--            or ((a.routeno,nvl(a.approvno,0)+ 1) in ( select routeno,numseq
+--                                                      from   twkflowde c
+--                                                      where  c.routeno  = a.routeno
+--                                                      and    c.codempid = p_codappr)
+--            and (((sysdate - nvl(dteapph,dteinput))*1440)) >= (select  hrtotal  from twkflpf where codapp ='HRES6KE')));
+-- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1905 
        end ;
       return v_qty ;
     end;

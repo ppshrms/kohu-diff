@@ -106,9 +106,14 @@
     v_typpayroll        temploy1.typpayroll%type;
     v_flgcal            tdtepay.flgcal%type := 'N';
     v_next_flgcal       tdtepay.flgcal%type := 'N';
+
+-- << Apisit || 06/02/2024 || fix error something went wrong
+--    v_dteyrepay         tdtepay.dteyrepay%type;
+--    v_dtemthpay         tdtepay.dtemthpay%type;
+    v_dteyrepay         varchar2(30);
+    v_dtemthpay         varchar2(30);
+    v_dtestrt2          tdtepay.dtestrt%type;
     
-    v_dteyrepay         tdtepay.dteyrepay%type;
-    v_dtemthpay         tdtepay.dtemthpay%type;
     v_numperiod         tdtepay.numperiod%type;
 --2000
     -- r1
@@ -130,8 +135,16 @@
             and (rownum <= 2)
         order by dteyrepay,dtemthpay,numperiod;
         
+    cursor p_tdtepay is
+     select dteyrepay,dtemthpay
+            -- into v_dteyrepay,v_dtemthpay,v_numperiod
+            from tdtepay
+            where codcompy = v_codcompy
+            and typpayroll = v_typpayroll
+            and v_dtestrt2 between dtestrt and dteend
+            and (rownum = 1);
   begin
-  
+    
     -- get codcompy & typpayroll
     begin
         select hcm_util.get_codcompy(codcomp),typpayroll 
@@ -142,25 +155,30 @@
         v_codcompy :='';
         v_typpayroll :='';
     end;
-    
     obj_row           := json_object_t();
     for r1 in c_tempinc loop
     -- << add surachai | 14/03/2023 | #545
         -- get v_dteyrepay & v_dtemthpay & v_numperiod
-         v_numperiod := r1.periodpay ;
-        begin
-            select dteyrepay,dtemthpay
-            into v_dteyrepay,v_dtemthpay
-            -- into v_dteyrepay,v_dtemthpay,v_numperiod
-            from tdtepay
-            where codcompy = v_codcompy
-            and typpayroll = v_typpayroll
-            and r1.dtestrt between dtestrt and dteend;
-        exception when no_data_found then
-            v_dteyrepay :='';
-            v_dtemthpay :='';
-            -- v_numperiod :='';
-        end;
+         v_numperiod := r1.periodpay;
+         v_dtestrt2  := r1.dtestrt;
+--        begin
+--            select dteyrepay,dtemthpay
+--            into v_dteyrepay,v_dtemthpay
+--            -- into v_dteyrepay,v_dtemthpay,v_numperiod
+--            from tdtepay
+--            where codcompy = v_codcompy
+--            and typpayroll = v_typpayroll
+--            and r1.dtestrt between dtestrt and dteend;
+--        exception when no_data_found then
+--            v_dteyrepay :='';
+--            v_dtemthpay :='';
+--            -- v_numperiod :='';
+--        end;
+
+        for r3 in p_tdtepay loop
+            v_dteyrepay := nvl(r3.dteyrepay,0);
+            v_dtemthpay := nvl(r3.dtemthpay,0);
+        end loop;
         
         -- get v_flgcal
         for r2 in c_tdtepay loop

@@ -491,7 +491,7 @@
                            item41         ,item42           ,
                            item43         )
                     values(global_v_codempid,'HRPY92R2'       ,1          , -- pk
-                           rpad(v_text_numtaxid, 13, ' ')  ,
+                           v_text_numtaxid  ,
                            v_codrevn        ,hcm_util.get_split_decimal(v_sum_amtinc,'I') ,hcm_util.get_split_decimal(v_sum_amttax,'I')     , -- header
                            v_img_path       ,v_h_desc_codempid  ,v_h_desc_position, -- header
                            hcm_util.get_split_decimal(v_sum_amtinc,'D') ,hcm_util.get_split_decimal(v_sum_amttax,'D'),
@@ -818,7 +818,7 @@
                            item53, item54
                            )
                     values(global_v_codempid,'HRPY92R1'       ,'1'              ,
-                           rpad(v_numcotax, 13, ' ')     ,v_namcomt        ,v_buildingt      ,
+                           v_numcotax     ,v_namcomt        ,v_buildingt      ,
                            v_roomnot        ,v_floort         ,v_villaget       ,
                            v_addrnot        ,v_moot           ,v_soit           ,
                            v_roadt          ,v_desc_codsubdist,v_desc_coddist   ,
@@ -912,6 +912,7 @@
 
   procedure get_process2(json_str_input in clob,json_str_output out clob) as
   begin
+    insert into a (b) values ('TEST123');commit;
     initial_value(json_str_input);
     check_process2;
     if param_msg_error is null then
@@ -963,12 +964,16 @@
     v_flg_data        varchar2(10) := 'N';
     v_flg_secure      varchar2(10) := 'N';
     v_chk_secur       varchar2(10) := 'N';
+
     cursor c_tcodrevn is
       select codcodec
         from tcodrevn
     order by codcodec;
+
     cursor c1 is
-      select codempid,
+--klkl      select codempid,
+      select codempid, typinc,
+--klkl
              nvl(sum(to_number(stddec(amtinc,codempid,global_v_chken))),0) amtinc,
              nvl(sum(to_number(stddec(amttax,codempid,global_v_chken))),0) amttax
         from ttaxinc
@@ -991,12 +996,18 @@
              and nvl(sum(to_number(stddec(amtinc,codempid,global_v_chken))),0) <> 0
               or nvl(sum(to_number(stddec(amttax,codempid,global_v_chken))),0) <> 0))
           or ((p_typeData = '2') and nvl(sum(to_number(stddec(amttax,codempid,global_v_chken))),0) <> 0)
+/*klkl
     group by codempid
     order by codempid;
+klkl*/
+--klkl
+    group by codempid, typinc
+    order by codempid, typinc;
+--klkl
+
   begin
     begin
-      select numcotax
-        into v_numcotax
+      select numcotax into v_numcotax
         from tcompny
        where codcompy = hcm_util.get_codcomp_level(p_codcomp,1);
     exception when no_data_found then
@@ -1005,12 +1016,14 @@
       return;
     end;
 
+/*klkl
     for r_tcodrevn in c_tcodrevn loop
       v_codrevn := v_codrevn + 1;
       if p_codrevn = r_tcodrevn.codcodec then
         exit;
       end if;
     end loop;
+klkl */
 
     for r1 in c1 loop
       v_flg_data  := 'Y';
@@ -1130,12 +1143,16 @@
       -- *          v_dtepay        ,r1.amtinc         ,r1.amttax         ,
       -- *          v_flgtax
 
+--klkl
+v_codrevn := substr(r1.typinc, 2 , 1);
+--klkl
+
       obj_data := json_object_t();
       obj_data.put('index1'      ,'00');
       obj_data.put('numcotax'  ,v_numcotax);
       obj_data.put('numcotax'    ,v_numcotax);
       obj_data.put('index2'      ,'0000');
-      obj_data.put('numoffid'    ,v_numoffid);
+      obj_data.put('numoffid'    ,v_numtaxid); --obj_data.put('numoffid'    ,v_numoffid);
       obj_data.put('numtaxid'    ,v_numtaxid);
       if v_numtaxid = v_numoffid then
         obj_data.put('numtaxid'  ,rpad('0',10,'0'));
@@ -1155,7 +1172,10 @@
       obj_data.put('codpostr'    ,v_codpostr);
       obj_data.put('month'       ,to_char(p_month));
       obj_data.put('year'        ,to_char(p_year + 543));
+--klkl
       obj_data.put('codrevn'     ,v_codrevn);
+--typinc
+--klkl
       obj_data.put('dtepay'      ,to_char(v_dtepay,'ddmm') || to_char(to_number(to_char(v_dtepay,'yyyy')) + 543));
       obj_data.put('index3'      ,'0');
       obj_data.put('amtinc'      ,to_char(r1.amtinc,'fm9999999999990.00'));

@@ -83,7 +83,11 @@
          codcomp like p_codcomp||'%'
          and   (codempid = nvl(p_codempid,codempid) or lower(get_temploy_name(codempid,global_v_lang)) like '%'||lower(p_codempid)||'%')
          and   */
-                staappr in ('P','A')
+--         (codempid = nvl(p_codempid,codempid) or lower(get_temploy_name(codempid,global_v_lang)) like '%'||lower(p_codempid)||'%')
+--         and
+         
+         codempid = nvl(p_codempid,codempid) -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 18/04/2024 | ต้องมีเพราะ front-end มีให้เลือก codempid อยู่
+         and   staappr in ('P','A')
          and   ('Y' = chk_workflow.check_privilege('HRES6KE',codempid,dtereq,numseq,(nvl(a.approvno,0) + 1),v_codappr)
                 /*KOHU-HR2301 19/10/2023 cancel
                 -- Replace Approve
@@ -105,8 +109,12 @@
                get_temploy_name(codempid,global_v_lang) ename,staappr,remark,
                qtyminb,qtymind,qtymina,staovrot,pctbguse
          from  ttotreq
-         where codcomp like p_codcomp||'%'
-         and   (codempid = nvl(p_codempid,codempid) or lower(get_temploy_name(codempid,global_v_lang)) like '%'||lower(p_codempid)||'%')
+         where 
+         -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 18/04/2024 | bk
+         -- codcomp like p_codcomp||'%'
+         -- and   (codempid = nvl(p_codempid,codempid) or lower(get_temploy_name(codempid,global_v_lang)) like '%'||lower(p_codempid)||'%')
+         -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 18/04/2024 | bk 
+         codempid = nvl(p_codempid,codempid) -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 18/04/2024 | add
          and   (codempid, dtereq, numseq) in
                           (select codempid, dtereq, numseq
                            from  taptotrq
@@ -228,69 +236,71 @@
         end if;
         obj_data.put('pctbguse', v_desPctbguse);
         v_staovrot := r1.staovrot;
+-- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 18/04/2024 | 4449#1907 update ตาม std (ทำให้ระบบช้า)
 --    if nvl(r1.staovrot,'N') = 'N' then
-
-    begin
-      select * into r_ttotreq
-        from ttotreq
-       where codempid = r1.codempid
-         and dtereq = r1.dtereq
-         and numseq = r1.numseq ;
-    exception when no_data_found then
-        r_ttotreq := null;
-    end;
-
-    begin
-        select hcm_util.get_codcomp_level(codcomp,1)
-          into v_codcompy
-          from temploy1
-         where codempid = r1.codempid;
-    exception when no_data_found then
-          v_codcompy := null;
-    end;
-
-    begin
-        select qtymxotwk,qtymxallwk
-          into v_qtymxotwk,v_qtymxallwk
-          from tcontrot
-         where codcompy = v_codcompy
-          and dteeffec = (select max(dteeffec)
-         from tcontrot
-        where codcompy = v_codcompy);
-    exception when no_data_found then
-        v_qtymxotwk := 0;
-        v_qtymxallwk := 0;
-    end;
-
-        std_ot.get_week_ot(r_ttotreq.codempid, r_ttotreq.numotreq,r_ttotreq.dtereq,r_ttotreq.numseq,r_ttotreq.dtestrt,r_ttotreq.dteend,
-                           r_ttotreq.qtyminb, r_ttotreq.timbend, r_ttotreq.timbstr,
-                           r_ttotreq.qtymind, r_ttotreq.timdend, r_ttotreq.timdstr,
-                           r_ttotreq.qtymina, r_ttotreq.timaend, r_ttotreq.timastr,
-                           global_v_codempid,
-                           a_dtestweek,a_dteenweek,
-                           a_sumwork,a_sumotreqoth,a_sumotreq,a_sumot,a_totwork,v_qtyperiod);
-            for n in 1..v_qtyperiod loop
-                v_staovrot := 'N';
-                if a_sumot(n) > v_qtymxotwk then
-                    v_staovrot := 'Y';
-                end if;
-                if a_totwork(n) > v_qtymxallwk then
-                    v_staovrot := 'Y';
-                end if;
-
-                if v_staovrot = 'Y' then
-                    begin
-                      update ttotreq
-                      set staovrot = 'Y'
-                    where codempid = r1.codempid
-                      and dtereq = r1.dtereq
-                      and numseq = r1.numseq ;
-                    end;
-                    commit;
-                end if;
-
-            end loop;
+--
+--    begin
+--      select * into r_ttotreq
+--        from ttotreq
+--       where codempid = r1.codempid
+--         and dtereq = r1.dtereq
+--         and numseq = r1.numseq ;
+--    exception when no_data_found then
+--        r_ttotreq := null;
+--    end;
+--
+--    begin
+--        select hcm_util.get_codcomp_level(codcomp,1)
+--          into v_codcompy
+--          from temploy1
+--         where codempid = r1.codempid;
+--    exception when no_data_found then
+--          v_codcompy := null;
+--    end;
+--
+--    begin
+--        select qtymxotwk,qtymxallwk
+--          into v_qtymxotwk,v_qtymxallwk
+--          from tcontrot
+--         where codcompy = v_codcompy
+--          and dteeffec = (select max(dteeffec)
+--         from tcontrot
+--        where codcompy = v_codcompy);
+--    exception when no_data_found then
+--        v_qtymxotwk := 0;
+--        v_qtymxallwk := 0;
+--    end;
+--
+--        std_ot.get_week_ot(r_ttotreq.codempid, r_ttotreq.numotreq,r_ttotreq.dtereq,r_ttotreq.numseq,r_ttotreq.dtestrt,r_ttotreq.dteend,
+--                           r_ttotreq.qtyminb, r_ttotreq.timbend, r_ttotreq.timbstr,
+--                           r_ttotreq.qtymind, r_ttotreq.timdend, r_ttotreq.timdstr,
+--                           r_ttotreq.qtymina, r_ttotreq.timaend, r_ttotreq.timastr,
+--                           global_v_codempid,
+--                           a_dtestweek,a_dteenweek,
+--                           a_sumwork,a_sumotreqoth,a_sumotreq,a_sumot,a_totwork,v_qtyperiod);
+--            for n in 1..v_qtyperiod loop
+--                v_staovrot := 'N';
+--                if a_sumot(n) > v_qtymxotwk then
+--                    v_staovrot := 'Y';
+--                end if;
+--                if a_totwork(n) > v_qtymxallwk then
+--                    v_staovrot := 'Y';
+--                end if;
+--
+--                if v_staovrot = 'Y' then
+--                    begin
+--                      update ttotreq
+--                      set staovrot = 'Y'
+--                    where codempid = r1.codempid
+--                      and dtereq = r1.dtereq
+--                      and numseq = r1.numseq ;
+--                    end;
+--                    commit;
+--                end if;
+--
+--            end loop;
 --    end if;
+-- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 18/04/2024 | 4449#1907 update ตาม std (ทำให้ระบบช้า)
         obj_data.put('chk_staovrot', nvl(v_staovrot,'N'));
 
         obj_row.put(to_char(v_row),obj_data);
@@ -389,7 +399,6 @@
         v_row := v_row+1;
       end loop;
     end if;
-
     json_str_output := obj_row.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
@@ -1430,12 +1439,11 @@
     v_dtestrtwk     date;
     v_dtestrtwk2    date;
     v_typalert      tcontrot.typalert%type;
-
--- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 10/04/2024 | issue kohu 4449: #1878
-    v_codcomp       temploy1.codcomp%type;
-    v_loop          number := 0;
-    v_count_loop    number := 0;
--- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 10/04/2024 | issue kohu 4449: #1878
+    
+    --
+    vv_codcompy          temploy1.codcomp%type;
+    vv_loop              number;
+    vv_count             number;
 
   begin
     v_staappr :=  p_status;
@@ -1505,8 +1513,8 @@
 
     if v_ttotreq.staappr <> 'Y' then
       begin
-        select staemp,dteeffex,codcomp          -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1878 | bk : select staemp,dteeffex
-        into   v_staemp,v_dteeffex,v_codcomp    -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1878 | bk :   into v_staemp,v_dteeffex
+        select staemp,dteeffex
+        into   v_staemp,v_dteeffex
         from   temploy1
         where  codempid = rq_codempid ;
         if v_staemp = '0' then
@@ -1642,26 +1650,40 @@
       -- อนุมัติขั้นสุดท้าย
       if rq_chk = 'E' and p_status = 'A' then
         v_staappr := 'Y';
+        -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (bk)
+        -- v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear);
+        -- std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,'');
+        -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (bk)
         
--- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1878 | bk : select staemp,dteeffex
---        v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear);
---        std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,'');
-        v_loop := 0;
+         -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (add)
+            begin
+                select get_codcompy(codcomp)
+                into vv_codcompy
+                from temploy1
+                where codempid = p_codempid;
+            exception when no_data_found then 
+                vv_codcompy := null;
+            end;
+        
+        vv_loop := 0;
         loop
-            v_loop := v_loop + 1;
-            v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear,hcm_util.get_codcompy(v_codcomp));
-            std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,hcm_util.get_codcompy(v_codcomp));
+            vv_loop := vv_loop + 1;
+            
+            v_numotreq 	:= std_al.gen_req ('OTRQ','TOTREQST','NUMOTREQ',v_zyear,vv_codcompy,'') ;
+            std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,vv_codcompy,'');
+            
             begin
                 select count(*)
-                  into v_count_loop
-                  from totreqst
-                 where numotreq  = v_numotreq;
+                into vv_count
+                from totreqst
+                where numotreq = v_numotreq;
+            exception when no_data_found then
+                null;
             end;
-            --
-            exit when (v_count_loop = 0 or v_loop = 100);
+            
+            exit when (vv_count = 0 or vv_loop = 100);
         end loop;
--- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 19/03/2024 | issue kohu 4449: #1878 | bk : select staemp,dteeffex
-
+        -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (add)
         insert_data(v_ttotreq,v_staemp,v_dteeffex,
                    v_numotreq,v_codeappr,to_date(p_dteappr,'dd/mm/yyyy'),-- user22 : 04/07/2016 : STA4590287 || v_numotreq,p_codappr,to_date(p_dteappr,'dd/mm/yyyy'),
                    p_coduser,p_lang);

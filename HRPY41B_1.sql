@@ -124,6 +124,7 @@
         p_codcomp := p_codcomp||'%';
       end if;
       --<< user46 05/05/2022
+/*      
       begin
         select '1'
           into v_chk
@@ -137,6 +138,7 @@
         return;
       exception when no_data_found then null;
       end;
+*/      
       -->> user46 05/05/2022
     end if;
     -- Check Period For Calculate

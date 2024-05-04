@@ -3,6 +3,8 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "BANK_EXP" IS
+/* Cust-Modify: KOHU */
+-- last update: 10/02/2023 12:00
 -- last update: 30/09/2020 20:30
 -- last update: 06/08/2021 : Add 32 . BBL (WEB)
    PROCEDURE HEAD(p_bank				in number,
@@ -23,6 +25,7 @@
 	    v_codmedia        varchar2(3);
       v_date				    varchar2(20);
       v_numcotax  	    varchar2(13);
+      v_sender          varchar2(1000);
    BEGIN
       if p_bank = 1 then					-- ??????????????
 			   p_text := null;
@@ -34,7 +37,7 @@
 									 substr(to_char(to_number(to_char(p_dtepaymt,'yyyy')) - p_global),3,2)||
 									 lpad(substr(to_char(p_totemp),1,5),5,'0')||
 									 lpad(substr(to_char(p_totamt * 100),1,10),10,'0')||'I'||lpad(' ',8,' ');
-			   p_rec := 0;
+			   p_rec := 0;            
       elsif p_bank = 3 then				-- ??????????????
 	 			 v_numacct :=	rpad(substr(p_numacct,1,10),10,' ');
 				 p_text	:= 'H'||rpad(substr(get_tcenter_name(p_codcomp,'101'),1,25),25,' ')||
@@ -176,6 +179,22 @@
 			elsif p_bank = 30 then	 -- CITY BANK (BEN35)
 			   p_text := null;
 			   p_rec 	:= 0;
+
+--KOHU 10/02/2024
+
+            elsif p_bank = 55 then
+
+                v_sender  := rpad(substr(p_codbkserv,1,6),6,' ')||rpad(substr(upper(get_tcenter_name(p_codcomp,'101')),1,30),30,' '); 
+                p_text	:= '10'||'1'||'000001'||'014'||'000'||
+                            lpad(substr(to_char(p_totamt * 100),1,15),15,'0')||
+                            to_char(p_dtepaymt,'dd')||to_char(p_dtepaymt,'mm')||
+                            to_char(to_number(to_char(p_dtepaymt,'yyyy')) - p_global)||
+                            'C'||' '||lpad(substr(to_char(p_totemp),1,6),6,'0')||
+                            v_sender||lpad(' ',238,' ');                    	
+                p_rec := 0;
+--KOHU 10/02/2024
+
+/*
 			elsif p_bank = 55 then				-- ???????????????? (Media)
 			   p_text := '001'||
 			   					 rpad(substr(p_codbkserv,1,12),12,' ')||
@@ -200,6 +219,9 @@
 			   					 '0'||substr(p_numacct,4,1)||
 			   					 '0'||substr(p_numacct,1,3);
 			   p_rec := 0;
+*/
+
+
 
 
       --<<user14 09/04/2013 STA2560390 add KBANK(SMART PAYROLL)(58) copy from DKSH
@@ -275,6 +297,7 @@
 	    v_mail					varchar2(50 char);
       v_date					varchar2(20 char);
 	    v_ename					varchar2(60 char);
+        v_sender          varchar2(1000);
    BEGIN
 --ADEC550544
       begin
@@ -333,7 +356,8 @@
 
 					   			 --<< add  By: User25/Thanittha.y Date: 19/04/2018   ErrorNo: STA4610085 HRPY70B Format SCB ???????????????????????
 					   			 lpad(' ',2,' ')||
-					   			 rpad(substr(get_temploy_name(p_codempid,p_codlang),1,50),50,' ');
+					   			 rpad('',50,' ');
+					   			 --rpad(substr(get_temploy_name(p_codempid,p_codlang),1,50),50,' ');
 					   			 -->> add  By: User25/Thanittha.y Date: 19/04/2018   ErrorNo: STA4610085 HRPY70B Format SCB ???????????????????????
 
       elsif p_bank = 3 then				-- ??????????????
@@ -620,6 +644,42 @@
 						           v_numacct||
 						           substr(get_tcompny_name(p_codcomp,'101'),1,43) ;
 
+
+--SCB Media KOHU
+
+        elsif p_bank = 55 then			
+        
+				 /*v_banch   := substr(p_numbank,1,4);
+				 v_numbank := lpad(substr(p_numbank,1,15),15,'0');	*/			 
+
+				 if p_codmedia in ('002','004','006','011','014','015','020','022',
+				 	                 '024','025','034','065','066','068','070','071',
+				 	                 '073') then
+				 	v_numbank := lpad(substr(p_numbank,1,11),11,'0');				 
+				 	v_banch   := substr(v_numbank,1,4);
+				 elsif p_codmedia = '030' then
+				 	v_numbank := lpad(substr(p_numbank,5,15),11,'0');		
+				 	v_banch   := substr(p_numbank,1,4);		 
+				 elsif p_codmedia = '017' then
+				 	v_numbank := lpad(substr(p_numbank,1,11),11,'0');		
+				 	v_banch   := '0001';	 
+				 end if;
+                 v_sender  := rpad(substr(p_codbkserv,1,6),6,' ')||rpad(substr(upper(get_tcenter_name(p_codcomp,'101')),1,30),30,' '); 
+				 p_text := '10'||'2'||'000001'||rpad(substr(p_codmedia,1,3),3,' ')||
+				 						--rpad(substr(p_codbkserv,4,3),3,' ')||
+				            v_banch||
+				            v_numbank||
+				           '014'||'0000'||lpad(substr(p_numacct,1,11),11,'0')||
+				           to_char(p_dtepaymt,'dd')||to_char(p_dtepaymt,'mm')||
+					   			 to_char(to_number(to_char(p_dtepaymt,'yyyy')) - p_global)||
+				           '01'||'00'||lpad(substr(to_char(p_amtpay * 100),1,12),12,'0')||
+				           lpad(' ',60,' ')||rpad(v_sender,60,' ')||'0000000000'||
+				           rpad(substr(get_temploy_name(p_codempid,p_codlang),1,23),23,' ')||
+				           lpad(' ',67,' ')||lpad(p_sumrec,6,'0')||lpad(' ',25,' ');		
+
+--SCB Media KOHU
+
+/*
 			elsif p_bank = 55 then				-- ???????????????? (Media)
 				begin
 					select namempe,namempt into v_namempe,v_namempt
@@ -670,6 +730,10 @@
 									lpad(' ',220,' ')||
 									rpad(nvl(v_namempe,' '),70,' ')||
 									lpad(' ',394,' ');
+
+
+*/         
+
 			elsif p_bank = 56 then				-- Deutsche Bank (Media)
 					begin
 						select namempe,namempt into v_namempe,v_namempt
@@ -827,6 +891,7 @@
 							 		 lpad(' ',1,' ')||'000000';
       elsif p_bank = 2 then				-- ????????????????
 			   p_text := null;
+
       elsif p_bank = 3 then				-- ??????????????
 			   p_text := null;
 			elsif p_bank = 31 then				-- ?????????????? (Pack 128)
@@ -876,11 +941,13 @@
 			   p_text := null;
 			elsif p_bank = 30 then	 -- CITY BANK (BEN35)
 			   p_text := null;
+/*
 			elsif p_bank = 55 then				-- ???????????????? (Media)
 				p_text := '999'||
 									lpad('001',6,'0')||
 									lpad(to_char(p_sumrec),6,'0')||
 									lpad(substr(to_char(p_totamt * 1000),1,16),16,'0');
+*/
   		elsif p_bank = 99 then			-- Modify ?????????
 			   p_text := null;
       end if;

@@ -37,7 +37,7 @@
   v_flg_data	              boolean := false;
   v_flg_se		              boolean := false;
 
-  para_numproc 	  	number := nvl(get_tsetup_value('QTYPARALLEL'),2);
+  para_numproc 	  	number     :=  1 ;  --nvl(get_tsetup_value('QTYPARALLEL'),2);
   para_chken        varchar2(4 char):= check_emp(get_emp) ;
   para_zyear        number:= 0;
   para_numlvlsalst  number;
@@ -96,5 +96,6 @@
 
   function check_index_batchtask(json_str_input clob) return varchar2;
 end HRPY3AB;
+
 
 /

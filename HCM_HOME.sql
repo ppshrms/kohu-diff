@@ -39,10 +39,19 @@
   p_codapp              tapplscr.codapp%type;
   p_dtestrt             date;
   p_dteend              date;
-  
+
+  v_flgsta              varchar2(10 char); 
+  v_dtework             TTODOLIST.DTEWORK%type;
+  v_nummseq             TTODOLIST.NUMSEQ%type;
+  v_timstrt             TTODOLIST.TIMSTRT%type;
+  v_timend              TTODOLIST.TIMEND%type;
+  v_title               TTODOLIST.TITLE%type;
+  v_detail              TTODOLIST.DETAIL%type;
+  v_flgchk              TTODOLIST.FLGCHK%type;
+
   type arr_1d is table of varchar2(4000 char) index by binary_integer;
 
-  function get_calendar(json_str_input in clob) return clob;
+  function get_calendar(json_str_input in clob) return clob; 
 
   function get_calendar_manager(json_str_input in clob) return clob;
 
@@ -87,6 +96,9 @@
 
   procedure get_atktest(json_str_input in clob, json_str_output out clob);
   procedure get_atktest_department(json_str_input in clob, json_str_output out clob);
+
+  procedure insert_todo_list(json_str_input in clob, json_str_output out clob);
+  procedure delete_todo_list(json_str_input in clob, json_str_output out clob);
 
 END HCM_HOME;
 

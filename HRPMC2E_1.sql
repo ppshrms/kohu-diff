@@ -1099,13 +1099,13 @@
         return;
 		  end;
 		end if;
-
+/*
 		if tax_detail_codbank = tax_detail_codbank2 and
 			 tax_detail_numbank = tax_detail_numbank2 then
       param_msg_error := get_error_msg_php('PM0024',global_v_lang,null,'numbank2');
       return;
 		end if;
-
+*/
     if tax_detail_dteyrrelf is not null or tax_detail_dteyrrelt is not null then
 			if tax_detail_dteyrrelf > tax_detail_dteyrrelt then
         param_msg_error := get_error_msg_php('HR2027',global_v_lang,null,'dteyrrelt');
@@ -4637,6 +4637,18 @@
     initial_value(json_str_input);
     initial_tab_work(json_object_t(json_str_input));
     get_head(work_codcomp,work_codpos,v_codcomph,v_codposh,v_codempidh,v_stapost);
+    begin
+     select   joblvlst, joblvlen
+       into   v_numlvl, v_numlvlen
+       from   tjobpos
+      where   codpos	= work_codpos
+      and     codcomp   = work_codcomp
+      and     codjob    = work_codjob;
+    exception when no_data_found then
+      v_numlvl := 0;
+      v_numlvlen := 99;
+    end;
+
 --    begin
 --      select  codcompy
 --      into    v_codcompy
@@ -4670,21 +4682,6 @@
         v_jobgrade	:= null;
       end;
     end if;
-    
-    insert into a (b) values (v_codjob);commit;
-    
-     begin
-     select   joblvlst, joblvlen
-       into   v_numlvl, v_numlvlen
-       from   tjobpos
-      where   codpos	= work_codpos
-      and     codcomp   = work_codcomp
-      and     codjob    = nvl(v_codjob,codjob);
-    exception when no_data_found then
-      v_numlvl := 0;
-      v_numlvlen := 99;
-    end;
-    
     obj_row := json_object_t();
     obj_row.put('coderror','200');
     obj_row.put('codempidh',v_codempidh);
@@ -5641,7 +5638,7 @@
         goto check_end;
       end if;
     end if;
-
+/*
     if v_numbank is not null or v_numbank2 is not null then
       begin
         select t1.codempid,t1.staemp
@@ -5659,7 +5656,7 @@
         null;
       end;
     end if;
-
+*/
     <<check_end>>
     obj_data    := json_object_t();
     obj_data.put('coderror','200');

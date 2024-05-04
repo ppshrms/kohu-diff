@@ -37,7 +37,7 @@
     delete ttemprpt
      where codempid = global_v_codempid
        and codapp = 'CALOT36'||p_codempid;
-
+       
     v_count_period              := 1;
     v_dtestrtwk                 := get_dtestrt_period (p_codempid ,p_dtestrt);
     v_dteendwk                  := v_dtestrtwk + 6;
@@ -132,11 +132,12 @@
                              from tgrpwork c
                             where c.codcomp   = a.codcomp
                               and c.codcalen  = a.codcalen
-                              and a.dteeffec <= sysdate)
+                              and a.dteeffec <= p_dtestrot /*24/04/2024 : KOHU-HR2301 || sysdate*/)
          and rownum     = 1
     order by a.codcomp desc;
     exception when no_data_found then null;
-    end;    
+    end;   
+insert_temp2('YYY','YYY',1,p_codempid,to_char(p_dtestrot,'dd/mm/yyyy'),v_startday,null,null,null,null,null,to_char(sysdate,'dd/mm/yyyy hh24:mi'));    
     v_startday := nvl(v_startday,'2');
 
       begin
@@ -170,7 +171,7 @@
                              from tgrpwork c
                             where c.codcomp   = a.codcomp
                               and c.codcalen  = a.codcalen
-                              and a.dteeffec <= sysdate)
+                              and a.dteeffec <= p_dtestrot /*24/04/2024 : KOHU-HR2301 || sysdate*/)
          and rownum     = 1
     order by a.codcomp desc;
     exception when no_data_found then null;
@@ -670,7 +671,7 @@
          and codempid||to_char(dtereq,'yyyymmdd')||numseq <>
              v_codempid||to_char(v_dtereq,'yyyymmdd')||v_numseq
       order by dtestrt;
-
+      
     cursor c2 is
         select *
           from tattence
@@ -1424,13 +1425,13 @@
         end if;
     end loop;
   end get_calotreq;
-
+    
   -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
   -- function get_max_numseq(global_v_codempid varchar2) return number is -- bk
   function get_max_numseq(global_v_codempid varchar2, p_codempid varchar2) return number is -- add
   -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
     v_max_numseq    ttemprpt.numseq%type;
-
+    
   begin
       begin
           select max(numseq)
@@ -1442,7 +1443,7 @@
       exception when no_data_found then
         v_max_numseq   := 0;
       end;
-
+    
       return nvl(v_max_numseq,0) + 1;
   end get_max_numseq;
 
