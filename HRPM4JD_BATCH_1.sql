@@ -354,10 +354,7 @@
         v_codnewid := r1.codnewid;
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'FLGREEMP',null,r1.flgreemp);
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'CODNEWID',null,r1.codnewid);
-        --<< mo-kohu-hr2301 | 000504-tae-surachai-dev | 02/04/2024 | 4449(#1835)
-        -- upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'DTEDUEPR',null,to_date(r1.dteduepr,'dd/mm/yyyy')); -- bk
-        upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'DTEDUEPR',null,to_char(r1.dteduepr,'dd/mm/yyyy')); -- add
-        -- >>
+        upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'DTEDUEPR',null,to_date(r1.dteduepr,'dd/mm/yyyy'));
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'STAEMP',null,r1.staemp);
 --        upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'FLGCONTI',null,r1.flgconti);
         if v_codnewid is not null then
@@ -666,24 +663,27 @@
     v_dteyearen   ttpunded.dteyearen%type;
     v_dtemthen    ttpunded.dtemthen%type;
     v_numprden    ttpunded.numprden%type;
-    v_codpay      ttpunded.codpay%type;
-    v_numst       number;
+    v_codpay       ttpunded.codpay%type;
+    v_numst        number;
     v_numen       number;
---<< user20 Date: 07/09/2021  PM Module- #6140
+    v_stdate        date ;
+    v_enddate     date ;
+
 
   cursor c_ttmistk is
-    select rowid
-           ,staupd--User37 STA4610099 02/05/2018
-    from	 ttmistk
+    select rowid ,staupd,typpayroll,codcomp --User37 STA4610099 02/05/2018
+    from	  ttmistk
     where	 codempid = v_codempid
-    and		 dteeffec = v_dteeffec
-    and		 staupd in('C','U');
+    and	 dteeffec = v_dteeffec
+    and	 staupd in('C','U');
+
   cursor c_ttpunsh is
     select rowid,codpunsh,flgexempt,flgblist,typpun,dtestart,dteend
     from	 ttpunsh
     where	 codempid = v_codempid
     and		 dteeffec = v_dteeffec
     order by numseq;
+
   cursor c_ttcancel is
     select rowid
     from   ttcancel
@@ -691,6 +691,7 @@
     and    dteeffec = v_dteeffec
     and    codtrn	  = v_codtrn
     and    numseq   = v_numseq;
+
   begin
     global_v_coduser  := p_coduser;
     v_codempid := p_codempid;
@@ -699,13 +700,12 @@
     v_numseq	 := Get_NaxNumseq(v_codempid,v_dteeffec,v_codtrn);-- user22 : 20/11/2015 : BHI-580005 || v_numseq	 := 1;
 
     for r1 in c_ttmistk loop
-      if r1.staupd = 'U' then --User37 STA4610099 02/05/2018
-        delete thismist
+      if r1.staupd = 'U' then
+          delete thismist
           where  codempid = v_codempid
           and    dteeffec = v_dteeffec;
         for r2 in c_ttpunsh loop
 
---<< user20 Date: 07/09/2021  PM Module- #6140
           if r2.dtestart is not null then
               v_codpunsh := r2.codpunsh;
               begin
@@ -718,8 +718,22 @@
                      and dteeffec = v_dteeffec
                      and codpunsh = v_codpunsh;
                   ---
-                  v_numst := ((v_dteyearst*1000) + (v_dtemthst*100)+ v_numprdst);
-                  v_numen := ((v_dteyearen*1000) + (v_dtemthen*100)+ v_numprden);
+                  v_numst  := v_dteyearst||lpad(v_dtemthst,2,'0') ||lpad(v_numprdst,2,'0');
+                  v_numen := v_dteyearen||lpad(v_dtemthen,2,'0') ||lpad(v_numprden,2,'0');
+                  begin
+                       select min(dtestrt) ,max(dtestrt)
+                       into v_stdate ,v_enddate
+                       from  tdtepay
+                       where codcompy  =  hcm_util.get_codcomp_level(r1.codcomp,1)
+                       and  typpayroll = r1.typpayroll
+                       and  dteyrepay|| lpad(dtemthpay,2,'0') ||lpad(numperiod,2,'0')    between v_numst and v_numen ;
+                  exception when others then
+                       null ;
+                  end ;     
+                   delete tempinc t1
+                   where t1.codempid = v_codempid
+                     and t1.codpay   = v_codpay
+                     and t1.dtestrt between v_stdate and v_enddate ;
 
                   begin
                       select codempid into v_codempid
@@ -745,35 +759,26 @@
 --<< user20 Date: 07/09/2021  PM Module- #6140 */
 
           v_codpunsh := r2.codpunsh;
-          upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,v_codpunsh,
-               'FLGEXEMPT='''||r2.flgexempt||'''','FLGBLIST='''||r2.flgblist||'''');
+          upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,v_codpunsh, 'FLGEXEMPT='''||r2.flgexempt||'''','FLGBLIST='''||r2.flgblist||'''');
           delete thispund
             where codempid = v_codempid
             and   dteeffec = v_dteeffec
             and   codpunsh = v_codpunsh;
+
           delete thispun
             where codempid = v_codempid
             and   dteeffec = v_dteeffec
             and   codpunsh = v_codpunsh;
 
-          delete  ttpunded
-            where	codempid = v_codempid
-            and		dteeffec = v_dteeffec
-            and 	codpunsh = v_codpunsh;
+--          delete  ttpunded
+--            where	codempid = v_codempid
+--            and		dteeffec = v_dteeffec
+--            and 	codpunsh = v_codpunsh;
 
           delete tapmovmt
-            where codapp   = 'HRPM4DE'
+            where codapp   = 'HRPM4GE'
             and codempid = v_codempid
             and dteeffec = v_dteeffec;
-
---<< user20 Date: 07/09/2021  PM Module- #6140
-          if r2.dtestart is not null then
-              delete tempinc t1
-               where t1.codempid = v_codempid
-                 and t1.codpay   = v_codpay
-                 and t1.dtestrt between r2.dtestart and nvl(r2.dteend , t1.dtestrt);
-          end if;-- if r2.dtestart is not null then
---<< user20 Date: 07/09/2021  PM Module- #6140 */
 
           --<< delete User46 25/05/2020 Comment Dr. ttpunsh where rowid = r2.rowid;
           update ttpunsh
@@ -786,7 +791,6 @@
             delete ttpminf where codempid = v_codempid and dteeffec = v_dteeffec and codtrn = '0006';
           end if;
           --<<
-
         end loop; -- c_ttpunsh
         v_exist := false;
         for r4 in c_ttcancel loop

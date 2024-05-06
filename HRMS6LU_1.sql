@@ -3,7 +3,7 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "HRMS6LU" is
--- last update: 27/09/2022 10:44
+-- last update: 10/04/2024 10:00
 
   procedure initial_value (json_str in clob) is
     json_obj        json_object_t;
@@ -100,6 +100,8 @@
           ORDER BY  codempid,dtereq,numseq;
 
   begin
+
+
     initial_value(json_str_input);
     v_codappr  := pdk.check_codempid(global_v_coduser);
     v_dtest    := to_date(replace(p_dtest,'/',null),'ddmmyyyy');
@@ -184,7 +186,7 @@
         v_staovrot := r1.staovrot;
 --    if nvl(r1.staovrot,'N') = 'N' then
 
-    begin
+    /*begin
       select * into r_ttotreq
         from ttotreq
        where codempid = r1.codempid
@@ -243,7 +245,7 @@
                     commit;
                 end if;
 
-            end loop;
+            end loop;*/
 --    end if;
         obj_data.put('chk_staovrot', nvl(v_staovrot,'N'));
 
@@ -1319,11 +1321,12 @@
     v_dtestrtwk     date;
     v_dtestrtwk2    date;
     v_typalert      tcontrot.typalert%type;
-    
-    --
-    vv_codcompy          temploy1.codcomp%type;
-    vv_loop              number;
-    vv_count             number;
+    v_codcomp       temploy1.codcomp%type; 
+
+-- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 10/04/2024 | issue kohu 4449: #1878
+    v_loop          number := 0;
+    v_count_loop    number := 0;
+-- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 10/04/2024 | issue kohu 4449: #1878
 
   begin
     v_staappr :=  p_status;
@@ -1363,17 +1366,17 @@
 
     if v_ttotreq.staappr <> 'Y' then
       begin
-        select staemp,dteeffex
-        into   v_staemp,v_dteeffex
+        select staemp,dteeffex,codcomp
+        into   v_staemp,v_dteeffex,v_codcomp
         from   temploy1
         where  codempid = rq_codempid ;
-        if v_staemp = '0' then
-           param_msg_error := rq_codempid||' - '||get_error_msg_php('HR2102',p_lang);
-           return ;
-        elsif v_staemp = '9' and v_ttotreq.dtestrt >= v_dteeffex then
-           param_msg_error := rq_codempid||' - '||get_error_msg_php('HR2101',p_lang);
-           return ;
-        end if;
+--        if v_staemp = '0' then
+--           param_msg_error := rq_codempid||' - '||get_error_msg_php('HR2102',p_lang);
+--           return ;
+--        elsif v_staemp = '9' and v_ttotreq.dtestrt >= v_dteeffex then 
+--           param_msg_error := rq_codempid||' - '||get_error_msg_php('HR2101',p_lang);
+--           return ;
+--        end if;
       exception when others then
          param_msg_error := rq_codempid||' - '||get_error_msg_php('HR2010',p_lang, 'TEMPLOY1');
          return ;
@@ -1492,40 +1495,24 @@
 
       if rq_chk = 'E' and p_status = 'A' then
         v_staappr := 'Y';
-        -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (bk)
-        -- v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear);
-        -- std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,'');
-        -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (bk)
-        
-         -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (add)
-            begin
-                select get_codcompy(codcomp)
-                into vv_codcompy
-                from temploy1
-                where codempid = p_codempid;
-            exception when no_data_found then 
-                vv_codcompy := null;
-            end;
-        
-        vv_loop := 0;
+        -- << KOHU-SS2301 | 000537-Boy-Apisit-Dev | 10/04/2024 | issue kohu 4449: #1878 | bk : select staemp,dteeffex
+--        v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear,hcm_util.get_codcompy(v_codcomp));
+--        std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,hcm_util.get_codcompy(v_codcomp));
+        v_loop := 0;
         loop
-            vv_loop := vv_loop + 1;
-            
-            v_numotreq 	:= std_al.gen_req ('OTRQ','TOTREQST','NUMOTREQ',v_zyear,vv_codcompy,'') ;
-            std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,vv_codcompy,'');
-            
+            v_loop := v_loop + 1;
+            v_numotreq := std_al.gen_req('OTRQ','TOTREQST','NUMOTREQ',v_zyear,hcm_util.get_codcompy(v_codcomp));
+            std_al.upd_req('OTRQ',v_numotreq,p_coduser,v_zyear,hcm_util.get_codcompy(v_codcomp));
             begin
                 select count(*)
-                into vv_count
-                from totreqst
-                where numotreq = v_numotreq;
-            exception when no_data_found then
-                null;
+                  into v_count_loop
+                  from totreqst
+                 where numotreq  = v_numotreq;
             end;
-            
-            exit when (vv_count = 0 or vv_loop = 100);
+            --
+            exit when (v_count_loop = 0 or v_loop = 100);
         end loop;
-        -- >> KOHU-HR2301 | 000504-Tae-Surachai-Dev | 19/04/2024 | 4449#1915 (add)
+-- >> KOHU-SS2301 | 000537-Boy-Apisit-Dev | 10/04/2024 | issue kohu 4449: #1878 | bk : select staemp,dteeffex
 
         insert_data(v_ttotreq,v_staemp,v_dteeffex,
                    v_numotreq,v_codeappr,to_date(p_dteappr,'dd/mm/yyyy'),-- user22 : 04/07/2016 : STA4590287 || v_numotreq,p_codappr,to_date(p_dteappr,'dd/mm/yyyy'),
@@ -1559,7 +1546,7 @@
       end ;
 
       --sendmail
-      begin 
+      begin
         chk_workflow.sendmail_to_approve( p_codapp        => 'HRES6KE',
                                           p_codtable_req  => 'ttotreq',
                                           p_rowid_req     => v_row_id,

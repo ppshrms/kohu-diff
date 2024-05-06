@@ -3,7 +3,9 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "HRPMC2E6" is
--- last update: 17/9/2020 19:15
+/* Cust-Modify: KOHU-HR2301 */
+-- last update: 18/04/2024 12:00
+-- last update: 17/09/2020 19:15
 
   function get_numappl(p_codempid varchar2) return varchar2 is
     v_numappl   temploy1.numappl%type;
@@ -603,14 +605,13 @@
     v_col_insert      varchar2(4000 char)   := ' ';
     v_val_insert      varchar2(4000 char)   := ' ';
     
-    v_pfcomp          number;
-    
+    v_pfcomp          number;  --KOHU-HR-2301
+        
+        
     cursor c1 is
       select  '1'
       from    tempothr
       where   numappl   = v_numappl;
-      
-      
   begin
     v_numappl     := get_numappl(p_codempid_query);
     for r1 in c1 loop
@@ -664,27 +665,26 @@
       execute immediate ' insert into tempothr(numappl,codempid,'||v_col_insert||'codcreate,coduser)
                                        values ('''||v_numappl||''','''||p_codempid_query||''','||v_val_insert||''''||global_v_coduser||''','''||global_v_coduser||''') ';
     end if;
-    
-     begin
+
+--KOHU-HR-2301 
+    begin
         select usr_pvf_comp into v_pfcomp
             from tempothr
             where numappl = v_numappl 
             and usr_pvf_comp is not null;
         exception when others then 
             v_pfcomp := null;
-      end;
+    end;
     
-    
-    
-        if v_pfcomp >= 0 then
+    if v_pfcomp >= 0 then
                 update tpfmemrt set ratecsbt = v_pfcomp
                 where codempid = p_codempid_query
                 and dteeffec = (select max(dteeffec) from tpfmemrt 
                                 where codempid = p_codempid_query);
-        end if;
-    end;
+    end if;
+--KOHU-HR-2301    
     
-  --end; -- end save_tempothr
+  end; -- end save_tempothr
   --
   procedure get_others_table(json_str_input in clob, json_str_output out clob) is
   begin

@@ -910,15 +910,11 @@
                                     1,0,0,v_staovrot);
 
               if not std_ot.chk_duptemp(r_tattence.codempid, r_tattence.dtework, 'B', global_v_codempid) then
-                -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
-                -- v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid); -- bk
-                v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid,r_tattence.codempid); -- add
-                -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
+                v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid);
                 insert into ttemprpt (codempid,codapp,numseq,
                                       item1,item2,item3,item4,item5,
                                       item6,item7,item8,item10,temp31)
-                -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)                                 
-                values(global_v_codempid, 'CALOT36'||r_tattence.codempid,v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add) 
+                values(global_v_codempid, 'CALOT36',v_numseq_tmp,
                        r_tattence.codempid, to_char(r_tattence.dtework,'dd/mm/yyyy'), 'B', '',
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timbstr,
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timbend,
@@ -928,8 +924,7 @@
                    set temp31 = v_qtyminotb,
                        item10 = '5'
                  where codempid = global_v_codempid
-                   -- and codapp = 'CALOT36' -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-                   and codapp = 'CALOT36'||r_tattence.codempid -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+                   and codapp = 'CALOT36'
                    and item1 = r_tattence.codempid
                    and to_date(item2,'dd/mm/yyyy') = r_tattence.dtework
                    and item3 = 'B';
@@ -968,15 +963,11 @@
                                     1,0,0,v_staovrot);
 
                 if not std_ot.chk_duptemp(r_tattence.codempid, r_tattence.dtework, 'D', global_v_codempid) then
-                    -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
-                    -- v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid); -- bk
-                    v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid,r_tattence.codempid); -- add
-                    -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
+                    v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid);
                     insert into ttemprpt (codempid,codapp,numseq,
                                           item1,item2,item3,item4,item5,
                                           item6,item7,item8,item10,temp31)
-                    -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-                    values(global_v_codempid, 'CALOT36'||r_tattence.codempid,v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+                    values(global_v_codempid, 'CALOT36',v_numseq_tmp,
                            r_tattence.codempid, to_char(r_tattence.dtework,'dd/mm/yyyy'), 'D', '',
                            to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timdstr,
                            to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timdend,
@@ -986,8 +977,7 @@
                        set temp31 = v_qtyminotd,
                            item10 = '5'
                      where codempid = global_v_codempid
-                       -- and codapp = 'CALOT36' --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-                       and codapp = 'CALOT36'||r_tattence.codempid --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+                       and codapp = 'CALOT36'
                        and item1 = r_tattence.codempid
                        and to_date(item2,'dd/mm/yyyy') = r_tattence.dtework
                        and item3 = 'D';
@@ -1026,15 +1016,11 @@
                                     1,0,0,v_staovrot);
 
               if not std_ot.chk_duptemp(r_tattence.codempid, r_tattence.dtework, 'A', global_v_codempid) then
-                -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
-                -- v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid); -- bk
-                v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid,r_tattence.codempid); -- add
-                -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
+                v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid);
                 insert into ttemprpt (codempid,codapp,numseq,
                                       item1,item2,item3,item4,item5,
                                       item6,item7,item8,item10,temp31)
-                -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)                      
-                values(global_v_codempid, 'CALOT36'||r_tattence.codempid,v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+                values(global_v_codempid, 'CALOT36',v_numseq_tmp,
                        r_tattence.codempid, to_char(r_tattence.dtework,'dd/mm/yyyy'), 'A', '',
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timastr,
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timaend,
@@ -1044,8 +1030,7 @@
                    set temp31 = v_qtyminota,
                        item10 = '5'
                  where codempid = global_v_codempid
-                   -- and codapp = 'CALOT36' --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-                   and codapp = 'CALOT36'||r_tattence.codempid --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+                   and codapp = 'CALOT36'
                    and item1 = r_tattence.codempid
                    and to_date(item2,'dd/mm/yyyy') = r_tattence.dtework
                    and item3 = 'A';
@@ -3279,15 +3264,11 @@
     end;
 
       if not std_ot.chk_duptemp(v_ttemprpt.item2, to_date(v_ttemprpt.item1,'dd/mm/yyyy'), v_ttemprpt.item5, global_v_codempid) then
-        -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
-        -- v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid); -- bk
-        v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid,v_ttemprpt.item2); -- add
-        -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
+        v_numseq_tmp := std_ot.get_max_numseq(global_v_codempid);
         insert into ttemprpt (codempid,codapp,numseq,
                               item1,item2,item3,item4,item5,
                               item6,item7,item8,item10,temp31)
-        -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-        values(global_v_codempid, 'CALOT36'||v_ttemprpt.item2,v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+        values(global_v_codempid, 'CALOT36',v_numseq_tmp,
                v_ttemprpt.item2, v_ttemprpt.item1, v_ttemprpt.item5, '',
                v_ttemprpt.item1, replace(v_ttemprpt.item15,':'),
                v_ttemprpt.item1, replace(v_ttemprpt.item16,':'),
@@ -3297,8 +3278,7 @@
            set temp31 = v_ttemprpt.item14,
                item10 = '5'
          where codempid = global_v_codempid
-           -- and codapp = 'CALOT36' -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-           and codapp = 'CALOT36'||v_ttemprpt.item2 -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+           and codapp = 'CALOT36'
            and item1 = v_ttemprpt.item2
            and to_date(item2,'dd/mm/yyyy') = to_date(v_ttemprpt.item1,'dd/mm/yyyy')
            and item3 = v_ttemprpt.item5;

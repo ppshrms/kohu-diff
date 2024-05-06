@@ -3,7 +3,10 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "HRPM55R" AS
-  --07/10/2019
+-- Author: 000553-Wiw-Chinnawat
+-- Date updated: 04/04/2024
+-- Comment: Issue 4449#1846
+
   procedure initial_value (json_str in clob) is
 		json_obj		json_object_t;
 	begin
@@ -818,6 +821,9 @@
 		tdata_dteprint := v_day||' '||v_desc_month||' '||v_year;
     numYearReport   := HCM_APPSETTINGS.get_additional_year();
 
+    insert into A (A, B) values (global_v_lang, 'global_v_lang'); commit;
+    insert into A (A, B) values (v_codlang, 'v_codlang'); commit;
+
 		for i in 0..p_dataSelectedObj.get_size - 1 loop
 			itemSelected  := hcm_util.get_json_t( p_dataSelectedObj,to_char(i));
       v_codempid    := hcm_util.get_string_t(itemSelected,'codempid');
@@ -941,6 +947,7 @@
             fparam_numseq   := hcm_util.get_string_t(obj_fparam,'numseq');
             fparam_section  := hcm_util.get_string_t(obj_fparam,'section');
             fparam_value    := hcm_util.get_string_t(obj_fparam,'value');
+
             if fparam_fparam = '[PARAM-SIGNID]' then
               begin
                 select get_temploy_name(codempid,global_v_lang) into v_namesign
@@ -984,6 +991,7 @@
 
           data_file := replace(data_file, '\t', '&nbsp;&nbsp;&nbsp;');
           data_file := replace(data_file, chr(9), '&nbsp;');
+          insert into A (A, B) values (data_file, 'data_file'); commit;
           list_msg_html(i) := data_file ;
         end loop;
         begin
@@ -1148,10 +1156,15 @@
           end if;
           --130
           --140
-          v_dataexct := to_number(v_day) ||' '||
-                        get_label_name('HRPM55R2',global_v_lang,220) || ' ' ||get_tlistval_name('NAMMTHFUL',to_number(v_month),global_v_lang) || ' ' ||
-                        get_label_name('HRPM55R2',global_v_lang,230) || ' ' ||hcm_util.get_year_buddhist_era(v_year);
+          -- Issue 4449#1846 | 000553-Wiw-Chinnawat | 04/04/2024 | chagne global_v_lang to v_codlang
+          if (v_codlang = 102) then
+            v_year := hcm_util.get_year_buddhist_era(v_year);
+          end if;
 
+          v_dataexct := to_number(v_day) ||' '||
+                        get_label_name('HRPM55R2',v_codlang,220) || ' ' ||get_tlistval_name('NAMMTHFUL',to_number(v_month),v_codlang) || ' ' ||
+                        get_label_name('HRPM55R2',v_codlang,230) || ' ' ||v_year;
+          -- Issue 4449#1846 | 000553-Wiw-Chinnawat | 04/04/2024 | chagne global_v_lang to v_codlang
         end if;
       else
         v_statmt := std_get_value_replace(v_statmt, p_itemson, v_codtable);
