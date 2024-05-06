@@ -28,10 +28,10 @@
   procedure gen_detail_create (json_str_output out clob);
   procedure get_detail(json_str_input in clob, json_str_output out clob);
   procedure gen_detail (json_str_output out clob);
-  
+
   procedure post_save(json_str_input in clob,json_str_output out clob);
   procedure save_tatkpcr(json_str_input in clob,json_str_output out clob);
-  
+
   procedure post_delete(json_str_input in clob, json_str_output out clob);
 
 END; -- Package spec

@@ -177,7 +177,7 @@
       exception when no_data_found then
         v_count := 0;
       end;  
-      
+
       if v_count = 0 then
         select max(dteeffec) into v_maxdteeffec
           from tsetpass

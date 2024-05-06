@@ -29,7 +29,6 @@
       from  tapplscr
      where  codapp like (v_codapp||'%')
      order by  codapp,numseq;
-     
   begin
     json_obj      := json_object_t(json_str_input);
     json_codapp   := json_object_t(hcm_util.get_string_t(json_obj, 'p_codapp'));

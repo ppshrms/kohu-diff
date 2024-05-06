@@ -156,9 +156,9 @@
     v_qtyalrtmin        tvtest.qtyalrtmin%type;
     v_qtyexam           tvtest.qtyexam%type;
     v_desexam           tvtest.desexam%type;
-    
+
     v_staresult         tvcourse.staresult%type;
-    
+
     v_flgtest_tr        varchar2(2 char);
     v_dtecreate         ttestemp.dtecreate%type;
     v_flgtimeout        varchar2(2 char) := 'N';
@@ -216,7 +216,7 @@
             v_flgtest_tr := 'N';
             v_dtecreate := null;
           end;
-          
+
           begin
             select staresult
               into v_staresult
@@ -224,7 +224,7 @@
              where codcours = p_codcours;
           exception when no_data_found then null;
           end;
-          
+
 --          if p_codcours is not null and p_codsubj is null and p_chaptno is null then
 --            begin
 --              select 'Y'
@@ -239,7 +239,7 @@
 --              v_flgtest_tr  := 'N';
 --            end;
 --          end if;
-         
+
           if  p_codapp in ('hrel21e','hrel22e','hrel23e') then
               begin
                 select statest,flgtest,dtecreate into v_statest,v_flgtest,v_dtecreate
@@ -256,7 +256,7 @@
               if v_statest = 'N' and v_flgtest = 'G' then
                   v_flgtest_tr := 'N';
               end if;
-              
+
           end if;
 
           if v_flgtest_tr = 'Y' then
@@ -268,7 +268,7 @@
           else 
             v_qtyexammin := v_qtyexammin * 60;
           end if;
-          
+
         if v_flgtest_tr = 'Y' then
              begin
                 select flgtest into v_flgtest2
@@ -281,16 +281,16 @@
              exception when no_data_found then
               null;
              end;
-           
+
             if v_flgtest2 = 'C' or v_flgtest2 = 'G' then
                v_qtyexammin := 0;
             end if;
           end if;
-          
+
           if v_qtyexammin = 0 then
             v_flgtimeout := 'Y';
           end if;
-          
+
           v_desc_qtyexammin := v_desc_qtyexammin / 60;
           v_qtyexammin := v_qtyexammin ;
           v_qtyalrtmin := v_qtyalrtmin * 60;
@@ -353,7 +353,7 @@
     v_statest           varchar2(100 char):='';
     v_typtest           ttestemp.typtest%type;
     v_statest2          ttestemp.statest%type;
-    
+
     v_total_answer      number := 0;
     v_flg_ansfull       varchar2(2 char):='N';
 
@@ -410,7 +410,7 @@
 --    el_dteexam2	        thistrnn.dteexam2%type;
 --    el_codexam	        thistrnn.codexam%type;
 --    el_codexam2	        thistrnn.codexam2%type;
-    
+
     v_flganswer         varchar2(1 char) := 'N';
     v_retest            varchar2(10) := 'N';
     pr_codexam          ttestemp.codexam%type; 
@@ -424,9 +424,9 @@
     v_timexam           ttestemp.timexam%type; 
     el_statest          ttestemp.statest%type;
     el_flgtest          ttestemp.flgtest%type;
-    
+
     v_codcours	        tvcourse.codcours%type;
-    
+
     cursor c1 is
         select codexam,decode(global_v_lang,'101',namsubje,
                                   '102',namsubj2,
@@ -466,7 +466,7 @@
           group by a.codquest;
 
     begin
-      
+
 /*      begin
         select flgshwans, staresult
         into v_flganswer, v_staresult
@@ -475,7 +475,7 @@
       exception when no_data_found then
         v_flganswer := 'N';
       end;*/
-      
+
       if p_flg_send_exam <> 'Y' then  
           if  p_codapp in ('hrel21e','hrel22e','hrel23e') then
               begin
@@ -491,8 +491,8 @@
               end;
               if v_statest = 'N' and v_flgtest = 'G' then
                   v_flgtest_tr := 'Y';
-                  
-                  
+
+
                   begin
                     delete from ttestempd
                     where codempid = p_codempid
@@ -505,17 +505,17 @@
                   end;
                   commit;
               end if;
-              
+
           end if;
         end if;
-        
+
         obj_result := json_object_t;
         obj_row := json_object_t();
         v_result_score := 0;
         for r1 in c1 loop
             v_count := v_count +1;
             v_flgtest := 'T';
-            
+
               obj_data := json_object_t();
               obj_data.put('coderror','200');
               obj_data.put('numseq',v_count);
@@ -539,7 +539,7 @@
               exception when no_data_found then
                 v_qtyans := 0;
               end;
-              
+
 --              begin
 --                  select flgtest,typtest,statest 
 --                  into v_flgtest2,v_typtest,v_statest2
@@ -581,7 +581,7 @@
 --              obj_data.put('desc_codempid',p_namtest);
 --              obj_data.put('statest',get_tlistval_name('STATEST', v_statest2, global_v_lang));
               v_codquest := r1.codquest;
-              
+
               if p_flg_send_exam = 'Y' then -- send exam
                 v_total_qtyscore := 0;
                 for r2 in c2 loop
@@ -691,13 +691,13 @@
                 end;
               else -- check score when complete
                 if v_flgtest = 'Y' then
-                
+
                     v_total_qtyscore := 0;
                     for r2 in c2 loop
                     v_score := '';
                     v_qtyscore :=0;
                       if r2.typeexam = 1 or r2.typeexam = 2 then
-    
+
                           begin
                             select qtyscore into v_score
                             from  tvquestd1
@@ -722,7 +722,7 @@
                         elsif r2.typeexam = 4 then
                             v_score := null;
                         end if;
-    
+
                           begin
                             select qtyscore into v_qtyscore
                             from  tvquestd1
@@ -732,7 +732,7 @@
                           exception when no_data_found then
                             v_qtyscore :=0;
                            end;
-    
+
                         begin
                             update ttestempd
                             set qtyscore = v_qtyscore,
@@ -747,10 +747,10 @@
                         exception when others then
                           null;
                         end;
-    
+
                         v_total_qtyscore := v_total_qtyscore + v_score;
                     end loop;
-    
+
                     if r1.typeexam <> 4 then
                       obj_data.put('score',v_total_qtyscore);
                       v_result_score   := v_result_score + v_total_qtyscore;
@@ -775,10 +775,10 @@
                         v_lrn_statest := 'N';
                      end if;
                 end if;
-                
-                
+
+
               end if;  -- end send exam
-              
+
               if v_flgtest_tr = 'N' then
                   begin
                       select flgtest,typtest,statest 
@@ -793,10 +793,10 @@
                     null;
                   end;
               end if;
-             
+
               if v_flgtest2 = 'C' or v_flgtest2 = 'G' then
                  v_flgtest := 'Y';
-                 
+
                  if r1.typeexam <> 4 then
                   obj_data.put('flganswer',v_flganswer);
                   else
@@ -809,14 +809,14 @@
               end if;
 
               v_total_answer := v_total_answer + v_qtyans;
-              
+
               if v_flgtest_tr = 'Y' then
                  v_flgtest := 'T';
               end if;
               if p_flg_send_exam = 'Y' then
                  v_flgtest := 'Y';
               end if;
-              
+
               obj_data.put('flgtest',v_flgtest);
               obj_data.put('qtyans',v_qtyans);
               obj_data.put('codquest',r1.codquest);
@@ -849,7 +849,7 @@
              else
                v_flgtest := 'G';
              end if;
-        
+
 --            begin
 --                update ttestemp
 --                set flgtest = v_flgtest,
@@ -873,7 +873,7 @@
             if v_total_answer = v_qtyexam then
               v_flg_ansfull := 'Y';
             end if;
-            
+
             if p_codapp = 'hrel21e' then
                if p_typetest = '1' then
                   begin
@@ -986,7 +986,7 @@
                           po_qtyscore := null;
                           po_score := null;
                         end;
-                        
+
                         begin
                             select qtytrflw,flgcommt,descommt,descommt2
                             into el_qtytrflw,el_flgcommt,el_descommt,el_descommtn
@@ -998,7 +998,7 @@
                             el_descommt := null;
                             el_descommtn := null;
                          end;
-                        
+
                          begin
                             insert into thistrnn(codempid,dteyear,codcours,numclseq,codpos,codcomp,codtparg,
                                         qtyprescr,qtyposscr,remarks,codhotel,codinsts,codinst,
@@ -1074,7 +1074,7 @@
          if v_flgtest = 'T' then
            v_flgtest := '';
          end if;
-         
+
          if v_flgtest_tr = 'Y' then
              v_flgtest := '';
              v_statest := '';
@@ -1090,7 +1090,7 @@
           json_str_output := obj_result.to_clob;
 
          if p_flg_send_exam <> 'Y' then
-             
+
               if p_codcomp is null then
                 begin
                   select codcomp,codpos
@@ -1102,7 +1102,7 @@
                   p_codpos := null;
                 end;
               end if;
-              
+
               begin
                 select (timexam+1),flgtest,statest
                   into v_timexam,el_flgtest,el_statest
@@ -1289,7 +1289,7 @@
           elsif v_old_typeexam = '2' then
             v_test_type := 'rightwrong';
            end if;
-           
+
           if v_old_typeexam <> '!@#' and v_old_typeexam <> v_typeexam then
              v_row := v_row + 1;
 
@@ -1422,7 +1422,7 @@
               obj_temp.put('table', obj_temp_row);
               obj_temp.put('detail', obj_detail);
               obj_result.put(v_test_type, obj_temp);
-              
+
               if hcm_util.get_string_t(obj_result,'evaluate') is null and hcm_util.get_json_t(obj_result,'evaluate').get_size = 0  then
                 obj_temp_row := json_object_t();
                 obj_temp_row.put('rows', json_object_t());
@@ -1455,7 +1455,7 @@
                 obj_temp.put('detail', json_object_t());
                 obj_result.put('rightwrong', obj_temp);
               end if;
-              
+
           json_str_output := obj_result.to_clob;
 
   end gen_detail_exam;
@@ -1544,14 +1544,14 @@
             and numques  = v_numques
             and typtest = p_typtest
             and typetest = p_typetest;
-      
+
       end;
 
 
     end loop;
     gen_detail(json_str_output);
-  
-        
+
+
   end;
 
   procedure post_save_exam (json_str_input in clob, json_str_output out clob) is

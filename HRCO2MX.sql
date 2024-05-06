@@ -12,7 +12,7 @@
 
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure get_route_detail(json_str_input in clob, json_str_output out clob);
-    
+
 end hrco2mx;
 
 /

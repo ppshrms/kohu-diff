@@ -461,7 +461,7 @@
       exception when no_data_found then
           v_trefreq := null;
       end;
-      
+
       begin 
         chk_workflow.sendmail_to_approve( p_codapp        => v_codapp,
                                           p_codtable_req  => 'tapempch',

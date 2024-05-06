@@ -77,10 +77,10 @@
       param_json_row        := hcm_util.get_json_t(param_json,to_char(i));
       v_file                := hcm_util.get_json_t(param_json_row,'filename');
       v_filename            := hcm_util.get_string_t(v_file, 'fileName');
-       
+
       if UPPER(substr(v_filename,instr(v_filename,'.',-1)+1,length(v_filename)-instr(v_filename,'.',-1))) not in ('SQL','PKG','FNC') then
 --        rollback;
-        
+
         param_msg_error := get_error_msg_php('CO0035',global_v_lang);
         exit;
 --        json_str_output := get_response_message(404, param_msg_error, global_v_lang);
@@ -166,7 +166,7 @@
                 null;
             end;
         end loop;
-        
+
         param_msg_error := get_error_msg_php('HR2715',global_v_lang);
         json_str_output := get_response_message(null, param_msg_error, global_v_lang);
   end compile_invalid;
@@ -175,12 +175,12 @@
   obj_data             json_object_t;
   begin
         param_msg_error := get_error_msg_php('CO0035',global_v_lang);
-        
+
         obj_data             := json_object_t();
         obj_data.put('coderror', '200');
         obj_data.put('response', replace(param_msg_error,'@#$%400',''));
         json_str_output := obj_data.to_clob();
-        
+
 --        json_str_output := get_response_message(null, param_msg_error, global_v_lang);
   end msgerror;
 

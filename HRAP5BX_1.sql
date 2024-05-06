@@ -22,7 +22,7 @@
     b_index_codcomp      := hcm_util.get_string_t(json_obj,'p_codcomp');
     b_index_typpayroll   := hcm_util.get_string_t(json_obj,'p_typpayroll');
 
-    
+
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
 
   end initial_value;
@@ -84,7 +84,7 @@
             obj_data.put('periodpay',i.numperiod||'/'||i.dtemthpay||'/'||i.dteyrepay);
             obj_data.put('amtnbon', i.amtnbon);
             obj_data.put('codcomp', i.codcomp);
-            
+
             obj_data.put('dteyreap', b_index_dteyreap);
             obj_data.put('numtime', b_index_numtime);
             obj_data.put('codbon', b_index_codbon);

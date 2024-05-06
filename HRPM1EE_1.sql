@@ -299,7 +299,7 @@
     v_codrespon 		  := hcm_util.Get_string_t(param_json, 'codrespon');
     v_codrespon2		  := hcm_util.Get_string_t(param_json, 'codrespon2');
     v_dtercass		    := To_date(hcm_util.Get_string_t(param_json, 'dtercass'),'dd/mm/yyyy');
-    
+
     if v_dterec > sysdate then
       param_msg_error := get_error_msg_php('PM0012',global_v_lang);
       json_str_output := get_response_message(400,param_msg_error,global_v_lang);

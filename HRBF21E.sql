@@ -48,7 +48,7 @@
     p_dteadmit              thwccase.dteadmit%type;
     p_numwc                 thwccase.numwc%type;
     p_stawc                 thwccase.stawc%type;
-    
+
 
     p_amtday                thwccase.amtday%type;
     p_amtmonth              thwccase.amtmonth%type;

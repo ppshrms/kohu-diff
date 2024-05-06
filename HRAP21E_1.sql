@@ -35,7 +35,7 @@
        where codcompy = b_index_codcompy
          and dteyreap = p_year
        order by jobgrade;
-        
+
   begin
     obj_row := json_object_t();
     check_yreeffec;
@@ -120,7 +120,7 @@
        where codcompy = b_index_codcompy
          and dteyreap = b_index_dteyreap;
       end;
-      
+
       if v_chkExist > 0 then
         p_year := b_index_dteyreap;
         p_flgedit := 'N';
@@ -173,7 +173,7 @@
         exception when no_data_found then
           v_yreeffec := null;
         end;
-        
+
         p_year := v_yreeffec;
         p_flgedit := 'Y';
       else
@@ -187,7 +187,7 @@
     param_json          json_object_t;
     param_json_row      json_object_t;
     param_index         json_object_t;
-    
+
     v_flg	            varchar2(1000 char);
     v_flgupd	        varchar2(1000 char);
     v_numvcher	      varchar2(1000 char);
@@ -252,7 +252,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message(null,param_msg_error,global_v_lang);
   end;
-  
+
 end hrap21e;
 
 /

@@ -6,7 +6,7 @@
 -- last update: 10/08/2020 13:45
 
   v_chken      varchar2(100 char);
-  
+
   param_msg_error     varchar2(4000 char);
 
   global_v_coduser      varchar2(100 char);

@@ -941,17 +941,17 @@
       -- start batch process
       v_dtetim := sysdate;
       obj_data_tmp := json_object_t(v_param_input);
-      
+
       v_coduser_tmp := hcm_util.get_string_t(obj_data_tmp,'p_coduser');
       if v_coduser_tmp is null then
         obj_data_tmp.put('p_coduser',global_v_coduser);
       end if;
-      
+
       v_lang_tmp := hcm_util.get_string_t(obj_data_tmp,'p_lang');
       if v_lang_tmp is null then
         obj_data_tmp.put('p_lang',global_v_lang);
       end if;
-      
+
       v_dtetim_tmp := to_date(hcm_util.get_string_t(obj_data_tmp,'p_dtetim'),'ddmmyyyyhh24miss');
       if v_dtetim_tmp is null then
         obj_data_tmp.put('p_dtetim',to_char(v_dtetim,'ddmmyyyyhh24miss'));

@@ -24,7 +24,7 @@
     v_rcnt            number := 0;
     v_coduser         varchar2(500);
     v_dteupd          tapplref.dteupd%type;
-    
+
     cursor c_tapplref is
       select  numappl,numseq,codempid,codempref,codtitle,
               decode(global_v_lang,'101',namfirste

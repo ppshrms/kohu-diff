@@ -512,7 +512,7 @@
     v_error             varchar2(4000 char);
     v_codpswd_hash      users.password%type;
     v_statappl          tapplinf.statappl%type;
-    
+
     v_subject           varchar2(4000 char); -- softberry || 25/04/2023 || #8797
   begin
     initial_value(json_str_input);
@@ -605,7 +605,7 @@
       end;
     */
 -->> softberry || 25/04/2023 || #8797
-      
+
 --<< softberry || 25/04/2023 || #8797
       begin
         select rowid
@@ -633,7 +633,7 @@
       chk_flowmail.get_message('HRRC43U', global_v_lang, v_msg_to, v_template_to, v_func_appr);
       chk_flowmail.replace_text_frmmail(v_template_to, 'tapplinf', v_rowidmail, v_subject, v_codfrm_to, null, v_func_appr, global_v_coduser, global_v_lang, v_msg_to); -- softberry || 25/04/2023 || #8797 || chk_flowmail.replace_text_frmmail(v_template_to, 'temploy1', v_rowidmail, get_label_name('HRRC43U1', global_v_lang, 130), v_codfrm_to, null, v_func_appr, global_v_coduser, global_v_lang, v_msg_to);
       v_error := chk_flowmail.send_mail_to_approve ('HRRC43U' , v_codempid, global_v_coduser, v_msg_to, null, v_subject, 'U', b_staappr, global_v_lang, v_approvno, null, null); -- softberry || 25/04/2023 || #8797 || v_error := chk_flowmail.send_mail_to_approve ('HRRC43U' , v_codempid, global_v_coduser, v_msg_to, null, get_label_name('HRRC43U1', global_v_lang, 130), 'U', b_staappr, global_v_lang, v_approvno, null, null);
-      
+
       commit;
       if v_error is null then
         v_error := '2401';

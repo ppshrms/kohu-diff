@@ -81,7 +81,7 @@
             v_stmt_select := ' select
                         nvl(sum(nvl(stddec(amtpay'||v_month||',a.codempid,hcm_secur.get_v_chken),0)),0) amtpay,count(*) row_count ';
         end if;
-        
+
         if p_report = '3' then
           v_stmt_report := ' where b.dteyrepay = '''||p_year||'''
                                and b.dtemthpay = decode('''||v_month||''',''A'',b.dtemthpay,'''||v_month||''') ';
@@ -240,7 +240,7 @@
                     obj_data.put('amtbudgt',to_char(nvl(get_amtbudgt(v_codpay,v_codgrbug,v_month),0)));
                     obj_data.put('pctbudgt',to_char(nvl(get_pctbudgt(get_amtpay(v_codpay,v_syscond,v_month),get_amtbudgt(v_codpay,v_codgrbug,v_month)),0)));
                     obj_rows.put(to_char(v_row-1),obj_data);
-    
+
                     -- สร้าง graph
                     create_graph_data(
                         lpad(v_row,2,0)
@@ -272,13 +272,13 @@
             exception when no_data_found then
                 v_syscond := null;
             end;
-            
+
             obj_rows    := json_object_t();
             if v_syscond is not null then
                 for i in 0..json_codpay.get_size-1 loop
                     v_row := v_row+1;
                     v_codpay := hcm_util.get_string_t(json_codpay,to_char(i));
-    
+
                     obj_data := json_object_t();
                     obj_data.put('codcodec',v_codpay);
                     obj_data.put('desc_codcodec',get_tinexinf_name(v_codpay,global_v_lang));

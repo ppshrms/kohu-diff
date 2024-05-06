@@ -37,5 +37,4 @@
   procedure gen_tguardet (json_str_output out clob);
 END HRRC58X;
 
-
 /

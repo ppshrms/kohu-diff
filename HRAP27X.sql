@@ -18,7 +18,7 @@
   global_v_codpswd      varchar2(100 char);
   global_v_lang         varchar2(10 char) := '102';
 
-  
+
   b_index_dteyear       number;
   b_index_numtime       number;
   b_index_codcomp       varchar2(4000 char);

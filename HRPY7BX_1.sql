@@ -48,7 +48,7 @@
     if not secur_main.secur7(p_codcompy, global_v_coduser) then
       param_msg_error := get_error_msg_php('HR3007',global_v_lang);
     end if;
-    
+
     --<<User37 #5230 Final Test Phase 1 V11 02/03/2021 
     if to_number(p_dteyrest||lpad(p_dtemthst,2,'00')) > to_number(p_dteyreen||lpad(p_dtemthen,2,'00')) then
         param_msg_error := get_error_msg_php('HR2029',global_v_lang);

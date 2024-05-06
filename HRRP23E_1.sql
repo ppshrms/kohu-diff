@@ -138,7 +138,7 @@
       obj_data.put('codemprq', r1.codemprq);
       obj_data.put('desc_codemprq', get_temploy_name(r1.codemprq,global_v_lang));
       --<< user25 Date : 13/09/2021 1. RP Module #4880
-      
+
       if to_number(to_char(trunc(sysdate),'yyyy')) > r1.dteyrbug then 
           obj_data.put('flgDisabled', true);
       else
@@ -367,7 +367,7 @@
 --            v_ytd := a_qtydata(rw)(mth);
 --        end if;
         obj_data.put('month'||to_char(mth), a_qtydata(rw)(mth));
-        
+
         -- set flgdisable column
         if b_index_dteyrbug = to_number(to_char(sysdate,'yyyy')) then
             if mth >= to_number(to_char(sysdate,'mm')) then --user36 #4881 15/09/2021

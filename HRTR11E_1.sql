@@ -14,14 +14,14 @@
 
     p_codcours        := UPPER(hcm_util.get_string_t(json_obj,'p_codcours'));
     p_codcoursCopy    := UPPER(hcm_util.get_string_t(json_obj,'p_codcoursCopy'));
-    
+
     if p_codcoursCopy is not null then
         p_flgcopy   := 'Y';
     else
         p_flgcopy   := 'N';
     end if;
   end initial_value;
-  
+
   procedure gen_index(json_str_output out clob) as
     obj_rows    json_object_t;
     obj_data    json_object_t;
@@ -62,19 +62,19 @@
         exception when no_data_found then
             v_count2 := 0;
         end;
-        
+
         if v_count1 > 0 or v_count1 > 0 then
             obj_data.put('flgDelDisabled',true);
         else
             obj_data.put('flgDelDisabled',false);
         end if;
-        
+
         obj_rows.put(to_char(v_row-1),obj_data);
     end loop;
 
     json_str_output := obj_rows.to_clob;
   end gen_index;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob) AS
   BEGIN
     initial_value(json_str_input);
@@ -125,7 +125,7 @@
         json_obj            := hcm_util.get_json_t(param_json,to_char(i));
         v_flg               := hcm_util.get_string_t(json_obj,'flg');
         p_codcours          := hcm_util.get_string_t(json_obj,'codcours');
-        
+
         if v_flg = 'delete' then
             check_save_index;
             if param_msg_error is null then 
@@ -142,7 +142,7 @@
             end if;
         end if;
     end loop;
-    
+
     if param_msg_error is null then
         commit;
         param_msg_error := get_error_msg_php('HR2425',global_v_lang);
@@ -168,7 +168,7 @@
     obj_tab3        json_object_t;
     obj_syncond     json_object_t;
     v_row           number := 0;
-    
+
     v_namgrade      tskilscor.namgrade%type;
     v_namgradt      tskilscor.namgradt%type;
     v_namgrad3      tskilscor.namgrad3%type;
@@ -191,7 +191,7 @@
     isAdd       := false;
     isEdit      := false;
     obj_main    := json_object_t();
-    
+
     begin
         select * 
           into v_tcourse
@@ -205,7 +205,7 @@
         v_tcourse.flgelern      := 'N';
         isAdd                   := true;
     end;
-    
+
     obj_tab1 := json_object_t();
     obj_tab1.put('coderror',200);
     obj_tab1.put('codcours',p_codcours);
@@ -214,7 +214,7 @@
     obj_tab1.put('namcours3',v_tcourse.namcours3);
     obj_tab1.put('namcours4',v_tcourse.namcours4);
     obj_tab1.put('namcours5',v_tcourse.namcours5);
-    
+
     if global_v_lang = '101' then
         obj_tab1.put('namcours',v_tcourse.namcourse);
     elsif global_v_lang = '102' then
@@ -226,7 +226,7 @@
     elsif global_v_lang = '105' then
         obj_tab1.put('namcours',v_tcourse.namcours5);
     end if;
-        
+
     obj_tab1.put('codcate',v_tcourse.codcate);
     obj_tab1.put('descours',v_tcourse.descours);
     obj_tab1.put('typtrain',v_tcourse.typtrain);
@@ -240,7 +240,7 @@
     obj_tab1.put('flgcommt',v_tcourse.flgcommt);
     obj_tab1.put('descommt',v_tcourse.descommt);
     obj_tab1.put('descommt2',v_tcourse.descommt2);
-    
+
     obj_syncond := json_object_t();
     obj_syncond.put('code',trim(nvl(v_tcourse.syncond,' ')));
     obj_syncond.put('description',trim(nvl(get_logical_desc(v_tcourse.statement),' ')));
@@ -251,7 +251,7 @@
     obj_tab1.put('qtytrday',v_tcourse.qtytrday);
     obj_tab1.put('qtytrflw',v_tcourse.qtytrflw);
     obj_tab1.put('filecommt',v_tcourse.filecommt);
-    
+
     obj_tab2_detail := json_object_t();
     obj_tab2_detail.put('coderror',200);
     obj_tab2_detail.put('descobjt',v_tcourse.descobjt);
@@ -266,7 +266,7 @@
     obj_tab2_detail.put('codcomptr',v_tcourse.codcomptr);
     obj_tab2_detail.put('flgelern',v_tcourse.flgelern);
     obj_tab2_detail.put('typcours',v_tcourse.typcours);
-    
+
     obj_tab2_table  := json_object_t();
     for r1 in c1 loop
         v_row           := v_row + 1;
@@ -279,7 +279,7 @@
         end if;
         obj_data.put('codskill',r1.codskill);
         obj_data.put('grade',r1.grade);
-        
+
         begin
           select namgrade, namgradt, namgrad3, namgrad4, namgrad5,
                  decode(global_v_lang,'101',namgrade
@@ -296,7 +296,7 @@
           v_namgrad  := ''; v_namgrade := ''; v_namgradt := ''; 
           v_namgrad3 := ''; v_namgrad4 := ''; v_namgrad5 := '';
         end;
-        
+
         obj_data.put('namgrad',v_namgrad);
         obj_data.put('namgrade',v_namgrade);
         obj_data.put('namgradt',v_namgradt);
@@ -305,12 +305,12 @@
         obj_data.put('namgrad5',v_namgrad5);
         obj_tab2_table.put(to_char(v_row-1),obj_data);
     end loop;
-    
+
     obj_tab2    := json_object_t();
     obj_tab2.put('coderror',200);
     obj_tab2.put('detail',obj_tab2_detail);
     obj_tab2.put('table',obj_tab2_table);
-    
+
     obj_tab3    := json_object_t();
     v_row       := 0;
     for r2 in c2 loop
@@ -327,7 +327,7 @@
         obj_data.put('qtytrhr',hcm_util.convert_minute_to_hour(r2.qtytrhr * 60)); 
         obj_tab3.put(to_char(v_row-1),obj_data);
     end loop;    
-    
+
     if param_msg_error is null then
         obj_main.put('coderror',200);
         if p_codcoursCopy is null then
@@ -382,7 +382,7 @@
     dbms_lob.createtemporary(json_str_output, true);
     obj_rows.to_clob(json_str_output);
   end gen_copylist;
-  
+
   procedure get_copylist(json_str_input in clob, json_str_output out clob) AS
   BEGIN
     initial_value(json_str_input);
@@ -478,7 +478,7 @@
             return;
         end;
      end if;  
-    
+
     -- tab2
 --  check null parameters
     if nvl(v_tcourse.qtyppc,0) <= 0 then
@@ -528,7 +528,7 @@
         end;
     end if;
   end check_save;
-  
+
   procedure check_tab2 as
   begin
 --  check null parameters
@@ -542,7 +542,7 @@
         return;
     end if;
   end check_tab2;
-  
+
   procedure check_tab3 as
     v_temp        varchar2(1 char);
     v_sumhr       number;
@@ -563,11 +563,11 @@
         end;
     end if;
   end check_tab3;
-  
+
   procedure save_detail(json_str_input in clob, json_str_output out clob) as
     json_obj        json_object_t;
     obj_syncond     json_object_t;
-    
+
     data_obj        json_object_t;
     v_flg           varchar2(10);
     v_sumqtytrhr    number;
@@ -582,7 +582,7 @@
     isAdd                   := hcm_util.get_boolean_t(json_obj,'isAdd');
     isEdit                  := hcm_util.get_boolean_t(json_obj,'isEdit');
     isCopy                  := hcm_util.get_string_t(json_obj,'isCopy');   
-    
+
     p_codcours              := hcm_util.get_string_t(p_tab1,'codcours');
     v_tcourse.namcourse     := hcm_util.get_string_t(p_tab1,'namcourse');
     v_tcourse.namcourst     := hcm_util.get_string_t(p_tab1,'namcourst');
@@ -621,16 +621,16 @@
     v_tcourse.codcomptr     := hcm_util.get_string_t(p_tab2_detail,'codcomptr');
     v_tcourse.flgelern      := hcm_util.get_string_t(p_tab2_detail,'flgelern');
     v_tcourse.typcours      := hcm_util.get_string_t(p_tab2_detail,'typcours');
-    
+
     check_save;
-    
+
     if param_msg_error is null then
         if isCopy = 'Y' then
             delete tcourse where codcours = p_codcours;
             delete tcoursub where codcours = p_codcours;
             delete tcomptcr where codcours = p_codcours;
         end if;
-        
+
         begin 
             insert into tcourse(codcours,namcourse,namcourst,namcours3,namcours4,namcours5,
                                 codcate,descours,typtrain,url1,url2,
@@ -693,22 +693,22 @@
              where codcours = p_codcours;
         end;
     end if;
-    
+
     if param_msg_error is null then
         for i in 0..p_tab2_table.get_size-1 loop
             data_obj                := hcm_util.get_json_t(p_tab2_table,to_char(i));
             v_flg                   := hcm_util.get_string_t(data_obj,'flg');
             v_tcomptcr.codskill     := hcm_util.get_string_t(data_obj,'codskill');
             v_tcomptcr.grade        := hcm_util.get_string_t(data_obj,'grade');
-            
+
             v_tskilscor.namgrade    := hcm_util.get_string_t(data_obj,'namgrade');
             v_tskilscor.namgradt    := hcm_util.get_string_t(data_obj,'namgradt');
             v_tskilscor.namgrad3    := hcm_util.get_string_t(data_obj,'namgrad3');
             v_tskilscor.namgrad4    := hcm_util.get_string_t(data_obj,'namgrad4');
             v_tskilscor.namgrad5    := hcm_util.get_string_t(data_obj,'namgrad5');
-            
+
             check_tab2;
-            
+
             if v_flg = 'delete' then
                 delete tcomptcr 
                  where codskill = v_tcomptcr.codskill
@@ -729,7 +729,7 @@
                        and grade = v_tcomptcr.grade
                        and codcours = p_codcours;
                 end;
-    
+
                 begin
                     insert into tskilscor(codskill,grade,
                                           namgrade,namgradt,namgrad3,namgrad4,namgrad5,
@@ -752,7 +752,7 @@
             end if;
         end loop;
     end if;
-    
+
     if param_msg_error is null then
         for i in 0..p_tab3.get_size-1 loop
             data_obj                := hcm_util.get_json_t(p_tab3,to_char(i));
@@ -760,12 +760,12 @@
             v_tcoursub.codsubj      := hcm_util.get_string_t(data_obj,'codsubj');
             v_tcoursub.codinst      := hcm_util.get_string_t(data_obj,'codinst');
             v_tcoursub.qtytrhr     := hcm_util.convert_hour_to_minute(hcm_util.get_string_t(data_obj,'qtytrhr'))/60;
-            
+
             check_tab3;
             if param_msg_error is not null then
                 exit;
             end if;
-            
+
             if v_flg = 'delete' then
                 delete tcoursub 
                  where codsubj = v_tcoursub.codsubj
@@ -788,7 +788,7 @@
             end if;
         end loop; 
     end if;
-    
+
     if param_msg_error is null then
         begin 	
           select sum(qtytrhr)
@@ -799,7 +799,7 @@
           v_sumqtytrhr := 0;	 
         end;	
         v_sumqtytrhr   := nvl(v_sumqtytrhr,0);
-        
+
         if nvl(v_sumqtytrhr,0) <> v_tcourse.qtytrhur then
           param_msg_error := get_error_msg_php('TR0001',global_v_lang);
         end if;

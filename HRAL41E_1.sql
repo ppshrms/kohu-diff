@@ -1228,7 +1228,7 @@
                                                p_qtyminb, p_timendb, p_timstrtb,
                                                p_qtymind, p_timendd, p_timstrtd,
                                                p_qtymina, p_timenda, p_timstrta);
-          
+
           v_qtyminotb   := std_ot.get_qtyminot(i.codempid, i.dtework, i.dtework,
                                                p_qtyminb, p_timendb, p_timstrtb,
                                                null, null, null,
@@ -1354,7 +1354,7 @@
               --<< user18 ST11 05/08/2021 change std
             end if;
           end if;
-          
+
           -- During Work
 --<<10/11/2022 15:17  error NMT: redmine415          
           --if v_qtyminotd > 0 and (p_timstrtd is not null or p_timendd is not null or (p_qtymind is not null and p_qtymind > 0)) then

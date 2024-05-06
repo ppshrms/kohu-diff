@@ -51,12 +51,12 @@
 --    p_dtestrt           date;
 --    p_dteend            date;
 --    flgAdd              boolean;
---    
+--
 --    v_date              varchar(20 char);
 --    present_date        varchar(20 char);
 --
 ----    cursor c1 is
-----      select * 
+----      select *
 ----        from tbudgetot
 ----       where codcomp like p_codcomp||'%'
 ----         and dtemonth = p_budget_month
@@ -70,23 +70,23 @@
 --         and dteyear||lpad(DTEMONTH, 2, 0) = (
 --             select decode(
 --             (select dteyear||lpad(DTEMONTH, 2, 0)
---                from tbudgetot 
---               where dteyear = p_budget_year 
---                 and dtemonth = p_budget_month 
+--                from tbudgetot
+--               where dteyear = p_budget_year
+--                 and dtemonth = p_budget_month
 ----                 and codcomp like p_codcomp||'%' --issue(4449#1466) 13/11/2023
 --                 and codcomp = a.codcomp --issue(4449#1466) 13/11/2023
 --             ), null, -- ถ้า query ชุดนี้ไม่เจอ จะไปเอา query ชุดข้่้างล่าง
 --        (select max(dteyear||lpad(DTEMONTH, 2, 0))
---           from tbudgetot 
---          where to_date(dteyear|| lpad(dtemonth, 2, 0), 'yyyymm') <= to_date(p_budget_year||lpad(p_budget_month, 2, 0), 'yyyymm') 
+--           from tbudgetot
+--          where to_date(dteyear|| lpad(dtemonth, 2, 0), 'yyyymm') <= to_date(p_budget_year||lpad(p_budget_month, 2, 0), 'yyyymm')
 ----            and codcomp like p_codcomp||'%' --issue(4449#1466) 13/11/2023
 --              and codcomp = a.codcomp
 ----              and to_date(dteyear|| lpad(dtemonth, 2, 0), 'yyyymm') <= to_date(present_date, 'yyyymm')
 --        ),  -- ถ้าเอา query ชุดนี้ไม่เจอ จะไปเอาข้างล่าง
 --        (select dteyear||lpad(DTEMONTH, 2, 0)
---           from tbudgetot 
---          where dteyear = p_budget_year 
---            and dtemonth = p_budget_month 
+--           from tbudgetot
+--          where dteyear = p_budget_year
+--            and dtemonth = p_budget_month
 ----            and codcomp like p_codcomp||'%')) --issue(4449#1466) 13/11/2023
 --            and codcomp = a.codcomp)) --issue(4449#1466) 13/11/2023
 --        from dual
@@ -100,8 +100,8 @@
 --      current_day := to_char(sysdate, 'ddmm'); -- get วันที่ เดือน ปัจจุบัน
 --      current_month := SUBSTR(current_day, 3); -- substr เพื่อเอาเดือนออกมา
 --      current_year := to_number(to_char(sysdate,'yyyy')); -- get ปีปัจจุบัน
---      
---      
+--
+--
 --      v_date := p_budget_year||lpad(p_budget_month, 2, 0);
 --      present_date := current_year||lpad(current_month, 2, 0);
 --
@@ -144,17 +144,17 @@
 --
 --        if v_flg_disabled = false then
 --          if secur_main.secur7(r1.codcomp, global_v_coduser) = true then
---            obj_data.put('codcomp', hcm_util.get_codcomp_level(rpad(r1.codcomp,40,'0'),10)); 
+--            obj_data.put('codcomp', hcm_util.get_codcomp_level(rpad(r1.codcomp,40,'0'),10));
 --            -- "How to fix it when codcomp is stored in a shortened table but the status is cancelled.
 --            -- (tcenter.flgate =2) causes the screen to not show data of codcomp.
 --            -- Because lov reads Desc only in full. Make the submitted short form blank."
 --            -- "วิธีแก้ไข เมื่อ codcomp เก็บใน Table แบบย่อ แต่มีสถานะเป็นยกเลิก
---            -- (tcenter.flgate =2) ทำให้ที่หน้าจอ จะไม่โชว์ data ของ codcomp 
+--            -- (tcenter.flgate =2) ทำให้ที่หน้าจอ จะไม่โชว์ data ของ codcomp
 --            -- เนื่องจาก lov อ่านค่า Desc เฉพาะแบบเต็มเท่านั้น ทำให้แบบย่อที่ส่งมา เป็นค่าว่าง"
---            
+--
 --            -- "Edit by sending the full codcomp value and specifying
 --            -- fullDisp: false in column.js for abbreviated display"
---            -- "แก้ไขด้วยการส่งค่า codcomp แบบเต็มมา แล้วกำหนด 
+--            -- "แก้ไขด้วยการส่งค่า codcomp แบบเต็มมา แล้วกำหนด
 --            -- fullDisp: false ที่ column.js เพื่อให้แสดงแบบย่อ"
 --            obj_data.put('pctbudget', r1.pctbudget);
 --            obj_data.put('pctabslv', r1.pctabslv);
@@ -180,12 +180,12 @@
 --            -- (tcenter.flgate =2) causes the screen to not show data of codcomp.
 --            -- Because lov reads Desc only in full. Make the submitted short form blank."
 --            -- "วิธีแก้ไข เมื่อ codcomp เก็บใน Table แบบย่อ แต่มีสถานะเป็นยกเลิก
---            -- (tcenter.flgate =2) ทำให้ที่หน้าจอ จะไม่โชว์ data ของ codcomp 
+--            -- (tcenter.flgate =2) ทำให้ที่หน้าจอ จะไม่โชว์ data ของ codcomp
 --            -- เนื่องจาก lov อ่านค่า Desc เฉพาะแบบเต็มเท่านั้น ทำให้แบบย่อที่ส่งมา เป็นค่าว่าง"
---            
+--
 --            -- "Edit by sending the full codcomp value and specifying
 --            -- fullDisp: false in column.js for abbreviated display"
---            -- "แก้ไขด้วยการส่งค่า codcomp แบบเต็มมา แล้วกำหนด 
+--            -- "แก้ไขด้วยการส่งค่า codcomp แบบเต็มมา แล้วกำหนด
 --            -- fullDisp: false ที่ column.js เพื่อให้แสดงแบบย่อ"
 --            obj_data.put('pctbudget', r1.pctbudget);
 --            obj_data.put('pctabslv', r1.pctabslv);
@@ -211,7 +211,7 @@
 --          end if;
 --        end if;
 --      end loop;
---      
+--
 ----      if v_rcnt = 0 then
 ----         param_msg_error   := get_error_msg_php('HR2055',global_v_lang,'TBUDGETOT');
 ----        json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
@@ -247,7 +247,7 @@
     check_loop          boolean := false;
 
     cursor c1 is
-      select * 
+      select *
         from tbudgetot
        where codcomp like p_codcomp||'%'
          and dtemonth = p_budget_month
@@ -313,7 +313,7 @@
 
         if v_flg_disabled = false then
           if secur_main.secur7(r1.codcomp, global_v_coduser) = true then
-            obj_data.put('codcomp', hcm_util.get_codcomp_level(rpad(r1.codcomp,40,'0'),10)); 
+            obj_data.put('codcomp', hcm_util.get_codcomp_level(rpad(r1.codcomp,40,'0'),10));
             obj_data.put('pctbudget', r1.pctbudget);
             obj_data.put('pctabslv', r1.pctabslv);
             obj_data.put('qtymanpw', r1.qtymanpw);
@@ -553,7 +553,7 @@
 --           where codcomp = v_codcomp; issue4448#9976
            where codcomp like v_codcomp||'%'
              and rownum = 1
-        order by codcomp; 
+        order by codcomp;
         end;
 
         if v_comlevel < 3 and v_flgDelete <> true then
@@ -643,7 +643,7 @@
           if nvl(v_qtyotESS,0) + nvl(v_qtyot_AL,0) + nvl(v_qtyot_AL2,0) > 0 then
             param_msg_error := get_error_msg_php('COZ005',global_v_lang);
           else
-            begin 
+            begin
               delete tbudgetot
                where dteyear  = p_budget_year
                  and dtemonth = p_budget_month
@@ -651,7 +651,7 @@
             end;
           end if;
 
-        end if; 
+        end if;
       end;
     end loop;
 

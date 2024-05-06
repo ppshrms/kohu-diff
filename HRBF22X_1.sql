@@ -185,7 +185,7 @@
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
         return;
     end;
-    
+
 --  get data from tcompny
     begin
         select numacdsd,codsubdist,coddist,codprovr,typbusiness,

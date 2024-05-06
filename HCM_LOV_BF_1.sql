@@ -1088,7 +1088,7 @@
       obj_data_temp.put('max',to_char(v_length));
 
     end loop; -- end while
-    
+
     json_str_output := obj_row_temp.to_clob;
     return json_str_output;
 

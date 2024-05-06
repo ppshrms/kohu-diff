@@ -93,7 +93,7 @@
         v_pctamt := p_amtsalyr * (v_pctdemax / 100);
         v_amtdeduct := least(v_amtdeduct,v_pctamt);
       end if;
-      
+
       ------ Check formula ------
       if v_formula is not null then
         if instr(v_formula,'[') > 1 then
@@ -686,13 +686,13 @@
         v_rund007 := 0;
         v_rund008 := 0;
         v_rund010 := 0;
-        
+
         for i in 1..100 loop
           p_dvalue_code(i) := null;
           p_evalue_code(i) := null;
           p_ovalue_code(i) := null;
         end loop;
-        
+
         for r_ttaxmedia in c_ttaxmedia loop
           if r_ttaxmedia.codtable = 'TDEDUCTD' then
             if r_ttaxmedia.coddeduct in ('E001','D001') then
@@ -801,7 +801,7 @@
         exception when no_data_found then
           v_sumded := 0;
         end;*/
-        
+
         p_var_item(v_seqdeduct)	:= round(v_sumded,2);
         --
         for i in 1..3 loop

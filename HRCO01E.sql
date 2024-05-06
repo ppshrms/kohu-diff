@@ -108,7 +108,7 @@
   p_contmsg4                tcompny.contmsg4%type;
   p_contmsg5                tcompny.contmsg5%type;
   p_compgrp                 tcompny.compgrp%type;
-  
+
   p_dteeffec                TPDPAITEM.dteeffec%type;
   p_dteeffec_tmp            TPDPAITEM.dteeffec%type;
   p_numseq                  TPDPAITEM.NUMITEM%type;

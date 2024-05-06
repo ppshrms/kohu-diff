@@ -60,7 +60,7 @@
        obj_data.put('description', v_description);
        obj_data.put('qtyreg', v_count);
        obj_row.put(to_char(v_rcnt-1),obj_data);
-       
+
        --<< softberry || 13/02/2023 || #8839
        insert into ttemprpt(codempid,codapp,numseq,item1,item4,item5,item7,item8,item9,item10)
        values(global_v_codempid,

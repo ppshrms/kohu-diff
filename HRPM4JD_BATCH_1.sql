@@ -502,10 +502,7 @@
         v_dteoccup := r1.dteoccup;
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'TYPPROBA',null,r1.typproba);
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'CODRESPR',null,r1.codrespr);
-        --<< mo-kohu-hr2301 | 000504-tae-surachai-dev | 02/04/2024 | 4449(#1835)
-        -- upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'DTEOCCUP',null,to_date(r1.dteoccup,'dd/mm/yyyy')); -- bk
-        upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'DTEOCCUP',null,to_char(r1.dteoccup,'dd/mm/yyyy')); -- add
-        --<< mo-kohu-hr2301 | 000504-tae-surachai-dev | 02/04/2024 | 4449(#1835)
+        upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'DTEOCCUP',null,to_date(r1.dteoccup,'dd/mm/yyyy'));
 --        upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'SCOREPR',null,r1.scorepr);
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'CODEXEMP',null,r1.codexemp);
         upd_ttcanceld(v_codempid,v_dteeffec,v_codtrn,v_numseq,'QTYEXPAND',null,r1.qtyexpand);
@@ -840,7 +837,7 @@
     b_index_dteoccup    temploy1.dteoccup%type;
 
     v_dteend           date;
---<<user14||08/06/2023 16:27 redmine STT#965  
+--<<user14||08/06/2023 16:27 redmine STT#965
   /*
   cursor c_ttexempt is
     select rowid,flgblist
@@ -854,11 +851,11 @@
     select a.rowid  ,flgblist,staupd ,
               a.codempid,  a.codcomp,b.codcalen,a.codempmt,b.typpayroll, b.flgatten ,b.dteempmt
     from ttexempt a,temploy1 b
- where	 a.codempid  = b.codempid 
+ where	 a.codempid  = b.codempid
     and   a.codempid = v_codempid
     and   a.dteeffec    = v_dteeffec
     and   a.staupd in('C','U');
---<<user14||08/06/2023 16:27 redmine STT#965  
+--<<user14||08/06/2023 16:27 redmine STT#965
 
 
   cursor c_ttcancel is
@@ -936,12 +933,12 @@
         end if;
       end if;  -- if r1.staupd = 'U' then
 
---<<user14||08/06/2023 16:27 redmine STT#965  
+--<<user14||08/06/2023 16:27 redmine STT#965
         begin
             select max(dtework)  into v_dteend
             from tgrpplan
             where to_char(dtework,'yyyy') = to_char(v_dteeffec,'yyyy')
-            and r1.codcomp||'%' like codcomp||'%' 
+            and r1.codcomp||'%' like codcomp||'%'
             and codcalen = r1.codcalen
             and dtework > v_dteeffec;
             exception when no_data_found then
@@ -965,7 +962,7 @@
                                                                   null);
                                                                   --i.dteeffex);
 
--->>user14||08/06/2023 16:27 redmine STT#965  
+-->>user14||08/06/2023 16:27 redmine STT#965
 
       --<< User46 25/05/2020 Comment Dr. delete ttexempt where rowid = r1.rowid;
       update ttexempt
@@ -1184,10 +1181,10 @@
 --        end if;
         if (r1.jobgrade <> r1.jobgradet) or (r1.codcompt <> r1.codcomp) or
              (r1.codpos <> r1.codposnow) or (r1.codjob <> r1.codjobt) or
-             (r1.numlvl <> r1.numlvlt) or (r1.codempmt <> r1.codempmtt) or 
+             (r1.numlvl <> r1.numlvlt) or (r1.codempmt <> r1.codempmtt) or
              (r1.typemp <> r1.typempt) then
             hrpm91b_batch.global_v_coduser := p_coduser;
-            hrpm91b_batch.ins_tusrprof(v_codempid); 
+            hrpm91b_batch.ins_tusrprof(v_codempid);
         end if;
 -->>redmine 5479 ST11
 

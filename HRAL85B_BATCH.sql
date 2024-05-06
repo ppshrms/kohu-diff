@@ -129,6 +129,4 @@
 
 end HRAL85B_BATCH;
 
-
-
 /

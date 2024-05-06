@@ -22,5 +22,4 @@
   procedure gen_index (json_str_output out clob);
 END HRTR74X;
 
-
 /

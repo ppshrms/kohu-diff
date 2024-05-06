@@ -588,7 +588,7 @@ BEGIN
       v_seqno     := to_number(hcm_util.get_string_t(json_obj2, 'p_numseq'));
       v_codempid  := hcm_util.get_string_t(json_obj2, 'p_codempid');
       v_dtereq    := hcm_util.get_string_t(json_obj2, 'p_dtereq');
-      
+
       v_staappr := nvl(v_staappr, 'A');
       approve(global_v_coduser,global_v_lang,to_char(v_rowcount),v_staappr,p_remark_appr,p_remark_not_appr,to_char(sysdate,'dd/mm/yyyy'),v_appseq,v_chk,v_codempid,v_seqno,v_dtereq);
       exit when param_msg_error is not null;

@@ -23,7 +23,7 @@
     -- save index
     p_typecodusr        := hcm_util.get_string_t(json_obj, 'p_typecodusr');
     p_typepwd           := hcm_util.get_string_t(json_obj, 'p_typepwd');
-    
+
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
   end initial_value;
 
@@ -59,14 +59,14 @@
         from tcontrusr
        where codcompy = b_index_codcompy
          and dteeffec = v_dteeffec;
-         
+
     cursor c_tcontrusrd is
       select numseq,syncond,statement,typeusr
         from tcontrusrd
        where codcompy = b_index_codcompy
          and dteeffec = v_dteeffec
       order by numseq;
-         
+
     cursor c_tcontrusrm is
       select codproc
         from tcontrusrm
@@ -97,13 +97,13 @@
             json_obj.put('isEdit',false);
         end if;
     end if;
-    
+
     json_obj.put('codcompy',b_index_codcompy);
     for r_tcontrusr in c_tcontrusr loop
         json_obj.put('typecodusr',r_tcontrusr.typecodusr);
         json_obj.put('typepwd',r_tcontrusr.typepwd);
     end loop;
-    
+
     v_row      := 0;
     obj_row    := json_object_t();
     for r_tcontrusrd in c_tcontrusrd loop
@@ -116,7 +116,7 @@
       obj_data.put('desc_syncond', get_logical_desc(r_tcontrusrd.statement));
       obj_data.put('statement', r_tcontrusrd.statement);
       obj_data.put('typeusr', r_tcontrusrd.typeusr);
-      
+
       v_numseq  := r_tcontrusrd.numseq;
       v_row_m   := 0;
       obj_row_m := json_object_t();
@@ -127,10 +127,10 @@
         obj_row_m.put(to_char(v_row_m-1), obj_data_m);
       end loop;
       obj_data.put('children', obj_row_m);
-      
+
       obj_row.put(to_char(v_row - 1), obj_data);
     end loop;
-    
+
     v_response := get_response_message(null,param_msg_error,global_v_lang);
     json_obj.put('coderror',hcm_util.get_string_t(json_object_t(v_response),'coderror'));
     json_obj.put('response',hcm_util.get_string_t(json_object_t(v_response),'response'));
@@ -154,7 +154,7 @@
     param_msg_error     := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace || '@#$%400';
     json_str_output     := get_response_message('400', param_msg_error, global_v_lang);
   end gen_index;
-  
+
   procedure check_save (p_syncond varchar2,p_statement clob,p_typeusr varchar2) is
   begin
     if p_syncond is null then
@@ -203,19 +203,19 @@
          where codcompy = b_index_codcompy
            and dteeffec = b_index_dteeffec;
     end;
-    
+
     -- delete before insert/update
     begin
         delete from tcontrusrd
          where codcompy  = b_index_codcompy
            and dteeffec  = b_index_dteeffec;
-        
+
         delete from tcontrusrm
          where codcompy  = b_index_codcompy
            and dteeffec  = b_index_dteeffec;
     exception when others then null;
     end;
-    
+
     param_json := hcm_util.get_json_t(json_object_t(json_str_input),'json_input_str2');
     if param_msg_error is null then
         v_numseq_reorder := 0;
@@ -228,7 +228,7 @@
             v_syncond           := hcm_util.get_string_t(obj_syncond, 'code');
             v_statement         := hcm_util.get_string_t(obj_syncond, 'statement');
             v_typeusr           := hcm_util.get_string_t(param_json_row, 'typeusr');
-            
+
             if not v_flg_parent_delete then
                 check_save(v_syncond,v_statement,v_typeusr);
                 if param_msg_error is null then
@@ -250,14 +250,14 @@
                            and dteeffec  = b_index_dteeffec
                            and numseq    = v_numseq_reorder;
                     end;
-                    
+
                     param_json_child  := hcm_util.get_json_t(param_json_row,'children');
-    
+
                     for j in 0..param_json_child.get_size - 1 loop
                         param_json_child_row    := hcm_util.get_json_t(param_json_child,to_char(j));
                         v_flg_child_delete      := hcm_util.get_boolean_t(param_json_child_row,'flgDelete');
                         v_codproc               := hcm_util.get_string_t(param_json_child_row,'codproc');
-        
+
                         if not v_flg_child_delete then
                             begin
                                 insert into tcontrusrm (codcompy,dteeffec,numseq,
@@ -275,7 +275,7 @@
                                    and numseq    = v_numseq_reorder;
                             end;
                         end if;
-                        
+
                     end loop; -- child
                 end if; -- if param_msg_error is null then
             end if; -- if not v_flg_parent_delete then

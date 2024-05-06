@@ -44,9 +44,9 @@
     p_temp_codempid       varchar2(4000 char);
     p_temp_stamarry       varchar2(4000 char);
     p_temp_typtax         varchar2(4000 char);
-    
+
     index_codcompy        tcompny.codcompy%type;
-    
+
     TYPE codeduct IS TABLE OF NUMBER INDEX BY BINARY_INTEGER;
       p_dvalue_code	  codeduct;
       p_evalue_code	  codeduct;

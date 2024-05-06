@@ -258,7 +258,7 @@
         initial_value (json_str_input);
         check_index;
         json_input_obj   := json_object_t(hcm_util.get_string_t(json_object_t(json_str_input),'json_input_str'));
-        
+
         v_count_flg_Delete  := 0;
         v_count_flg_Ot      := 0;
         if param_msg_error is null then
@@ -364,7 +364,7 @@
     v_dteyreff          number;
     v_flgdef_b          boolean;
     v_flgclear_b        boolean;
-    
+
 
     cursor c1 is
         select * 
@@ -376,7 +376,7 @@
   begin
     gen_flg_status;
     obj_row         := json_object_t();
-    
+
     for i in c1 loop
       v_rcnt       := v_rcnt+1;
       obj_data     := json_object_t();
@@ -390,7 +390,7 @@
       obj_data.put('typdeduct', i.typdeduct);
       obj_data.put('formula', i.formula);
       obj_data.put('desc_formula', hcm_formula.get_description(i.formula, global_v_lang));
-      
+
       if nvl(i.flgdef,'N') = 'N' then
         v_flgdef_b := false;
       else
@@ -401,12 +401,12 @@
       else
         v_flgclear_b := true;
       end if;
-      
+
       obj_data.put('flgdef', v_flgdef_b);
       obj_data.put('_flgdef', nvl(i.flgdef,'N'));
       obj_data.put('flgclear', v_flgclear_b);
       obj_data.put('_flgclear', nvl(i.flgclear,'N'));
-      
+
         if isInsertReport then
           obj_data.put('item1','TABLE1');
           obj_data.put('item2',p_codcompy);
@@ -420,7 +420,7 @@
           obj_data.put('item10',nvl(i.flgclear,'N'));
           insert_ttemprpt_table(obj_data);
         end if;
-      
+
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
     json_str_output := obj_row.to_clob;
@@ -451,7 +451,7 @@
     v_dteyreff          number;
     v_flgdef_b          boolean;
     v_flgclear_b        boolean;
-    
+
 
     cursor c1 is
         select * 
@@ -463,7 +463,7 @@
   begin
     gen_flg_status;
     obj_row         := json_object_t();
-    
+
     for i in c1 loop
       v_rcnt       := v_rcnt+1;
       obj_data     := json_object_t();
@@ -477,7 +477,7 @@
       obj_data.put('typdeduct', i.typdeduct);
       obj_data.put('formula', i.formula);
       obj_data.put('desc_formula', hcm_formula.get_description(i.formula, global_v_lang));
-      
+
       if nvl(i.flgdef,'N') = 'N' then
         v_flgdef_b := false;
       else
@@ -488,12 +488,12 @@
       else
         v_flgclear_b := true;
       end if;
-      
+
       obj_data.put('flgdef', v_flgdef_b);
       obj_data.put('_flgdef', nvl(i.flgdef,'N'));
       obj_data.put('flgclear', v_flgclear_b);
       obj_data.put('_flgclear', nvl(i.flgclear,'N'));
-      
+
         if isInsertReport then
           obj_data.put('item1','TABLE2');
           obj_data.put('item2',p_codcompy);
@@ -507,7 +507,7 @@
           obj_data.put('item10',nvl(i.flgclear,'N'));
           insert_ttemprpt_table(obj_data);
         end if;
-      
+
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
     json_str_output := obj_row.to_clob;
@@ -538,7 +538,7 @@
     v_dteyreff          number;
     v_flgdef_b          boolean;
     v_flgclear_b        boolean;
-    
+
 
     cursor c1 is
         select * 
@@ -549,7 +549,7 @@
         order by dteyreff desc;
   begin
     obj_row         := json_object_t();
-    
+
     for i in c1 loop
       v_rcnt       := v_rcnt+1;
       obj_data     := json_object_t();
@@ -563,7 +563,7 @@
       obj_data.put('typdeduct', i.typdeduct);
       obj_data.put('formula', i.formula);
       obj_data.put('desc_formula', hcm_formula.get_description(i.formula, global_v_lang));
-      
+
       if nvl(i.flgdef,'N') = 'N' then
         v_flgdef_b := false;
       else
@@ -574,12 +574,12 @@
       else
         v_flgclear_b := true;
       end if;
-      
+
       obj_data.put('flgdef', v_flgdef_b);
       obj_data.put('_flgdef', nvl(i.flgdef,'N'));
       obj_data.put('flgclear', v_flgclear_b);
       obj_data.put('_flgclear', nvl(i.flgclear,'N'));
-      
+
         if isInsertReport then
           obj_data.put('item1','TABLE3');
           obj_data.put('item2',p_codcompy);
@@ -593,7 +593,7 @@
           obj_data.put('item10',nvl(i.flgclear,'N'));
           insert_ttemprpt_table(obj_data);
         end if;
-      
+
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
     json_str_output := obj_row.to_clob;
@@ -636,7 +636,7 @@
             v_flag          := hcm_util.get_string_t(json_row, 'flg');
             v_flgdef_b      := hcm_util.get_boolean_t(json_row,'flgdef');
             v_flgclear_b    := hcm_util.get_boolean_t(json_row,'flgclear');
-    
+
             if v_flgdef_b is null then
                 v_flgdef    := 'N';
             else
@@ -655,7 +655,7 @@
                     v_flgclear  := 'N';
                 end if;
             end if;
-            
+
             begin
                 select count(*) 
                   into v_count
@@ -666,12 +666,12 @@
                    and typdeduct = v_typdeduct;
             exception when others then null;
             end;
-    
+
             v_validate := validate_save(v_typdeduct,v_coddeduct,v_pctdemax,v_flag);
             if v_validate = false then
                 exit;
             end if;
-            
+
             if upper(v_flag) = 'ADD' then
                 v_count_flg_Ot := v_count_flg_Ot + 1;
                 insert into tdeductd (codcompy, dteyreff, coddeduct, typdeduct, 
@@ -744,7 +744,7 @@
             v_flag          := hcm_util.get_string_t(json_row, 'flg');
             v_flgdef_b      := hcm_util.get_boolean_t(json_row,'flgdef');
             v_flgclear_b    := hcm_util.get_boolean_t(json_row,'flgclear');
-    
+
             if v_flgdef_b is null then
                 v_flgdef    := 'N';
             else
@@ -763,7 +763,7 @@
                     v_flgclear  := 'N';
                 end if;
             end if;
-            
+
             begin
                 select count(*) 
                   into v_count
@@ -774,12 +774,12 @@
                    and typdeduct = v_typdeduct;
             exception when others then null;
             end;
-    
+
             v_validate := validate_save(v_typdeduct,v_coddeduct,v_pctdemax,v_flag);
             if v_validate = false then
                 exit;
             end if;
-            
+
             if upper(v_flag) = 'ADD' then
                 v_count_flg_Ot := v_count_flg_Ot + 1;
                 insert into tdeductd (codcompy, dteyreff, coddeduct, typdeduct, 
@@ -852,7 +852,7 @@
             v_flag          := hcm_util.get_string_t(json_row, 'flg');
             v_flgdef_b      := hcm_util.get_boolean_t(json_row,'flgdef');
             v_flgclear_b    := hcm_util.get_boolean_t(json_row,'flgclear');
-    
+
             if v_flgdef_b is null then
                 v_flgdef    := 'N';
             else
@@ -871,7 +871,7 @@
                     v_flgclear  := 'N';
                 end if;
             end if;
-            
+
             begin
                 select count(*) 
                   into v_count
@@ -882,12 +882,12 @@
                    and typdeduct = v_typdeduct;
             exception when others then null;
             end;
-    
+
             v_validate := validate_save(v_typdeduct,v_coddeduct,v_pctdemax,v_flag);
             if v_validate = false then
                 exit;
             end if;
-            
+
             if upper(v_flag) = 'ADD' then
                 v_count_flg_Ot := v_count_flg_Ot + 1;
                 insert into tdeductd (codcompy, dteyreff, coddeduct, typdeduct, 
@@ -925,7 +925,7 @@
     param_msg_error   := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure gen_report(json_str_input in clob,json_str_output out clob) is
     json_output       clob;
   begin
@@ -950,7 +950,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end gen_report;
-  
+
   procedure clear_ttemprpt is
   begin
     begin
@@ -1001,7 +1001,7 @@
       null;
     end;
       v_numseq := v_numseq + 1;
-      
+
       begin
         insert
           into ttemprpt
@@ -1032,13 +1032,13 @@
       exception when no_data_found then
         v_count := 0;
       end;  
-      
+
       if v_count = 0 then
         select max(dteyreff) into v_maxdteyreff
           from tdeductd
          where codcompy = p_codcompy 
            and dteyreff <= p_dteeffec;
-           
+
         if v_maxdteyreff is null then
             select min(dteyreff) into v_maxdteyreff
               from tdeductd
@@ -1069,7 +1069,7 @@
         end if;
         p_dteyreff_query := p_dteeffec;
       end if;
-      
+
       if p_dteyreff_query < p_dteeffec then
         v_flgAdd          := true;  
       else

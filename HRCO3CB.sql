@@ -31,7 +31,7 @@
   v_text_key                varchar2(100 char) := '';
   v_fd_key                  varchar2(100 char) := 'HRCO3CB';
   type arr_1d is table of clob index by binary_integer;
-  
+
   procedure initial_value (json_str in clob);
 
   procedure runscript (json_str_input in clob, json_str_output out clob) ;

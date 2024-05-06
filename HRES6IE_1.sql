@@ -268,7 +268,7 @@
     obj_row         := json_object_t();
     obj_detail      := json_object_t();
     v_flg_thistrnn := false;
-    
+
     for r4 in c4 loop
         v_thistrnn.dtetrst  := r4.dtetrst;
         v_thistrnn.dtetren  := r4.dtetren;
@@ -276,7 +276,7 @@
         v_flg_thistrnn      := true;
         exit;
     end loop;
-    
+
     if p_flgConfirm = 'Y' then
         for r1 in c1 loop
             begin
@@ -289,7 +289,7 @@
             exception when no_data_found then
                 v_plancond := null;
             end;
-            
+
             begin
                 select max(numseq)
                   into max_numseq
@@ -448,7 +448,7 @@
             obj_row.put(to_char(v_rcnt-1), obj_data);
         end loop;
     end if;
-    
+
     obj_main.put('coderror', '200');
     obj_main.put('detail', obj_detail);
     obj_main.put('table', obj_row);
@@ -497,7 +497,7 @@
     end;
 
     max_numseq := nvl(max_numseq,0) + 1;
-    
+
     begin 
         select codcomp
           into v_codcomp
@@ -506,7 +506,7 @@
     exception when others then
         v_codcomp  := null;
     end;
-    
+
     begin 
         select costcent 
           into v_costcent
@@ -517,7 +517,7 @@
     exception when others then
         v_costcent  := null;
     end;
-    
+
     obj_detail.put('coderror', '200');
     obj_detail.put('codempid', p_codempid_query);
     obj_detail.put('dtereq', to_char(sysdate,'dd/mm/yyyy'));
@@ -604,7 +604,7 @@
     obj_row         := json_object_t();
     obj_detail      := json_object_t();
     v_flg_thistrnn := false;
-    
+
     for r1 in c1 loop
         v_thistrnn.dtetrst  := r1.dtetrst;
         v_thistrnn.dtetren  := r1.dtetren;
@@ -964,7 +964,7 @@
     rollback;
   end save_ttrnreq;
   --
-  
+
   procedure check_save as
     v_temp   varchar(1 char);
   begin
@@ -982,7 +982,7 @@
             param_msg_error := get_error_msg_php('HR2010',global_v_lang,'tyrtrsch');
             return;
         end;
-        
+
         begin
             select 'X' 
               into v_temp
@@ -996,7 +996,7 @@
         exception when no_data_found then
             null;
         end;
-        
+
         begin
             select 'X' 
               into v_temp
@@ -1013,7 +1013,7 @@
         end;
      end if;
   end check_save;  
-  
+
   procedure post_save(json_str_input in clob,json_str_output out clob) as
   begin
     initial_value(json_str_input);

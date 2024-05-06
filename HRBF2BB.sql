@@ -25,5 +25,4 @@
   procedure gen_process (json_str_output out clob);
 END HRBF2BB;
 
-
 /

@@ -30,7 +30,7 @@
     procedure get_index(json_str_input in clob, json_str_output out clob);
 
     procedure save_index(json_str_input in clob, json_str_output out clob);
-    
+
     procedure get_flg_status (json_str_input in clob, json_str_output out clob);
     procedure gen_flg_status;
 

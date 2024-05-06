@@ -211,7 +211,7 @@
 --    obj_data.put('amtacc', tclnsinf_rec.amtacc);
     obj_data.put('amtalw', tclnsinf_rec.amtalw);
     obj_data.put('amtexp', tclnsinf_rec.amtexp);
-    
+
     --> Peerasak || #9115 || 15032023
     obj_data.put('amtavai', nvl(tclnsinf_rec.amtavai, 0));
     --> Peerasak || #9115 || 15032023

@@ -156,7 +156,7 @@
         v_definit3  := hcm_util.get_string_t(obj_data,'definit3');
         v_definit4  := hcm_util.get_string_t(obj_data,'definit4');
         v_definit5  := hcm_util.get_string_t(obj_data,'definit5');
-        
+
         param_json_delete  := hcm_util.get_json_t(obj_data,'param_json');
         begin
             insert into tcodskil(codcodec,descode,descodt,descod3,descod4,descod5
@@ -1429,7 +1429,7 @@
             exception when others then
                 v_count := 0;
             end;
-            
+
             if v_count > 0 then
                 param_msg_error := get_error_msg_php('HR1450',global_v_lang);
             else
@@ -1441,12 +1441,12 @@
                 exception when others then
                     v_count := 0;
                 end;
-            
+
                 if v_count > 0 then
                     param_msg_error := get_error_msg_php('HR1450',global_v_lang);
                 end if;
             end if;
-            
+
             if param_msg_error is not null then
                 exit;
             end if;

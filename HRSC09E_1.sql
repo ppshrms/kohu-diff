@@ -38,7 +38,7 @@
                 return;
             end;
         end if;
-        
+
         -- รหัสบริษัทให้ Check Security โดยใช้ secur_main.secur7
         if p_codcompy is not null then
             if secur_main.secur7(p_codcompy,global_v_coduser) = false then
@@ -87,14 +87,14 @@
         from twidgetcom 
        where codcompy    = p_codcompy
          and codwg       = v_codwg;
-      
+
   begin  
     obj_row            := json_object_t();
     for r1 in c_twidget loop
             v_rcnt          := v_rcnt + 1;
             v_flg_data      := v_flg_data+1;
             obj_data        := json_object_t();
-            
+
             obj_data.put('coderror', '200');
             obj_data.put('codwg', r1.codwg);
             obj_data.put('wgname',get_twidget_name(r1.codwg,global_v_lang));   
@@ -149,14 +149,14 @@
   begin
     initial_value (json_str_input);
 --     json_obj := json_object_t(json_str_input).get_object('param_json');
-     
+
      json_obj_tmp   := json_object_t(json_str_input);
      json_obj       := hcm_util.get_json_t(json_obj_tmp, 'param_json');
      json_obj_row   := hcm_util.get_json_t(json_obj, 'rows');
      v_codcompy     := hcm_util.get_string_t(json_obj_tmp, 'p_codcompy');
-     
+
      delete  twidgetcom where codcompy = v_codcompy;
-               
+
      v_rowcount := json_obj_row.get_size;
      for i in 0..json_obj_row.get_size-1 loop
       json_obj2     := hcm_util.get_json_t(json_obj_row,to_char(i));
@@ -169,7 +169,7 @@
                  values (v_codcompy,v_codwg,v_flgdefault,global_v_coduser,global_v_coduser);
           end; 
     end loop;
-    
+
     if param_msg_error is null then
       commit;
       param_msg_error := get_error_msg_php('HR2401', global_v_lang);

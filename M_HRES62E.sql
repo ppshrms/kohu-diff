@@ -5,7 +5,7 @@
   CREATE OR REPLACE EDITIONABLE PACKAGE "M_HRES62E" is
   /* Cust-Modify: KOHU-SM2301 */
   -- last update: 14/12/2023 12:00
-  
+
   v_file              utl_file.file_type;
   v_file_name         varchar2 (4000 char);
   global_v_zyear            number := 0;
@@ -190,8 +190,9 @@
   procedure get_paternity_date(json_str_input in clob, json_str_output out clob);
   function check_leave_after(p_codempid varchar2,p_dtereq date,p_dteleave date,p_daydelay number) return varchar2;
   function check_leave_before(p_codempid varchar2,p_dtereq date,p_dteleave date,p_daydelay number) return varchar2;
-  
+
   procedure get_list_appr(json_str_input in clob, json_str_output out clob);
 end; -- Package spec
+
 
 /

@@ -1040,5 +1040,4 @@
   end gen_report;
 end HRTR72X;
 
-
 /

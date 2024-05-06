@@ -87,4 +87,5 @@
   procedure gen_create (json_str_output out clob);
 END M_HRES6DE;
 
+
 /

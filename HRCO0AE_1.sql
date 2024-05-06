@@ -738,7 +738,7 @@
         exception when others then
             v_count := 0;
         end;
-        
+
         if v_count > 0 then 
             param_msg_error := get_error_msg_php('HR1450',global_v_lang);
             json_str_output := get_response_message('400',param_msg_error,global_v_lang);

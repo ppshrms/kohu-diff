@@ -19,7 +19,7 @@
   p_codobf                  tobfsum.codobf%type;
   p_dteyre                  tobfsum.dteyre%type;
   p_codempid_query          tobfsum.codempid%type;
-  
+
   -- save index
 --  p_codobf                  tobfsum.codobf%type;
   p_qtytwidrw               tobfsum.qtytwidrw%type;
@@ -29,16 +29,16 @@
   p_typepay                 tobfcde.typepay%type;
   p_qtyalw                  tobfsum.qtyalw%type;
   p_qtytalw                 tobfsum.qtytalw%type;
-  
+
   --> Peerasak || #9245 || 17032023
   p_dtemth                  tobfsum.dtemth%type;
   p_qtywidrwOld             tobfsum.qtywidrw%type;
   p_qtytwidrwOld            tobfsum.qtytwidrw%type;
-  
+
   type array_t is table of varchar2(4000 char) index by varchar2(100 char);
   array_tobflog             array_t;
   --> Peerasak || #9245 || 17032023
-  
+
   p_warning                 varchar(10 char);
   json_params               json_object_t;
 

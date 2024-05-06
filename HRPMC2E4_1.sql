@@ -477,7 +477,7 @@
 --          upd_log2('tguarntr','41',v_numseq,'numfax','N','numseq',null,null,'C',i.numfax,null,'N',v_upd,'D');
 --          upd_log2('tguarntr','41',v_numseq,'amtguarntr','N','numseq',null,null,'C',i.amtguarntr,null,'Y',v_upd,'D');
 --        end loop;
-        
+
         delete from tguarntr
         where   codempid    = p_codempid_query
         and     numseq      = v_numseq;
@@ -695,7 +695,7 @@
 --          upd_log2('tcolltrl','42',v_numseq,'dteend','C','numcolla',collateral_tab(n).numcolla,null,'D',to_char(i.dteend,'dd/mm/yyyy'),null,'N',v_upd,'D');
 --          upd_log2('tcolltrl','42',v_numseq,'amtded','C','numcolla',collateral_tab(n).numcolla,null,'N',i.amtded,null,'Y',v_upd,'D');
 --        end loop;
-        
+
         for i in c_tcolltrl loop
           v_numrefdoc   := i.numrefdoc;
           exit;
@@ -865,7 +865,7 @@
 --          upd_log2('tapplref','43',v_numseq,'codoccup','N','numseq',null,null,'C',i.codoccup,null,'N',v_upd,'D');
 --          upd_log2('tapplref','43',v_numseq,'remark','N','numseq',null,null,'C',i.remark,null,'N',v_upd,'D');
 --        end loop;
-        
+
         delete from tapplref
         where   numappl     = v_numappl
         and     numseq      = v_numseq;
@@ -1059,7 +1059,7 @@
     v_codoccup          := hcm_util.get_string(v_str_json,'codoccup');
     v_codempref         := hcm_util.get_string(v_str_json,'codempref');
     v_codempidQuery     := hcm_util.get_string(v_str_json,'codempidQuery');
-     
+
     if v_codoccup is not null then
       begin
         select  codcodec
@@ -1071,7 +1071,7 @@
         return;
       end;
     end if;
-    
+
     if v_codempref = v_codempidQuery then
         param_msg_error := get_error_msg_php('PM0143',global_v_lang);
         return;
@@ -1536,7 +1536,7 @@
 		exception when no_data_found then
 			v_dteempmt  := null;
 		end;
-    
+
     for i in c1 loop
       v_rcnt      := v_rcnt + 1;
       obj_data    := json();

@@ -24,7 +24,7 @@
 
   procedure initial_value (json_str in clob);
   procedure check_index;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure copy_data(json_str_input in clob, json_str_output out clob);
   procedure popup_copy(json_str_input in clob, json_str_output out clob);

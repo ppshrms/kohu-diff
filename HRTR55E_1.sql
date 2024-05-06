@@ -1424,7 +1424,7 @@
 	                param_msg_error := get_error_msg_php('HR2101',global_v_lang);
 	                return;
 	            end;
-                
+
                 begin
                     insert into tpotentp (flgatend, flgwait, staappr, costcent, dteyear,codcompy,codcours,codempid,codcomp
                         ,codpos,stacours,numclseq,numclsn,flgqlify,numlvl,codtparg,dtetrst,dtetren,dtecreate,codcreate,dteupd
@@ -1534,7 +1534,7 @@
         v_codcompy          tyrtrsch.codcompy%type;
         v_codcours          tyrtrsch.codcours%type;
         v_numclseq          tyrtrsch.numclseq%type;
-        
+
         v_dtetrst           date;
         v_dtetren           date;
     begin
@@ -1560,7 +1560,7 @@
             if param_msg_error is null then
                 save_data_tab4(param_json_save4);
             end if;
-            
+
             if param_msg_error is null then
                 v_dtetrst   := to_date(hcm_util.get_string_t(param_json_save1,'dtetrst'),'dd/mm/yyyy');
                 v_dtetren   := to_date(hcm_util.get_string_t(param_json_save1,'dtetren'),'dd/mm/yyyy');
@@ -1649,7 +1649,7 @@
             exception when no_data_found then
                 v_chk_waiting := 'N';
             end;
-            
+
             if v_chk_waiting = 'N' then
                 begin
                     select stacours into v_get

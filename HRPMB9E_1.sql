@@ -10,15 +10,15 @@
     global_v_coduser    := hcm_util.get_string_t(json_obj,'p_coduser');
     global_v_lang       := hcm_util.get_string_t(json_obj,'p_lang');
     global_v_codempid   := hcm_util.get_string_t(json_obj,'p_codempid');
-    
+
     p_typfm             := hcm_util.get_string_t(json_obj,'p_typfm');
-    
+
     p_codtable          := hcm_util.get_string_t(json_obj,'p_codtable');
     p_codlang           := hcm_util.get_string_t(json_obj,'p_codlang');
     p_codform           := hcm_util.get_string_t(json_obj,'p_codform');
     p_codform_to        := hcm_util.get_string_t(json_obj,'p_codform_to');
     p_isCopy            := hcm_util.get_string_t(json_obj,'p_isCopy');
-    
+
     p_message           := hcm_util.get_string_t(json_obj,'p_messsage');
     p_message2          := hcm_util.get_string_t(json_obj,'p_messsage2');
     p_message3          := hcm_util.get_string_t(json_obj,'p_messsage3');
@@ -34,7 +34,7 @@
     p_namfm5	          := hcm_util.get_string_t(json_obj,'p_namfm5');
     p_namimglet         := hcm_util.get_string_t(json_obj,'p_namimglet');
     p_codapp            := hcm_util.get_string_t(json_obj,'p_codapp');
-    
+
 		hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
 	END initial_value;
 
@@ -87,7 +87,7 @@
 			obj_data.put('codlang',v_codlang);
 			obj_data.put('namimglet',v_namimglet);
 			obj_data.put('typfm',v_typfm);
-      
+
       if p_codform_to is not null and (p_codform_to <> p_codform) then
         v_isCopy := 'Y';
         v_flgstd := 'N';
@@ -109,7 +109,7 @@
 		v_message		    tfmrefr.message%type;
 		v_messagedsp		tfmrefr.messagedsp%type;
 		v_rcnt			    number := 0;
-          
+
 		cursor c_tfmparam_header is 
       select codform, section, numseq, fparam, ffield, descript, flgstd, flgdesc, flginput, codtable
         from tfmparam
@@ -127,7 +127,7 @@
 			v_message     := '';
       v_messagedsp  := '';
 		end;
-    
+
 		for i in c_tfmparam_header loop
 			v_rcnt := v_rcnt + 1;
 			obj_data		:= json_object_t ();
@@ -205,7 +205,7 @@
 	procedure get_body_detail (json_str_output out clob) is
 		v_message		tfmrefr2.message%type;
 		v_rcnt			number := 0;
-    
+
 		cursor c_tfmparam_header is 
       select codform, section, numseq, fparam, ffield, descript, flgstd, flgdesc, flginput, codtable
         from tfmparam
@@ -318,7 +318,7 @@
 	procedure gen_index (json_str_output out clob) is
 		v_rcnt			    number := 0;
 		v_rcnt_found		number := 0;
-    
+
 		cursor c_tfmrefr is 
       select codform,get_tfmrefr_name (codform ,global_v_lang) namcodform,a.flgstd,
              get_tlistval_name('TYPFM',a.typfm,global_v_lang) namtypfrm,
@@ -340,7 +340,7 @@
 			obj_data.put('flgstd',nvl(i.flgstd,'N'));
 			obj_row.put(to_char(v_rcnt - 1),obj_data);
 		end loop;
-    
+
     json_str_output := obj_row.to_clob;
 	exception when others then
 		param_msg_error := dbms_utility.format_error_stack||' '|| dbms_utility.format_error_backtrace;
@@ -497,7 +497,7 @@
             where codform = p_codform;
         end;
 			end if;
-      
+
 			v_count := 0;
       if p_isCopy = 'Y' then
         begin
@@ -612,7 +612,7 @@
 --					end if;
 --				end loop;
 --			end if;
-      
+
       begin
         select count(*) into v_count
           from tfmrefr2
@@ -792,7 +792,7 @@
 					v_flginput      := nvl(hcm_util.get_string_t(param_json_row,'flginput'),'Y');
 					v_flgdesc       := nvl(hcm_util.get_string_t(param_json_row,'flgdesc'),'N');
 					v_flgdelete     := hcm_util.get_boolean_t(param_json_row,'flgDelete');
-					
+
           if v_numseq is null then
             begin
               select nvl(max(numseq),0) + 1 into v_numseq
@@ -929,7 +929,7 @@
         from tcoldesc
        where codtable = p_codtable
     order by column_id;
-    
+
 		v_desc_codcolmn		varchar2(1000);
 		v_codcolmn		    varchar2(1000);
 		v_row			        number;
@@ -970,7 +970,7 @@
 	end;
 
 	procedure list_codtable_typfm ( json_str_input in clob, json_str_output out clob ) is
-  
+
 		cursor c_ttatabdesc is 
       select b.codtable, 
              decode(global_v_lang,'101',b.destabe,
@@ -1086,7 +1086,7 @@
        WHERE codform = p_codform
          AND section = 2
     ORDER BY flgstd DESC, numseq;
-        
+
     CURSOR c_tfmparam_footer IS 
       SELECT numseq, codtable, fparam, ffield, descript, flgstd, flginput, flgdesc
         FROM tfmparam
@@ -1430,15 +1430,15 @@
       end loop;
       return v_result;
     end esc_json;
-    
+
   procedure get_popup_detail ( json_str_input in clob, json_str_output out clob ) is
-  
+
     cursor t_coldesc is 
       select codtable, codcolmn, descole, descolt, descol3, descol4, descol5, funcdesc, flgchksal
         from tcoldesc
        where codtable = p_codtable
     order by column_id;
-    
+
 		v_desc_codcolmn		varchar2(1000);
 		v_codcolmn		    varchar2(1000);
 		v_row			        number;
@@ -1476,7 +1476,7 @@
 		param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 	end;
-  
+
   procedure get_list_typfm (json_str_output out clob) as
     obj_row			    json_object_t;
     obj_data		    json_object_t;
@@ -1502,7 +1502,7 @@
     end loop;
     json_str_output := obj_row.to_clob;
   end;
-    
+
   procedure get_list_typfm (json_str_input in clob, json_str_output out clob) is
         json_obj        json_object_t;
         v_rcnt          number;
@@ -1517,7 +1517,7 @@
              and numseq > 0
 --             and codlang = global_v_lang
           order by codapp,codlang,numseq;
-    
+
     begin
         initial_value(json_str_input);
         obj_row := json_object_t();
@@ -1539,7 +1539,7 @@
             v_rcnt := v_rcnt + 1;
         end loop;
 
-        
+
         json_str_output := obj_row.to_clob;
     exception when others then
         param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;

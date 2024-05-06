@@ -51,7 +51,7 @@
     v_scorfta           tattpreh.scorfta%type;
     v_scorfpunsh        tattpreh.scorfpunsh%type;
     v_remarkcal         tappemp.remarkcal%type;
-    
+
     v_stmt              clob;
     v_syncond           tnineboxap.syncond%type;
     v_flgfound          number := 0;
@@ -72,7 +72,7 @@
            and a.codempid = nvl(p_codempid,a.codempid)
            and a.codempid = b.codempid
         order by a.codempid;
-        
+
     cursor c_tapbudgt is
         select codcomp,flggrade 
           from tapbudgt
@@ -136,14 +136,14 @@ begin
         v_qtybeh    := round(((nvl(r_tappemp.qtybeh3,0)  * v_pctbeh) / 100),2 );
         v_qtycmp    := round(((nvl(r_tappemp.qtycmp3,0)  * v_pctcmp) / 100),2 );
         v_qtykpie   := round(((nvl(r_tappemp.qtykpie3,0) * v_pctkpiem) / 100),2 );
-        
+
         v_remarkcal := null;
         if r_tappemp.flgappr = 'P' then
             v_remarkcal := get_tlistval_name('FLGAPPRP','I','102') ;
         elsif nvl(v_qtybeh,0) = 0 and nvl(v_qtycmp,0) = 0 and nvl(v_qtykpie,0) = 0 then
             v_remarkcal := get_error_msg_php('HR1620','102');
         end if;
-        
+
         v_qtymaxsc := 0;
         begin
             select max(score) into v_qtymaxsc
@@ -249,7 +249,7 @@ begin
                  where codempid = i.codempid
                    and dteyreap = i.dteyreap
                    and numtime  = i.numtime;
-        
+
                 update_tcmptncy(i.dteyreap,i.numtime,i.codempid,v_numappl,p_codreq);
 
             end loop;
@@ -270,7 +270,7 @@ begin
             exception when no_data_found then
                 v_numempap := 0;
             end;
-            
+
             for r_tstdis in c_tstdis loop
                 v_numsyn := v_numsyn + 1; -- ลำดับที่ array
                 v_arrgrdap(v_numsyn)  := r_tstdis.grade; -- เกรด
@@ -293,7 +293,7 @@ begin
                             exception when no_data_found then
                                 v_empgrd := 0;
                             end;
-    
+
                             for j in 1..v_numsyn loop
                                 if v_arrgrdap(j) = r_tstdis.grade and v_empgrd < v_arrnumemp(j) then
                                     v_grdap := r_tstdis.grade;
@@ -311,7 +311,7 @@ begin
                                     exception when no_data_found then
                                         v_countqty := 0;
                                     end;
-    
+
                                     if v_countqty = 0 then
                                         v_grdap := v_arrgrdap(j+1);
                                         exit;
@@ -319,22 +319,22 @@ begin
                                         v_grdap := r_tstdis.grade;
                                         exit;
                                     end if;
-    
+
                                 end if;
                             end loop;
-    
+
                             exit;
                         end if;
                     end loop;
                 end if; ---if v_numsyn <> 0 then  
-            
+
                 update tappemp set grdappr  = v_grdap,
                                    grdap    = v_grdap,
                                    grdadj   = 'Y'
                  where codempid = i.codempid
                    and dteyreap = i.dteyreap
                    and numtime  = i.numtime;
-        
+
                 update_tcmptncy(i.dteyreap,i.numtime,i.codempid,v_numappl,p_codreq);
             end loop ;  
         elsif r_tapbudgt.flggrade = '3' then --3- โดยการคิดคะแนนตามกลุ่ม 9 box   
@@ -375,7 +375,7 @@ begin
                  where codempid = i.codempid
                    and dteyreap = i.dteyreap
                    and numtime  = i.numtime;
-                   
+
                 update_tcmptncy(i.dteyreap,i.numtime,i.codempid,v_numappl,p_codreq);
             end loop;
         end if;
@@ -387,7 +387,7 @@ begin
            and numtime  = r_tappemp.numtime;
     end loop;
 end;
-  
+
   procedure start_process_9box (p_dteyreap   number,
                                 p_numtime    number,
                                 p_codcomp    varchar2,
@@ -396,7 +396,7 @@ end;
                                 p_flgcal     varchar2,
                                 p_coduser    in varchar2,
                                 p_lang       in varchar2) is
-  
+
       v_pctbeh            number;
       v_pctcmp            number;
       v_pctkpicp          number;
@@ -405,7 +405,7 @@ end;
       v_pctta             number;
       v_pctpunsh          number;
       v_numappl           varchar2(40 char);
-  
+
       v_qtybeh            number;
       v_qtycmp    	    number;
       v_qtykpie    	    number;
@@ -414,12 +414,12 @@ end;
       v_qtyta             number;
       v_qtypuns           number;
       v_qtytot    	    number;
-  
+
       v_qtyscor           number;
       v_qtyscort          number;
       v_qtyscorn          number;
       v_qtyscornn         number;
-  
+
       v_flggrade          varchar2(1 char);
       v_codcomlvl         varchar2(40 char) := '@#';
       v_grdap             varchar2(40 char) := '@#';
@@ -434,11 +434,11 @@ end;
       v_scorfta           tattpreh.scorfta%type;
       v_scorfpunsh        tattpreh.scorfpunsh%type;
       v_remarkcal         tappemp.remarkcal%type;
-      
+
       v_stmt              clob;
       v_syncond           tnineboxap.syncond%type;
       v_flgfound          number := 0;
-      
+
       cursor c_9box is
         select syncond,codgroup
           from tnineboxap
@@ -447,7 +447,7 @@ end;
                              from tnineboxap
                             where codcompy = hcm_util.get_codcomp_level(v_codcomp, 1)
                               and dteeffec <= trunc(sysdate));
-      
+
       cursor c_tappemp_grade is
         select *
           from tappemp
@@ -457,7 +457,7 @@ end;
            and codempid   = nvl(p_codempid,codempid)
            and grdap      is null
         order by codempid;
-  
+
   begin
     --tar
     if p_codcomp is not null then
@@ -471,7 +471,7 @@ end;
         null;
       end;
     end if;
-    
+
     begin
        update tappemp 
           set grdappr    = null,
@@ -485,7 +485,7 @@ end;
                           and tappemp.codcomp like x.codcomp||'%');
     end;
     hcm_secur.get_global_secur(p_coduser,global_v_zminlvl, global_v_zwrklvl, global_v_numlvlsalst, global_v_numlvlsalen);
-    
+
     for r_tappemp in c_tappemp_grade loop
       if secur_main.secur2(r_tappemp.codempid,p_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_zupdsal) then
         for r_9box in c_9box loop
@@ -522,13 +522,13 @@ end;
                               p_codempid   varchar2,
                               p_numappl    varchar2,
                               p_codreq     varchar2) is
-  
+
       v_codskill      varchar2(4 char);
       v_count         number := 0;
       v_codeval       varchar2(40 char);
       v_dteapman      date;
-  
-  
+
+
       cursor c_tappcmps is
           select codtency,codskill,gradexpct,grade,qtyscor,remark
             from  tappcmps
@@ -542,20 +542,20 @@ end;
                                  and numtime  = p_numtime
                           )
           order by codskill;
-  
+
       cursor c_tcmptncy is
           select grade
             from tcmptncy
            where codempid = p_codempid
              and codtency = v_codskill ;
-  
+
       /*cursor c_thcmptcy is
           select codempid
             from thcmptcy
            where codempid = p_codempid
              and dteeval  = trunc(sysdate)
              and codtency = v_codskill ;*/
-  
+
   begin
       for i in c_tappcmps loop
           v_codskill  := i.codskill;
@@ -566,12 +566,12 @@ end;
                where codempid = p_codempid
                  and codtency = i.codskill;
           end loop;
-  
+
           if v_count = 0  then
               insert into tcmptncy(numappl,codtency,grade,codempid,codcreate,coduser)
                      values		(p_numappl,i.codskill,i.grade,p_codempid,p_codreq,p_codreq);
           end if;
-  
+
           begin
               select codapman,dteapman into v_codeval,v_dteapman
                 from tappfm
@@ -587,7 +587,7 @@ end;
           exception when no_data_found then
               v_codeval := null;
           end;
-  
+
           /*v_count    := 0 ;
           for k in c_thcmptcy  loop
               v_count    := 1 ;
@@ -600,7 +600,7 @@ end;
                 and dteeval  = v_dteapman
                 and codtency = i.codskill;
           end loop;
-  
+
           if v_count = 0 then
               insert into thcmptcy(codempid,codtency,codeval,
                                    dteeval,scorenew,coduser,
@@ -609,7 +609,7 @@ end;
                                    v_dteapman,i.qtyscor,p_codreq,
                                    p_codreq,i.grade) ;
           end if;*/
-  
+
       end loop;
   end;
 

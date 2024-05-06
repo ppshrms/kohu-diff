@@ -36,5 +36,4 @@
   procedure gen_qtyappl_reject (json_str_output out clob);
 END HRRC28X;
 
-
 /

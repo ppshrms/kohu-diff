@@ -16,7 +16,7 @@
                           flg_log     in varchar2,
                           p_mailalno  in varchar2,
                           p_dteeffec  in date);
-                          
+
   procedure gen_probation(p_codcompy  in varchar2,
                           flg_log     in varchar2,
                           p_mailalno  in varchar2,
@@ -162,17 +162,17 @@
                        flg_log     in varchar2,
                        p_mailalno  in varchar2,
                        p_dteeffec  in date);
-                       
+
   procedure gen_exprworkpmit(p_codcompy  in varchar2,
                              flg_log     in varchar2,
                              p_mailalno  in varchar2,
                              p_dteeffec  in date);
-                             
+
   procedure gen_exprvisa(p_codcompy  in varchar2,
                          flg_log     in varchar2,
                          p_mailalno  in varchar2,
                          p_dteeffec  in date);
-                         
+
   procedure gen_exprdoc(p_codcompy  in varchar2,
                         flg_log     in varchar2,
                         p_mailalno  in varchar2,
@@ -187,7 +187,7 @@
                               flg_log     in varchar2,
                               p_mailalno  in varchar2,
                               p_dteeffec  in date);
-                              
+
   procedure sendmail_alert( p_codcompy  in varchar2,
                             p_codempid  in varchar2,
                             p_mailalno  in varchar2,
@@ -197,7 +197,7 @@
                             p_message   in clob,
                             p_filname   in varchar2,
                             p_typesend  in varchar2);
-                            
+
   procedure sendmail_group( p_codcompy  in varchar2,
                             p_codempid  in varchar2,
                             p_mailalno  in varchar2,
@@ -208,7 +208,7 @@
                             p_filname   in varchar2,
                             p_typesend  in varchar2,
                             p_seqno     in number);
-                            
+
   procedure replace_text_sendmail(p_msg        in out clob,
                                    p_template  in clob,
                                    p_codempid  in varchar2,
@@ -259,7 +259,7 @@
                               p_codapp      in varchar2,
                               p_coduser     in varchar2,
                               p_stcodempid  in varchar2);
-                              
+
 
 --  procedure insert_ttemprpt2(p_codempid in varchar2,p_codapp in varchar2,
 --                            p_item1 in varchar2,p_item2 in varchar2,p_item3 in varchar2,

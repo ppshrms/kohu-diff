@@ -58,5 +58,4 @@
   procedure get_day(p_dtecycst in date,p_month in number,p_dtestr out date,p_dteend out date);
 end HRAL5CX;
 
-
 /

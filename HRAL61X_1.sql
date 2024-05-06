@@ -1090,7 +1090,7 @@
     v_timinout       := nvl(hcm_util.get_string_t(obj_data, 'timinout'), '');
     v_emp_image      := get_emp_img(v_codempid);
     v_folder         := get_tfolderd('HRPMC2E1');
-    
+
 
     for i_rateot in 1..v_rateot_length+1 loop
       v_rateot(i_rateot) := hcm_util.get_string_t(obj_data, v_text_key||i_rateot);
@@ -1105,7 +1105,7 @@
       null;
     end;
       v_numseq := v_numseq + 1;
-      
+
     if v_emp_image is not null then
       v_emp_image   := get_tsetup_value('PATHWORKPHP')||v_folder||'/'||v_emp_image;
       v_flg_img     := 'Y';

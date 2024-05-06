@@ -138,7 +138,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.jobgrade
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              b.codempmt datagroup,get_tcodec_name('TCODEMPL',b.codempmt,global_v_lang) desc_datagroup,
@@ -170,7 +170,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.codempmt
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              b.typemp datagroup,get_tcodec_name('TCODCATG',b.typemp,global_v_lang) desc_datagroup,
@@ -202,7 +202,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.typemp
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              c.codsex datagroup,get_tlistval_name('NAMSEX',c.codsex,global_v_lang) desc_datagroup,
@@ -234,7 +234,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              c.codsex
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              get_tgrppos(hcm_util.get_codcomp_level(a.codcomp,1),b.codpos) datagroup,get_tcodec_name('TCODGPOS',get_tgrppos(hcm_util.get_codcomp_level(a.codcomp,1),b.codpos),global_v_lang) desc_datagroup,
@@ -266,7 +266,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              get_tgrppos(hcm_util.get_codcomp_level(a.codcomp,1),b.codpos)
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              to_char(b.numlvl) datagroup,to_char(b.numlvl) desc_datagroup,
@@ -298,7 +298,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.numlvl
-             
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              b.codbrlc datagroup,get_tcodec_name('TCODLOCA',b.codbrlc,global_v_lang) desc_datagroup,
@@ -330,7 +330,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.codbrlc
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              b.codedlv datagroup,get_tcodec_name('TCODEDUC',b.codedlv,global_v_lang) desc_datagroup,
@@ -362,7 +362,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.codedlv
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              b.typpayroll datagroup,get_tcodec_name('TCODTYPY',b.typpayroll,global_v_lang) desc_datagroup,
@@ -394,7 +394,7 @@
                                    and x.dtemonth = a.dtemonth)
     group by hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel),
              b.typpayroll
-    
+
     union all
     select hcm_util.get_codcomp_level(a.codcomp,b_index_comlevel) codcomp_lv, 
              b.codcalen datagroup,get_tcodec_name('TCODWORK',b.codcalen,global_v_lang) desc_datagroup,
@@ -429,7 +429,7 @@
 --#3066    order by 2,4;
     order by 1,3;
 --#3066
-    
+
   begin
     obj_row := json_object_t();
 
@@ -488,7 +488,7 @@
     end if;
 
   end;
-  
+
   procedure get_list_comlevel(json_str_input in clob, json_str_output out clob) as
     obj_data        json_object_t;
     obj_row         json_object_t;
@@ -507,7 +507,7 @@
 
   begin
     initial_value(json_str_input);
-    
+
     obj_row := json_object_t();
     for r1 in c_1 loop
       v_rcnt      := v_rcnt + 1;
@@ -519,7 +519,7 @@
 
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
-    
+
     if v_rcnt = 0 then 
       obj_data    := json_object_t();
       obj_data.put('coderror', '200');
@@ -531,12 +531,12 @@
     end if;
         json_str_output := obj_row.to_clob;
 --     
-    
+
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure get_list_group(json_str_input in clob, json_str_output out clob) as
     obj_data        json_object_t;
     obj_row         json_object_t;
@@ -554,7 +554,7 @@
 
   begin
     initial_value(json_str_input);
-    
+
     obj_row := json_object_t();
     for r1 in c_1 loop
       v_rcnt      := v_rcnt + 1;
@@ -565,19 +565,19 @@
 
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
-    
+
 --    if v_rcnt = 0 then 
 --        param_msg_error := get_error_msg_php('HR2055', global_v_lang, 'treport2');
 --        json_str_output := get_response_message(null, param_msg_error, global_v_lang);
 --     else
         json_str_output := obj_row.to_clob;
 --     end if;
-    
+
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
 end;
 
 /

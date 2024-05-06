@@ -94,7 +94,7 @@
         v_error := false;
       end if;
     end if;
-    
+
     p_max   := v_length;
     return(v_error);
   end;

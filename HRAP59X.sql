@@ -19,7 +19,7 @@
     b_index_numtime         varchar2(4000 char);
     b_index_codcomp         varchar2(4000 char);
     b_index_codbon          varchar2(4000 char);
-        
+
   procedure initial_value(json_str in clob);
   procedure get_index1(json_str_input in clob, json_str_output out clob);
   procedure gen_data1(json_str_output out clob);

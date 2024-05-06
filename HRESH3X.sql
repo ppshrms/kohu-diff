@@ -25,7 +25,7 @@
 
   procedure get_index_medical (json_str_input in clob, json_str_output out clob);
   procedure gen_index_medical (json_str_output out clob);
-  
+
 end hresh3x;
 
 /

@@ -237,7 +237,7 @@
             end if;
         end;
     end loop;
-    
+
     if param_msg_error is null then
         param_msg_error := get_error_msg_php('HR2401',global_v_lang);
         commit;

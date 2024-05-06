@@ -106,11 +106,11 @@
         rollback;
         return;
     end if;
-    
+
     if global_v_batch_qtyerror > 0 then
       global_v_batch_descproc := '('||get_label_name('HRPY46B', global_v_lang, '60') || ': ' || global_v_batch_qtyerror || ' ' || get_label_name('HRPY46B', global_v_lang, '70')||')';
     end if;
-    
+
     -- set complete batch process
     hcm_batchtask.finish_batch_process(
       p_codapp    => global_v_batch_codapp,

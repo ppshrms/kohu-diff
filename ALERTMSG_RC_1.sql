@@ -684,7 +684,7 @@ begin
         p_codapp            := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
         p_codapp_receiver   := p_codapp||'_R';
         p_codapp_file       := p_codapp||'_X';
-        
+
         delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
         delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
         commit;
@@ -991,8 +991,8 @@ begin
 
         v_stment := 'select distinct codempid
                        from v_hrrcat ' ||v_where|| ' order by codempid';
-        
-        
+
+
         dbms_sql.parse(v_cursor,v_stment,dbms_sql.native);
 
         for j in 1..1 loop
@@ -1197,7 +1197,7 @@ begin
         p_codapp            := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
         p_codapp_receiver   := p_codapp||'_R';
         p_codapp_file       := p_codapp||'_X';
-        
+
         delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
         delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
         commit;
@@ -2277,7 +2277,7 @@ begin
         end if;
         v_cursor    := dbms_sql.open_cursor;
         v_where     := ' where codcomp like '''|| p_codcompy ||'%'' ';
-        
+
         if i.syncond is not null then
             v_where := v_where || ' and ('||i.syncond||')';
         end if;
@@ -2440,7 +2440,7 @@ begin
     if nvl(i.flgdesc,'N') = 'N' then
       v_funcdesc := null;
     end if;
-    
+
       if v_flgchksal = 'Y' then
         v_pfield  := 'to_char(stddec('||i.pfield||',codempid,'''||global_v_chken||'''),''fm999,999,999,990.00'')' ;
 --      elsif upper(i.ffield) = 'CODPSWD' then
@@ -2458,9 +2458,9 @@ begin
       else
         v_pfield  := i.pfield ;
       end if;    
-    
-    
-    
+
+
+
 --    if i.flgdesc = 'Y' then
 --      if v_funcdesc is null then
 --         v_funcdesc := i.pfield;
@@ -2652,7 +2652,7 @@ begin
 --  end if; 
 
   data_file := v_message;
-  
+
 
 
   if p_typesend in ('H','E','N') then
@@ -2724,7 +2724,7 @@ begin
     data_file  := replace(data_file  ,'[PARA_POSITION]',get_tpostn_name(v_codpos,p_lang));
   end if;
   p_msg := v_headmag||crlf||data_file;
-  
+
 end; -- Function replace_text_sendmail
 
 

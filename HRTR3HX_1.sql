@@ -391,7 +391,7 @@ procedure gen_rpt (json_str_output out clob) is
     values ( global_v_codempid, v_rpt_codapp, v_numseq, v_item1, v_item2 );
     commit;
     -----------------------------------------------------
-    
+
     v_numseq_main := 0 ;
     v_rpt_codapp := 'HRTR3HX_FP2_MAIN' ;
     for r_main in c_thistrnn1

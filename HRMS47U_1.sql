@@ -82,7 +82,7 @@
     -- default value --
     obj_row := json_object_t();
     v_row   := 0;
-    
+
     -- get data
     if p_staappr = 'P' then
       for r1 in c_hrms47u_c1 loop
@@ -93,10 +93,10 @@
         else
            v_chk := v_appno;
         end if;
-        
+
         v_nextappr := null;
         v_nextappr := chk_workflow.get_next_approve('HRES17E',r1.codempid,to_char(r1.dtereq,'dd/mm/yyyy'),r1.numseq,r1.approvno,global_v_lang);
-        
+
         begin
             select codpos
               into v_codpos
@@ -196,7 +196,7 @@
     obj_detail  := json_object_t();
     obj_detail.put('coderror', '200');
     obj_detail.put('objective', v_objective);
-    
+
     obj_table   := json_object_t();
     for r1 in c_tkpireq2 loop
         obj_data := json_object_t();
@@ -212,7 +212,7 @@
         obj_table.put(to_char(v_row),obj_data);
         v_row := v_row+1;
     end loop;
-    
+
     obj_data := json_object_t();
     obj_data.put('coderror', '200');
     obj_data.put('detail', obj_detail);
@@ -259,7 +259,7 @@
 
   begin
     initial_value (json_str_input);
-    
+
     v_seq := 0;
     obj_table1 := json_object_t();
     for r1 in c_tkpireq4 loop
@@ -274,7 +274,7 @@
         obj_data.put('stakpi', get_tlistval_name('STAKPI',r1.stakpi,global_v_lang));
         obj_table1.put(to_char(v_seq-1),obj_data);
     end loop;
-    
+
     v_seq := 0;
     obj_table2 := json_object_t();
     for r2 in c_tkpireq3 loop
@@ -286,7 +286,7 @@
         obj_data.put('targtend', to_char(r2.targtend,'dd/mm/yyyy'));
         obj_table2.put(to_char(v_seq-1),obj_data);
     end loop;
-    
+
     obj_detail := json_object_t();
     obj_detail.put('coderror', '200');
     obj_detail.put('tab1', obj_table1);
@@ -331,7 +331,7 @@
       order by planno;
 
   BEGIN
-    
+
     begin
         insert into tobjemp(dteyreap,numtime,codempid,codcomp,
                             objective,dtecreate,codcreate,dteupd,coduser)
@@ -384,7 +384,7 @@
                and codkpi = r1.codkpi;
         end;
     end loop; -- for r_tkpireq2
-    
+
     for r2 in c_tkpireq4 loop
         null;
         begin
@@ -410,7 +410,7 @@
                and grade = r2.grade;
         end;
     end loop; -- for r_tkpireq2
-    
+
     for r3 in c_tkpireq3 loop
         null;
         begin

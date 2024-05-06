@@ -70,7 +70,7 @@
   v_fd_key                  varchar2(100 char) := 'MANUAL_BACKUP';
   v_new_line                varchar2(100 char) := chr(10);
   v_end_of_module           varchar2(100 char) := '/'||v_new_line;
-  
+
   json_input               json_object_t;  
 
   procedure initial_value (json_str in clob);
@@ -80,10 +80,10 @@
 
   procedure get_backup_main (json_str_input in clob, json_str_output out clob);
   procedure gen_backup_main (json_str_output out clob);
-  
+
   procedure get_patch_standard (json_str_input in clob, json_str_output out clob);
   procedure gen_patch_standard (json_str_output out clob);
-  
+
   procedure get_patch_package (json_str_input in clob, json_str_output out clob);
   procedure gen_patch_package (json_str_output out clob);
 

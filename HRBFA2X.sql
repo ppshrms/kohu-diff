@@ -29,5 +29,4 @@ procedure send_mail(json_str_input in clob,json_str_output out clob);
 
 END HRBFA2X;
 
-
 /

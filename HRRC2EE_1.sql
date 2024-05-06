@@ -8,7 +8,7 @@
     json_obj        json_object_t;
   begin
     json_obj            := json_object_t(json_str);
-    
+
     global_v_coduser    := hcm_util.get_string_t(json_obj,'p_coduser');
     global_v_codpswd    := hcm_util.get_string_t(json_obj,'p_codpswd');
     global_v_lang       := hcm_util.get_string_t(json_obj,'p_lang');
@@ -19,7 +19,7 @@
 
     b_index_dtepost     := to_date(hcm_util.get_string_t(json_obj,'p_dtepost'),'dd/mm/yyyy');
     p_codjobpost        := hcm_util.get_string_t(json_obj,'p_codjobpost');
- 
+
 --<<  #7262 || USER39 || 27/11/2021    
     if b_index_dtepost is not null then
         b_index_mthpost := null;

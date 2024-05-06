@@ -118,7 +118,7 @@
                 v_str := concat(',',v_str);
             end if;
         end loop;
-       
+
         if v_str is not null and v_scale != 0 then
             v_str := concat(v_str,'.');
         end if;
@@ -151,7 +151,7 @@
             exception when no_data_found then
                 return ' ';
             end;
-            
+
         end;
         if  global_v_lang = '101' then
             return ttabdesc_rec.destabe;

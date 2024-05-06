@@ -142,7 +142,7 @@
                 from    tinexinf
                 where   typpay = ''1'' '||v_where||
                'order by codpay';
-               
+
     begin
         select  char_length
           into  v_length

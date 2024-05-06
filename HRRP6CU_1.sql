@@ -335,7 +335,7 @@
     v_error			    varchar2(4000);
     v_error_cc          varchar2(4000);
 	v_rowid             ROWID;
-    
+
   begin
     initial_value(json_str_input);
     for i in 0..params_json.get_size-1 loop
@@ -356,7 +356,7 @@
       elsif v_flgStaappr = 'N' then
             v_remark := p_remark;
       end if;
-      
+
       v_remark      := replace(v_remark,'.',chr(13));
       v_remark      := replace(replace(v_remark,'^$','&'),'^@','#');
       v_codcomp     :=  hcm_util.get_codcomp_level(b_index_codcomp, 1);

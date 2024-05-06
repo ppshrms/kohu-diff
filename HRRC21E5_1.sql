@@ -30,7 +30,7 @@
     v_stalife     tapplfm.stalife%type;
     v_desnoffi    tapplfm.desnoffi%type;
     v_codspocc    tapplfm.codspocc%type;
-    
+
   begin
     obj_data    := json_object_t();
     obj_data.put('coderror','200');

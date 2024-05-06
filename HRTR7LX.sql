@@ -30,5 +30,4 @@
   procedure gen_detail_avglst (json_str_output out clob);
 END HRTR7LX;
 
-
 /

@@ -36,5 +36,4 @@
   procedure gen_tintvews (json_str_output out clob);
 END HRRC3FE;
 
-
 /

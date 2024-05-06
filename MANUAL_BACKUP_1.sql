@@ -16,7 +16,7 @@
     v_user              := hcm_util.get_string_t(json_obj, 'p_user');
     v_last_update       := hcm_util.get_string_t(json_obj, 'p_day');
     v_custname          := hcm_util.get_string_t(json_obj, 'p_custname');
-    
+
     json_input      := json_obj;
 
     if v_type is null then
@@ -68,7 +68,7 @@
     when others then
       return;
   end self_write_file;
-  
+
   function get_function_name(function_name in varchar2) return varchar2 is
   v_name varchar2(50 char);
   begin
@@ -76,13 +76,13 @@
     if(instr(v_name,'_',1,1)>0) then
         v_name := substr(v_name,1,instr(v_name,'_',1,1)-1);
     end if;
-    
+
     if(instr(v_name,'HR',1,1)>0) then
         if(instr(v_name,'.',1,1)>0) then
             v_name := substr(v_name,1,instr(v_name,'.',1,1)-1);
         end if;
     end if;
-    
+
     return v_name;
   end;
 
@@ -282,10 +282,10 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
     v_object_found        := v_object_found || 'Total :: ' || to_char(v_row_count) || v_new_line;
     json_str_output       := v_object_found || 'success with params => ' || global_json_str;
   end gen_backup_main;
-  
+
   procedure get_patch_standard (json_str_input in clob, json_str_output out clob) is
   begin
-    
+
     initial_value(json_str_input);
     if param_msg_error is null then
       gen_patch_standard(json_str_output);
@@ -353,12 +353,12 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
   begin
     v_object_found        := '';
     v_row_count           := 0;
-    
+
     v_filename := 'patch_version.txt';
     version_file := utl_file.Fopen('UTL_DIR_BACKUP_FUNCTION',v_filename,'w');
-    
+
     utl_file.Put_line(version_file,v_custname || '-' ||to_char(sysdate,'YYYYmmdd-hh24mi'));
-    
+
     for row_object in c_find_object loop
       v_row_count         := v_row_count + 1;
       v_object_name       := row_object.object_name;
@@ -390,14 +390,14 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
       v_use_filename      := v_object_name||v_object_ext;
       v_use_filename      := replace(v_use_filename, ' ', '_');
       self_remove_file(v_use_filename);
-      
+
       v_temp_filename := v_use_filename;
-      
+
       if(instr(v_temp_filename,'HR',1,1)>0) then
         v_temp_filename := get_function_name(v_temp_filename);
         utl_file.Put_line(version_file,v_temp_filename);
       end if;
-      
+
       v_text_temp := '';
       for row_source in c_find_source loop
         if row_source.line = 1 then
@@ -499,10 +499,10 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
     v_object_found        := v_object_found || 'Total :: ' || to_char(v_row_count) || v_new_line;
     json_str_output       := v_object_found || 'success with params => ' || global_json_str;
   end gen_patch_standard;
-  
+
   procedure get_patch_package (json_str_input in clob, json_str_output out clob) is
   begin
-    
+
     initial_value(json_str_input);
     if param_msg_error is null then
       gen_patch_package(json_str_output);
@@ -562,7 +562,7 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
              end,
              object_name
     order by object_type, object_name;
-    
+
     cursor c_find_object is
     select d_level,referenced_type object_type,referenced_name object_name,referenced_owner  
       from(
@@ -578,7 +578,7 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
 --       and d_level = 1
        and referenced_owner = user
   order by referenced_type;
-    
+
     cursor c_find_source is
       select name, text, line
         from all_source
@@ -590,26 +590,26 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
   begin
     v_object_found        := '';
     v_row_count           := 0;
-    
+
     v_filename := 'patch_version.txt';
     version_file := utl_file.Fopen('UTL_DIR_BACKUP_FUNCTION',v_filename,'w');
-    
+
     utl_file.Put_line(version_file,'SIT-STD-' ||to_char(sysdate,'YYYYmmdd-hh24mi'));
     insert_temp2('MONGKOL','HCMV11','json_input.get_size='||json_input.get_size);
     insert_temp2('MONGKOL','HCMV11','v_filename'||v_filename);
     for i in 0..json_input.get_size  loop
         param_json_row:= json_object_t(hcm_util.get_json_t(json_input, to_char(i)));
         v_function_name      := hcm_util.get_string_t(param_json_row, 'function_name');
-    
+
         for row_object in c_find_object loop
           v_row_count         := v_row_count + 1;
           v_object_name       := row_object.object_name;
           v_object_type       := row_object.object_type;
-    
+
           if v_object_type = 'PACKAGE BODY' then
             continue;
           end if;
-    
+
           if v_object_type in ('FUNCTION') then
             v_object_ext := '.fnc';
           elsif v_object_type in ('PACKAGE') then
@@ -626,20 +626,20 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
           else
             v_write_by_line   := false;
           end if;
-    
+
           v_directory         := global_default_directory||'_'||replace(v_object_type, ' ', '_');
           DBMS_OUTPUT.PUT_LINE(v_directory);
           v_use_filename      := v_object_name||v_object_ext;
           v_use_filename      := replace(v_use_filename, ' ', '_');
           self_remove_file(v_use_filename);
-          
+
           v_temp_filename := v_use_filename;
-          
+
           if(instr(v_temp_filename,'HR',1,1)>0) then
             v_temp_filename := get_function_name(v_temp_filename);
             utl_file.Put_line(version_file,v_temp_filename);
           end if;
-          
+
           v_text_temp := '';
           for row_source in c_find_source loop
             if row_source.line = 1 then
@@ -664,13 +664,13 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
               end if;
             end if;
           end loop;
-    
+
           if length(v_text_temp) is not null and length(v_text_temp) > 0 then
             self_write_file (v_use_filename, v_text_temp);
             v_text_temp := '';
           end if;
           self_write_file (v_use_filename, v_end_of_module);
-    
+
           v_text_temp := '';
           if v_object_type in ('TYPE') then
             v_object_type := v_object_type || ' BODY';
@@ -692,7 +692,7 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
                 end if;
               end if;
             end loop;
-    
+
             if length(v_text_temp) is not null and length(v_text_temp) > 0 then
               self_write_file (v_use_filename, v_text_temp);
               v_text_temp := '';
@@ -701,7 +701,7 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
               self_write_file (v_use_filename, v_end_of_module);
             end if;
           end if;
-    
+
           v_text_temp := '';
           if v_object_type in ('PACKAGE') then
             v_object_type := v_object_type || ' BODY';
@@ -727,7 +727,7 @@ DBMS_OUTPUT.PUT_LINE(v_directory);
                 end if;
               end if;
             end loop;
-    
+
             if length(v_text_temp) is not null and length(v_text_temp) > 0 then
               self_write_file (v_use_filename, v_text_temp);
               v_text_temp := '';

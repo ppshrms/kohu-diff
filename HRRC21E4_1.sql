@@ -48,7 +48,7 @@
     exception when no_data_found then null;
     end;
     -->> softberry || 176/02/2023 || #8807    
-    
+
     obj_data.put('reason',v_reason);
     obj_data.put('flgstrwk',nvl(v_flgstrwk,'N'));
     obj_data.put('dtewkst',to_char(v_dtewkst,'dd/mm/yyyy'));
@@ -58,7 +58,7 @@
     obj_data.put('flgprov',nvl(v_flgprov,'N'));
     obj_data.put('flgoversea',nvl(v_flgoversea,'N'));
     obj_data.put('statappl',v_statappl); -- softberry || 176/02/2023 || #8807  
-    
+
     json_str_output   := obj_data.to_clob;
   end;
   --
@@ -113,7 +113,7 @@
              coduser    = global_v_coduser
        where numappl    = b_index_numappl;
     end;
-    
+
     param_msg_error := get_error_msg_php('HR2401',global_v_lang);
     commit;
 

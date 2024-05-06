@@ -381,7 +381,7 @@
     v_emp_image             varchar2(600);
     v_flg_img               varchar2(1) := 'N';
     v_seq                   number;
-    
+
     cursor c1 is
       select t1.dteyear, t2.codempid,t2.codcomp,t1.dteheal,t1.codprgheal,t1.codcln,t1.amtheal,t1.namdoc,t1.numcert,t1.namdoc2,t1.numcert2,t1.descheal,t1.dtefollow
         from thealinf1 t1,temploy1 t2

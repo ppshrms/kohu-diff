@@ -717,7 +717,7 @@
     v_codincom8         tapplcfm.codincom8%type;
     v_codincom9         tapplcfm.codincom9%type;
     v_codincom10        tapplcfm.codincom10%type;
-    
+
 --<< softberry || 15/05/2023 || #9252     
     v_amtmax            tcontpmd.amtmax1%type;
     v_amtmax1           tcontpmd.amtmax1%type := 99999999.99;

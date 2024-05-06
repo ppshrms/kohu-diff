@@ -57,9 +57,9 @@
     procedure saveData (json_str_input in clob, json_str_output out clob);
 
     procedure post_send_mail (json_str_input in clob, json_str_output out clob);
-      
+
     function get_seqno (v_codcompy varchar2, v_mailalno varchar2, v_dteeffec date) return number;
-	
+
     procedure getParams(json_str_input in clob, json_str_output out clob);
 	procedure genParams(json_str_output out clob);        
 	procedure getAssign(json_str_input in clob, json_str_output out clob);

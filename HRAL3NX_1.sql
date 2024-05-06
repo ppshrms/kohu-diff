@@ -152,7 +152,7 @@
   	for r1 in c1 loop
   		v_exist  := true; -- data found
       v_secur  := secur_main.secur2(r1.codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal,global_v_numlvlsalst,global_v_numlvlsalen);
-      
+
       if v_secur then
         v_permis := true;
         json_obj := json_object_t();
@@ -195,7 +195,7 @@
         json_row.put(to_char(v_count),json_obj);
         v_count := v_count + 1;
       end if;
-      
+
     end loop;
     if v_exist then
       if v_permis then

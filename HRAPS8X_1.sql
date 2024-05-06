@@ -58,7 +58,7 @@
     v_amtavg        number;
     cs_emp_min      number;
     cs_emp_max      number;
-    
+
     cursor c1 is
         select jobgrade,count(a.codempid) c_emp
           from temploy1 a, temploy3 b
@@ -379,12 +379,12 @@
         group by jobgrade
         order by jobgrade;
   begin
-    
+
     delete ttemprpt where codempid = v_codempid and codapp = v_codapp; commit;
-    
+
     v_item31 := get_label_name('HRAPS8XC1', global_v_lang, '50'); --'จำนวนเงินที่จ่าย' 
     v_chksecu := '2';
-    
+
     for i in c1 loop
         v_item4  := i.jobgrade;
         v_item5  := get_tcodec_name('TCODJOBG',i.jobgrade,global_v_lang);
@@ -407,7 +407,7 @@
             v_amtavg := null;
         end;
         v_item10  := round(v_amtavg,2); --'เงินเดือนเฉลี่ย (บาท)'; 
-        
+
         ----------Insert ttemprpt
         begin
             insert into ttemprpt

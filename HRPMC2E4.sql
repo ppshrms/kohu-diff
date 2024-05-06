@@ -53,7 +53,7 @@
   procedure get_Reference_table(json_str_input in clob, json_str_output out clob);
   procedure gen_Reference_table(json_str_output out clob);
   procedure get_sta_submit_ref(json_str_input in clob, json_str_output out clob);
-  
+
   procedure get_emp_detail(json_str_input in clob, json_str_output out clob);
 
   procedure get_popup_change_guarantee(json_str_input in clob, json_str_output out clob);

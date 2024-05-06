@@ -13,7 +13,7 @@
   global_v_numlvlsalen  number;
   global_v_chken        varchar2(4000 char);
   v_zupdsal     		    varchar2(4 char);
-  
+
   global_v_batch_codapp     varchar2(100 char)  := 'HRPY46B';
   global_v_batch_codalw     varchar2(100 char)  := 'HRPY46B';
   global_v_batch_dtestrt    date;
@@ -32,7 +32,7 @@
   procedure check_process;
   procedure get_process(json_str_input in clob,json_str_output out clob);
   procedure gen_process(json_str_output out clob);
-  
+
   function check_index_batchtask(json_str_input clob) return varchar2;
 end hrpy46b;
 

@@ -40,7 +40,7 @@
         return;
       end if;
     end if;
-    
+
   end check_index;
 
   procedure get_index(json_str_input in clob,json_str_output out clob) as
@@ -123,7 +123,7 @@
         obj_data.put('net'          ,to_char(r1.amtretn + r1.amtcaccu - r1.amttax,'fm999999999990.00'));
         obj_data.put('codpfinf' ,r1.codpfinf);
         obj_data.put('desc_codpfinf' ,get_tcodec_name('TCODPFINF', r1 .codpfinf,global_v_lang));
-        
+
         obj_data.put('dtereti' ,to_char(r1.dtereti,'dd/mm/yyyy'));
 
         obj_rows.put(to_char(v_count) ,obj_data);

@@ -13,11 +13,11 @@
     global_v_numlvlsalst      number;
     global_v_numlvlsalen      number;
     v_zupdsal                 varchar2(4 char);
-    
+
     p_dteyreap                number;
     p_codcomp                 varchar2(100 char);
     p_codreq                  varchar2(100 char);
-     
+
     b_var_codempid        temploy1.codempid%type;
     b_var_codcompy        tcompny.codcompy%type;
     b_var_typpayroll      temploy1.typpayroll%type;

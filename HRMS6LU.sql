@@ -35,7 +35,7 @@
   p_qtyot_total         number;
   p_qtytotal            number;
   v_msgerror            varchar2(4000 char);
-  
+
   a_dtestweek           std_ot.a_dtestr;
   a_dteenweek           std_ot.a_dtestr;
   a_sumwork             std_ot.a_qtyotstr;

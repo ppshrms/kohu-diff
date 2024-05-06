@@ -270,7 +270,7 @@
       else
         if training_tab(n).numseq > 0 then
           v_exist       := false;
-          
+
           begin
             insert into ttrainbf
               (codempid,numappl,numseq,
@@ -292,7 +292,7 @@
             for i in c_ttrainbf loop
               v_exist       := true;
               v_numrefdoc   := i.numrefdoc;
-  
+
               if nvl(i.filedoc,'#$@') <> nvl(training_tab(n).filedoc,'#$@') then
                 hrrc21e.update_filedoc( b_index_numappl,
                                         training_tab(n).filedoc,
@@ -420,7 +420,7 @@
     obj_row           json_object_t;
     obj_data          json_object_t;
     v_rcnt            number := 0;
-    
+
     cursor c_teducatn is
       select  codempid,numappl,numseq,codedlv,coddglv,
               codmajsb,codminsb,codinst,codcount,numgpa,
@@ -430,7 +430,7 @@
       order by numseq;
   begin
     obj_row    := json_object_t();
-    
+
     for i in c_teducatn loop
       obj_data    := json_object_t();
       v_rcnt      := v_rcnt + 1;

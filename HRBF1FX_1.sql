@@ -346,7 +346,7 @@
                 v_amtpaid := null;
                 v_dtecash := null;
             end;
-            
+
             if not isInsertReport then
                 obj_row.put('desc_codcomp',get_tcenter_name(v_codcomp, global_v_lang));
                 obj_row.put('desc_codpos',get_tpostn_name(v_codpos, global_v_lang));
@@ -381,7 +381,7 @@
                 obj_row.to_clob(json_str_output);
             else       
                 p_codempid_query := v_codempid; 
-                
+
                 begin
                     select namimage
                       into v_image
@@ -390,7 +390,7 @@
                 exception when no_data_found then
                     v_image := null;
                 end;
-    
+
                 if v_image is not null then
                     v_image      := get_tsetup_value('PATHWORKPHP')||get_tfolderd('HRPMC2E1')||'/'||v_image;
                     v_has_image   := 'Y';
@@ -473,7 +473,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
       end gen_table_withdraw;
-      
+
    procedure clear_ttemprpt is
   begin
     begin
@@ -485,7 +485,7 @@
       null;
     end;
   end clear_ttemprpt;    
-  
+
   procedure get_report(json_str_input in clob, json_str_output out clob) is
     json_output       clob;
     p_select_arr                    json;
@@ -503,9 +503,9 @@
         exception when no_data_found then
             v_numseq := 0;
         end;
-        
+
         v_numseq    := nvl(v_numseq,0) + 1;
-        
+
         gen_data_withdraw(json_output);
         gen_table_withdraw(json_output);
     end if;

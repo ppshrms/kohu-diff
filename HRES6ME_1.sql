@@ -503,9 +503,9 @@
     v_routeno    varchar2(15);
     v_table			 varchar2(50 char);
     v_error			 varchar2(50 char);
-    
+
     v_typleave       tleavecd.typleave%type;
-     
+
   begin
 --<< user14:||20/04/2022
     begin
@@ -516,7 +516,7 @@
     exception when no_data_found then	null;
     end;
  -->>user14:||20/04/2022
-         
+
          v_approvno         :=  0 ;
          v_codempap         := b_index_codempid ;
          tleavecc_staappr  := 'P';

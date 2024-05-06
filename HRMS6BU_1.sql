@@ -383,7 +383,7 @@
     v_row_id     varchar2(200 char);
 		v_endw       date;
     v_numrec     number;
-    
+
     --<< user4 || 07/07/2020
     cursor c_tcontal5 is
       select codchng

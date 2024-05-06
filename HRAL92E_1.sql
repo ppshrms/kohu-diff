@@ -7,7 +7,7 @@
     v_typpay	tinexinf.typpay%type;
   begin
     if v_code is not null then
-      begin 
+      begin
         select typpay into v_typpay
         from tinexinf
         where codpay = v_code;
@@ -1064,7 +1064,7 @@
   procedure insert_ttemprpt_tab1_detail(obj_data in json_object_t) is
     v_numseq            number := 0;
     v_flgchglv          varchar2(100 char);
-    
+
     v_flgrateot         varchar2(100 char);
     v_year              number := 0;
     v_dteeffec          date;
@@ -1118,7 +1118,7 @@
     elsif v_flgchglv = 'N' then
       v_flgchglv := get_label_name('HRAL92E1', global_v_lang, '80');
     end if;
-    
+
 --<< user25 Date: 09/08/2021 TDKU-SS-2101
     v_typalert    :=  hcm_util.get_string_t(obj_data, 'typalert');
     if v_typalert = '1' then
@@ -1134,7 +1134,7 @@
     v_startday    :=  hcm_util.get_string_t(obj_data, 'desc_startday');
     v_otcalflg    :=  hcm_util.get_string_t(obj_data, 'desc_otcalflg');
 -->> user25 Date: 09/08/2021 TDKU-SS-2101
-        
+
     begin
       select nvl(max(numseq), 0)
         into v_numseq
@@ -1150,7 +1150,7 @@
          into ttemprpt
              (
              codempid, codapp, numseq, item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13,
-             
+
              item15, item16, item17, item18, item19 --<< user25 Date: 09/08/2021 TDKU-SS-2101
              )
         values

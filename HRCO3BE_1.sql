@@ -148,7 +148,7 @@
             param_json_row       := hcm_util.get_json_t(param_json,to_char(i));
             v_objectname         := hcm_util.get_string_t(param_json_row, 'objectname');
             v_objecttype         := hcm_util.get_string_t(param_json_row, 'objecttype');
-        
+
             if v_objecttype = 'PACKAGE BODY' then
                 v_statement := 'ALTER PACKAGE '||v_objectname||' COMPILE BODY' ;
             else

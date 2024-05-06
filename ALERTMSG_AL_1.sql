@@ -230,7 +230,7 @@
                        and dtework  between v_dtestrt and v_dteend;
                 exception when no_data_found then null;
                 end;
-    
+
                 if v_qtylate > i.qtylate or v_qtyearly > i.qtyearly or v_qtyabsent > i.qtyabsent or
                      v_qtytlate > i.qtytlate or v_qtytearly > i.qtytearly or v_qtytabs > i.qtytabs then
                     v_check := true;
@@ -649,7 +649,7 @@
 --      if v_file_attch1 is not null then
 --        v_file_attch1_path   := v_host_attach_file||v_file_attch1;
 --      end if;
-      
+
       -- if v_file_attch2 is not null then
       --   v_file_attch2_path   := v_host_attach_file||v_file_attch2;
       -- end if;

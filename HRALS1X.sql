@@ -46,7 +46,7 @@
     procedure insert_ttemprpt(obj_data in json_object_t);
     procedure gen_graph(obj_row in json_object_t);
     procedure get_label(json_str_input in clob,json_str_output out clob);
-    
+
 end HRALS1X;
 
 /

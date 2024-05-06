@@ -2,7 +2,7 @@
 --  DDL for Package M_HRESZ1E
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE PACKAGE "M_HRESZ1E" AS 
+  CREATE OR REPLACE EDITIONABLE PACKAGE "M_HRESZ1E" AS
 
   param_msg_error           varchar2(4000 char);
 

@@ -69,6 +69,6 @@
     procedure exp_text(json_str_output out clob);
 
     function check_index_batchtask(json_str_input clob) return varchar2;
-  end hrpy90b;
+  end;
 
 /

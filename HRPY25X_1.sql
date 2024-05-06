@@ -299,7 +299,7 @@
 --      v_otrate(v_otrate_count) := r_rate.rteotpay;
 --      v_otrate_count := v_otrate_count + 1;
 --    end loop;
-    
+
     obj_row := json_object_t();
 
     for r1 in c1 loop

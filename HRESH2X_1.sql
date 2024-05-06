@@ -114,7 +114,7 @@
         obj_data.put('qtytwidrw', to_char(i.qtytwidrw, 'fm99,999,990'));
         --obj_data.put('amtwidrw', i.amtwidrw);
         obj_data.put('amtwidrw', to_char(i.amtwidrw, 'fm99,999,990.90') );
-        
+
         obj_data.put('typepay', v_typebf);
         v_sum       := nvl(v_sum,0) + nvl(i.amtwidrw,0);--User37 #4918 8. ES.MS Module (P2) 18/02/2021  v_sum + i.amtwidrw;
         v_total     := v_total + i.amtwidrw;

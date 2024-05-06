@@ -132,7 +132,7 @@
         obj_data := json_object_t();
         obj_data.put('numreq', i.numreqst);
         obj_data.put('desc_codpos', get_tpostn_name(i.codpos, global_v_lang));
-        
+
 --<< user22 : 26/01/2023 : https://hrmsd.peopleplus.co.th:4448/redmine/issues/8812 || v_qtypost          := (i.dtepost    - i.dteappchse) + 1;
         v_qtyapprove       := (i.dteaprov   - i.dtereq) + 1;
         v_qtypost          := (i.dtepost    - i.dteaprov);
@@ -155,14 +155,14 @@
         obj_data.put('interview_period', v_interview_period);
         obj_data.put('approval_period', v_approval_period);
         obj_data.put('total_duration', v_total_duration);
-        
+
         insert_graph(get_max_numseq, get_label_name('HRRC94XC1',global_v_lang,'80'), v_qtyapprove, i.codpos,i.numreqst,'C1');
         insert_graph(get_max_numseq, get_label_name('HRRC94XC1',global_v_lang,'90'), v_qtypost, i.codpos,i.numreqst,'C2');
         insert_graph(get_max_numseq, get_label_name('HRRC94XC1',global_v_lang,'100'), v_qtytransfer, i.codpos,i.numreqst,'C3');
         insert_graph(get_max_numseq, get_label_name('HRRC94XC1',global_v_lang,'110'), v_interview_period, i.codpos,i.numreqst,'C4');
         insert_graph(get_max_numseq, get_label_name('HRRC94XC1',global_v_lang,'120'), v_approval_period, i.codpos,i.numreqst,'C5');
         insert_graph(get_max_numseq, get_label_name('HRRC94XC1',global_v_lang,'130'), v_total_duration, i.codpos,i.numreqst,'C6');
-        
+
         obj_rows.put(to_char(v_row-1),obj_data);
       end if;
     end loop;

@@ -19,12 +19,12 @@
       obj_data    json_object_t;
       v_row       number := 0;
       v_typeauth  tusrprof.typeauth%type;
-      
+
       cursor c_tlanguage is
           select * 
             from tlanguage 
            order by codlang;
-          
+
       cursor c_tsetup is
           select * 
             from tsetup 
@@ -102,7 +102,7 @@
           v_namabb    := upper(hcm_util.get_string_t(json_obj,'namabb'));
           v_namimage  := hcm_util.get_string_t(json_obj,'namimage');
           v_isdup     := hcm_util.get_string_t(json_obj,'isdup');
-          
+
           -- ข้อมูลที่ต้องระบุ รูปภาษา,ชื่อภาษา และชื่อย่อภาษา
           if v_codlang2 is not null then
               if (v_namimage is null) or (v_namabb is null) then
@@ -178,7 +178,7 @@
           v_namimage  := hcm_util.get_string_t(json_obj,'namimage');
           v_isdup     := hcm_util.get_string_t(json_obj,'isdup');
           v_flgedit   := hcm_util.get_string_t(json_obj,'flg');
-          
+
           if v_codlang2 is null then
               v_namlang := null;
               v_namabb  := null;

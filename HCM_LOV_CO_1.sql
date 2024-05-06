@@ -887,7 +887,7 @@
     if param_where is not null then
       v_where := ' where ' || param_where;
     end if;
-    
+
     v_stmt := ' select codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcoddevt '||v_where||
                 ' order by codcodec';

@@ -82,7 +82,7 @@
     v_tyrtrsch      tyrtrsch%rowtype;
     v_thistrnn      thistrnn%rowtype;
     v_flg_thistrnn  boolean;
-    
+
     v_codempid      thistrnn.codempid%type;
     v_codcours      thistrnn.codcours%type;
 
@@ -104,7 +104,7 @@
                                                        and c.codempid = global_v_codempid)
                      and ((sysdate - nvl(a.dteapph,a.dteinput))*1440 >= (select hrtotal from twkflpf where codapp = 'HRES6IE'))))
         order by codempid,dtereq desc,numseq ;
-        
+
    cursor c2 is
     select *
       from thistrnn
@@ -155,8 +155,8 @@
         v_next_codappr := chk_workflow.get_next_approve('HRES6IE',i.codempid,to_char(i.dtereq,'dd/mm/yyyy'),i.numseq,i.approvno,global_v_lang);
         obj_data.put('desc_codempap',v_next_codappr);
         obj_data.put('approvno',v_appno);
-        
-        
+
+
         -- user18 2022/03/28
         begin
             select plancond
@@ -180,7 +180,7 @@
         exception when no_data_found then
             v_tyrtrsch := null;
         end;
-        
+
         v_codempid  := i.codempid;
         v_codcours  := i.codcours;
         v_flg_thistrnn := false;
@@ -192,7 +192,7 @@
             v_flg_thistrnn          := true;
             exit;
         end loop;
-        
+
         obj_data.put('codtparg',i.codtparg);
         obj_data.put('codcours',i.codcours);
         obj_data.put('codcompy',hcm_util.get_codcomp_level(i.codcomp,1));
@@ -232,7 +232,7 @@
         obj_data.put('dtepay', to_char(i.dteduepay,'dd/mm/yyyy'));
         obj_data.put('flgreq', i.flgreq);
         -- user18 2022/03/28
-        
+
         obj_row.put(to_char(v_rcnt-1), obj_data);
     end loop;
 
@@ -269,7 +269,7 @@
     v_flg_thistrnn  boolean;
     v_chk           varchar2(1);
     v_numclseq       tyrtrsch.numclseq%type;
-        
+
    cursor c1 is
     select *
       from thistrnn
@@ -327,7 +327,7 @@
     exception when no_data_found then
         v_chk := 'N';
     end;
-    
+
     if v_chk = 'Y' then
         v_numclseq   := p_numclseq;
     else
@@ -424,7 +424,7 @@
     v_qtytrhr	            number;
     v_qtytrmin	            number;
     v_codeappr              temploy1.codempid%type;
-    
+
     v_tyrtrsch              tyrtrsch%rowtype;
 
     cursor c1 is
@@ -459,7 +459,7 @@
     exception when no_data_found then 
         v_ttrnreq := null;
     end;
-    
+
     if v_ttrnreq.flgreq = '1' then
         v_tyrtrsch.dteregen   := to_date(hcm_util.get_string_t(file_json,'dteregisen'),'dd/mm/yyyy');
         if p_dteappr > v_tyrtrsch.dteregen then
@@ -818,7 +818,7 @@
     if param_msg_error is null then
       save_approve(json_str_input ,json_str_output);
     end if;
-    
+
     if param_msg_error is not null then
       rollback;
       json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -830,7 +830,7 @@
         json_str_output := get_response_message(null,param_msg_error,global_v_lang);
       end if;
     end if;
-    
+
     json_str_output := get_response_message(null, param_msg_error, global_v_lang);
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
@@ -898,7 +898,7 @@
            and numseq   = v_numseq
            and approvno = v_approvno;
       end if;
-    
+
       update ttrnreq
          set codappr   = global_v_codempid,
              dteappr   = trunc(sysdate),

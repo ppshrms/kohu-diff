@@ -40,7 +40,7 @@
   -- sendApprove
   p_remark_appr         varchar2(4000 char);
   p_remark_not_appr     varchar2(4000 char);
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure get_detail_tab1(json_str_input in clob, json_str_output out clob);
   procedure get_table_tab1(json_str_input in clob, json_str_output out clob);

@@ -233,7 +233,7 @@ procedure gen_probation  (p_codcompy  in varchar2,
        and item4 = v_receiver
        and item5 = v_seqno
   order by codempid;
-  
+
   cursor c_asign is
     select codcomp,codpos,codempid
 	  from tproasgh
@@ -268,11 +268,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -356,7 +356,7 @@ begin
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit; 
 
@@ -378,7 +378,7 @@ begin
                              where codempid = v_codempid;
                         exception when no_data_found then null;
                         end;
-                        
+
                         for j in c_asign loop
                             v_codcompemp   := j.codcomp;
                             v_codposemp    := j.codpos;
@@ -433,7 +433,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||''' ',v_numseq,20);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -545,7 +545,7 @@ procedure gen_probationn( p_codcompy  in varchar2,
        and item4 = v_receiver
        and item5 = v_seqno
   order by codempid;
-  
+
   cursor c_asign is
     select codcomp,codpos,codempid
 	  from tproasgh
@@ -581,7 +581,7 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = para_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
@@ -645,9 +645,9 @@ begin
       for j in 1..1 loop
         dbms_sql.define_column(v_cursor,j,v_data_file,500);
       end loop;
-      
+
       v_dummy := dbms_sql.execute(v_cursor);
-      
+
       loop
         if dbms_sql.fetch_rows(v_cursor) = 0 then
           exit;
@@ -672,7 +672,7 @@ begin
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;  
         if v_count = 0 then
@@ -693,7 +693,7 @@ begin
                              where codempid = v_codempid;
                         exception when no_data_found then null;
                         end;
-                        
+
                         for j in c_asign loop
                             v_codcompemp   := j.codcomp;
                             v_codposemp    := j.codpos;
@@ -746,7 +746,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||''' ',v_numseq,22);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -875,7 +875,7 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
@@ -1009,7 +1009,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' ttprobat.codempid = '''||i.codempid||''' and ttprobat.dteduepr = to_date('''||i.dteduepr||''',''dd/mm/yyyy'') ',v_numseq,24);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -1475,7 +1475,7 @@ begin
                         p_dteeffect,p_numseq,p_codsend,
                         p_codcompy, p_mailalno,p_dteeffec,p_typemail,
                         p_mail_message,p_typesend);
-                        
+
   auto_execute_mail(p_codcompy,p_mailalno,p_dteeffec,p_codempid,v_msg_to,p_typemail,p_filname,p_typesend);
 
 end;--sendmail_ttmovemt_to
@@ -1991,7 +1991,7 @@ procedure gen_prbcodpos (p_codcompy in varchar2,
 --       and item3 = v_numtime
        and item5 = v_seqno
   order by codempid;
-  
+
   cursor c_asign is
     select codcomp,codpos,codempid
 	  from tproasgh
@@ -2026,11 +2026,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -2100,7 +2100,7 @@ begin
                   ' and temploy1.codcomp like '''|| p_codcompy ||'%'' '||
                   'order by ttmovemt.codempid, ttmovemt.dteeffec, ttmovemt.numseq';
       dbms_sql.parse(v_cursor,v_stment,dbms_sql.native);
-      
+
       for j in 1..3 loop
         dbms_sql.define_column(v_cursor,j,v_data_file,500);
       end loop;
@@ -2111,15 +2111,15 @@ begin
         if dbms_sql.fetch_rows(v_cursor) = 0 then
           exit;
         end if;
-        
+
         for j in 1..3 loop
           dbms_sql.column_value(v_cursor,j,v_data_file);
           data_file(j) := v_data_file;
         end loop;
-        
+
         v_codempid := data_file(1);
         v_count    := 0;
-        
+
         begin
           select count(*) into v_count
             from talertlog
@@ -2136,10 +2136,10 @@ begin
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;   
-        
+
         if v_count = 0 then
           v_seq := v_seq + 1;
           if v_typesend = 'A' then
@@ -2158,7 +2158,7 @@ begin
                              where codempid = v_codempid;
                         exception when no_data_found then null;
                         end;
-                        
+
                         for j in c_asign loop
                             v_codcompemp   := j.codcomp;
                             v_codposemp    := j.codpos;
@@ -2213,7 +2213,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' ttmovemt.codempid = '''||i.codempid||''' and ttmovemt.dteeffec = to_date('''||i.dteeffec||''',''dd/mm/yyyy'') and ttmovemt.numseq = '''||i.numseq||''' ',v_numseq,40);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -2326,7 +2326,7 @@ procedure gen_prbcodposn (p_codcompy  in varchar2,
 --       and item3 = v_numtime
        and item5 = v_seqno
   order by codempid;
-  
+
   cursor c_asign is
     select codcomp,codpos,codempid
 	  from tproasgh
@@ -2361,7 +2361,7 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = para_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
@@ -2430,7 +2430,7 @@ begin
                   ' and temploy1.codcomp like '''|| p_codcompy ||'%'' '||
                   'order by ttmovemt.codempid,ttmovemt.dteeffec,ttmovemt.numseq';
       dbms_sql.parse(v_cursor,v_stment,dbms_sql.native);
-      
+
       for j in 1..3 loop
         dbms_sql.define_column(v_cursor,j,v_data_file,500);
       end loop;
@@ -2463,7 +2463,7 @@ begin
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;  
         if v_count = 0 then
@@ -2484,7 +2484,7 @@ begin
                              where codempid = v_codempid;
                         exception when no_data_found then null;
                         end;
-                        
+
                         for j in c_asign loop
                             v_codcompemp   := j.codcomp;
                             v_codposemp    := j.codpos;
@@ -2540,7 +2540,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' ttmovemt.codempid = '''||i.codempid||''' and ttmovemt.dteeffec = to_date('''||i.dteeffec||''',''dd/mm/yyyy'') and ttmovemt.numseq = '''||i.numseq||''' ',v_numseq,42);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -2652,7 +2652,7 @@ procedure gen_prbcodposp (p_codcompy   in varchar2,
 --       and item3 = v_numtime
        and item5 = v_seqno
   order by codempid;
-  
+
   cursor c_asign is
     select codcomp,codpos,codempid
 	  from tproasgh
@@ -2687,11 +2687,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -2736,7 +2736,7 @@ begin
       end if;
 
       v_cursor := dbms_sql.open_cursor;
-      
+
       v_where   := ' where temploy1.codcomp like '''|| p_codcompy ||'%''
                        and ttprobat.typproba  = ''2''
                        and temploy1.codempid  = ttprobat.codempid
@@ -2757,7 +2757,7 @@ begin
                    v_where|| '
                    order by codempid ';
       commit;
-      
+
       dbms_sql.parse(v_cursor,v_stment,dbms_sql.native);
 
       for j in 1..2 loop
@@ -2791,10 +2791,10 @@ begin
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit; 
-        
+
         if v_count = 0 then
           v_seq := v_seq + 1;
           if v_typesend = 'A' then
@@ -2813,7 +2813,7 @@ begin
                              where codempid = v_codempid;
                         exception when no_data_found then null;
                         end;
-                        
+
                         for j in c_asign loop
                             v_codcompemp   := j.codcomp;
                             v_codposemp    := j.codpos;
@@ -2869,7 +2869,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' ttprobat.codempid = '''||i.codempid||''' and ttprobat.dteduepr = to_date('''||i.dteduepr||''',''dd/mm/yyyy'') ',v_numseq,44);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -3240,7 +3240,7 @@ procedure gen_resign  (p_codcompy  in varchar2,
   v_endate          varchar2(30);
   v_typesend        varchar2(1);
   v_testsend        varchar2(1) := 'N';
-  
+
   v_seq             number := 0;
   v_numseq          number := 0;
   v_sql             varchar2(2500 char);
@@ -3333,11 +3333,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -3350,7 +3350,7 @@ begin
       for i in c_tmailrpm loop
         v_count := v_count + 1;
       end loop;
-      
+
       if v_count > 0 then
         v_typesend := 'A';
       else
@@ -3383,20 +3383,20 @@ begin
       if i.syncond is not null then
         v_where  := v_where||' and (' ||i.syncond|| ') ';
       end if;
-      
+
       v_stment := 'select ttexempt.codempid,to_char(ttexempt.dteeffec,''dd/mm/yyyy'') dteeffec
                    from ttexempt, temploy1 ' ||v_where|| '
                    and ttexempt.codempid = temploy1.codempid
                    order by ttexempt.codempid';
       commit;
-      
+
       dbms_sql.parse(v_cursor,v_stment,dbms_sql.native);
       for j in 1..2 loop
         dbms_sql.define_column(v_cursor,j,v_data_file,500);
       end loop;
 
       v_dummy := dbms_sql.execute(v_cursor);
-      
+
       loop
         if dbms_sql.fetch_rows(v_cursor) = 0 then
           exit;
@@ -3419,14 +3419,14 @@ begin
         exception when no_data_found then
           v_count := 0;
         end;
-        
+
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;  
-        
+
         if v_count = 0 then
           v_seq     := v_seq + 1;
           if v_typesend = 'A' then
@@ -3475,7 +3475,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' ttexempt.codempid = '''||i.codempid||''' and ttexempt.dteeffec = to_date('''||i.dteeffec||''',''dd/mm/yyyy'') ',v_numseq,60);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -3677,7 +3677,7 @@ procedure gen_retire     (p_codcompy  in varchar2,
   v_endate          varchar2(30);
   v_typesend        varchar2(1);
   v_testsend        varchar2(1) := 'N';
-  
+
   v_seq             number := 0;
   v_numseq          number := 0;
   v_sql             varchar2(2500 char);
@@ -3700,7 +3700,7 @@ procedure gen_retire     (p_codcompy  in varchar2,
 
   type descol is table of varchar2(2500) index by binary_integer;
     data_file    descol;
-    
+
   cursor c_tpmalert is
     select codcompy,mailalno,dteeffec,syncond,codsend,typemail,
            message,subject,qtydayb,
@@ -3771,11 +3771,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -3788,7 +3788,7 @@ begin
       for i in c_tmailrpm loop
         v_count := v_count + 1;
       end loop;
-      
+
       if v_count > 0 then
         v_typesend := 'A';
       else
@@ -3853,14 +3853,14 @@ begin
         exception when no_data_found then
           v_count := 0;
         end;
-        
+
         if flg_log = 'N' then
            v_count := 0;
         end if;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit; 
-        
+
         if v_count = 0 then
           v_seq := v_seq + 1;
           if v_typesend = 'A' then
@@ -3909,7 +3909,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||'''  ',v_numseq,70);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -3943,7 +3943,7 @@ procedure gen_newemp  (p_codcompy  in varchar2,
   v_endate          varchar2(30);
   v_typesend        varchar2(1);
   v_testsend        varchar2(1) := 'N';
-  
+
   v_seq             number := 0;
   v_numseq          number := 0;
   v_sql             varchar2(2500 char);
@@ -4029,11 +4029,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -4042,7 +4042,7 @@ begin
       v_item     := null;
       v_desc     := null;
       v_comma    := '';
-      
+
       for i in c_tmailrpm loop
         v_count := v_count + 1;
       end loop;
@@ -4108,10 +4108,10 @@ begin
         exception when no_data_found then
           v_count := 0;
         end;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;
-        
+
         if v_count = 0 then
           v_seq := v_seq + 1;
           if v_typesend = 'A' then
@@ -4158,7 +4158,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||'''  ',v_numseq,80);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -4191,7 +4191,7 @@ procedure gen_exprworkpmit  (p_codcompy  in varchar2,
   v_endate          varchar2(30);
   v_typesend        varchar2(1);
   v_testsend        varchar2(1) := 'N';
-  
+
   v_seq             number := 0;
   v_numseq          number := 0;
   v_sql             varchar2(2500 char);
@@ -4278,7 +4278,7 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
@@ -4361,10 +4361,10 @@ begin
           v_count := 0;
         end;*/
         -->>User37 TTIC610049 05/09/2018
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit; 
-        
+
         if v_count = 0 then
           v_seq := v_seq + 1;
           if v_typesend = 'A' then
@@ -4410,7 +4410,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||'''  ',v_numseq,90);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -4443,7 +4443,7 @@ procedure gen_exprvisa  (p_codcompy  in varchar2,
   v_endate          varchar2(30);
   v_typesend        varchar2(1);
   v_testsend        varchar2(1) := 'N';
-  
+
   v_seq             number := 0;
   v_numseq          number := 0;
   v_sql             varchar2(2500 char);
@@ -4530,11 +4530,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -4611,10 +4611,10 @@ begin
         exception when no_data_found then
           v_count := 0;
         end;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit; 
-        
+
         if v_count = 0 then
           v_seq := v_seq + 1;
           if v_typesend = 'A' then
@@ -4661,7 +4661,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||'''  ',v_numseq,100);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -4694,7 +4694,7 @@ procedure gen_exprdoc  (p_codcompy  in varchar2,
   v_endate          varchar2(30);
   v_typesend        varchar2(1);
   v_testsend        varchar2(1) := 'N';
-  
+
   v_seq             number := 0;
   v_numseq          number := 0;
   v_sql             varchar2(2500 char);
@@ -4781,7 +4781,7 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
@@ -4851,7 +4851,7 @@ begin
         end loop;
         v_codempid := data_file(1);
         V_COUNT    := 0;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit; 
 
@@ -4901,7 +4901,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||'''  ',v_numseq,110);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -4948,10 +4948,10 @@ procedure gen_congratpos  (p_codcompy  in varchar2,
   v_filename        varchar2(1000 char);
   v_receiver        temploy1.codempid%type;
   v_seqno           tpmasign.seqno%type;
-  
+
   type descol is table of varchar2(2500) index by binary_integer;
     data_file    descol;
-    
+
   cursor c_tpmalert is
     select codcompy,mailalno,dteeffec,syncond,codsend,typemail,
            message,subject,qtydayb,
@@ -5019,11 +5019,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -5096,7 +5096,7 @@ begin
         end loop;
         v_codempid := data_file(1);
         V_COUNT    := 0;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;   
 
@@ -5147,7 +5147,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||''' ',v_numseq,120);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -5266,11 +5266,11 @@ begin
       p_codapp              := i.codcompy||i.mailalno||to_char(i.dteeffec,'yyyymmdd');
       p_codapp_receiver     := p_codapp||'_R';
       p_codapp_file         := p_codapp||'_X';
-      
+
       delete ttemprpt where codempid = 'AUTO' and codapp = p_codapp;
       delete ttempprm where codempid = 'AUTO' and codapp = p_codapp_file;
       commit;
-      
+
       v_seq      := 0;
       v_numseq   := 0;
       v_count    := 0;
@@ -5339,7 +5339,7 @@ begin
         end loop;
         v_codempid := data_file(1);
         V_COUNT    := 0;
-        
+
         delete ttemprpt where codapp = p_codapp_receiver and codempid = p_coduser;
         commit;   
 
@@ -5389,7 +5389,7 @@ begin
                 v_numseq := v_numseq + 1;
                 hrpm.gen_file(p_codcompy,v_mailalno,v_dteeffec,' codempid = '''||i.codempid||''' ',v_numseq,130);
             end loop;
-    
+
             v_filename  := to_char(sysdate,'yyyymmddhh24mi');
             excel_mail(v_item,v_label,null,'AUTO',p_codapp_file,v_filename);
             sendmail_group(p_codcompy, v_receiver,i.mailalno,
@@ -5511,7 +5511,7 @@ BEGIN
     auto_execute_mail_group(p_codcompy,p_mailalno,p_dteeffec,p_codempid,v_msg_to,p_typemail,v_filename,p_typesend,p_seqno);
 end;--sendmail_alert
 
- 
+
 procedure replace_text_sendmail( p_msg       in out clob,
                                p_template  in clob,
                                p_codempid  in varchar2,
@@ -6024,7 +6024,7 @@ begin
   exception when no_data_found then
     null;
   end;
-  
+
   --
   if p_typemail in (20,22,24) then
     v_typproba :=  '1';
@@ -6032,7 +6032,7 @@ begin
     v_typproba :=  '2';
   end if;
 
-  
+
   select * into v_tpmalert
      from tpmalert
     where codcompy = p_codcompy
@@ -6065,7 +6065,7 @@ begin
         --
 --<< user22 : 04/02/2016 : STA3590210 ||
       elsif i.flgappr = '6' then
-      
+
         for i in c_asign loop
           v_codcompemp   := i.codcomp;
           v_codposemp    := i.codpos;
@@ -6190,7 +6190,7 @@ begin
     exception when others then
         v_tpmalert := null;
     end;  
-    
+
     begin
         select message
           into v_othmessage
@@ -6202,7 +6202,7 @@ begin
     exception when others then
         v_othmessage := null;
     end;
-       
+
     begin
         select email
           into v_sender_email

@@ -84,7 +84,7 @@ begin
             elsif r_tcoldesc.funcdesc is not null then
               v_field_search    := r_tcoldesc.codcolmn;
             end if;
-            
+
             insert into treportq
               (codapp, numseq, namfld, nambrowe, nambrowt, nambrow3, nambrow4, nambrow5, flgdisp, namtbl, tblsrh, fldsrh, funcdesc, datatype)
             values

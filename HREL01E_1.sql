@@ -84,7 +84,7 @@
          and codcate = nvl(p_codcate, codcate)
 --         and flgelern = 'Y'
        order by codcate,codcours;
-       
+
   begin
     obj_row := json_object_t();
     v_count := 0;
@@ -97,13 +97,13 @@
       obj_data.put('desc_codcate', get_tcodec_name('TCODCATE',r1.codcate, global_v_lang));
       obj_data.put('codcours', r1.codcours);
       obj_data.put('desc_codcours', get_tcourse_name(r1.codcours, global_v_lang));
-      
+
       begin
         select count(*) into v_qtysubj
           from tcoursub
          where codcours = r1.codcours;
       end;
-      
+
       obj_data.put('qtysubj', v_qtysubj);
       --
       begin
@@ -169,7 +169,7 @@
         end if;
 */ -->> #4628 || 27/05/2022
       end if;
-      
+
       begin
         select 'Y'
           into v_chk_learn
@@ -180,7 +180,7 @@
       exception when no_data_found then
         v_chk_learn   := 'N';
       end;
-      
+
       obj_data.put('chk_learn',v_chk_learn);
       if v_chk_learn = 'Y' then
         obj_data.put('error_msg','HR1450 '||get_terrorm_name('HR1450',global_v_lang));
@@ -188,11 +188,11 @@
       --
       obj_row.put(to_char(v_count-1),obj_data);
     end loop;
-    
+
     if v_count = 0 then
       param_msg_error := get_error_msg_php('EL0007', global_v_lang);
     end if;
-    
+
     if param_msg_error is null then
       json_str_output := obj_row.to_clob;
     else
@@ -235,7 +235,7 @@
     v_flglearn          tvsubject.flglearn%type;
     v_flgexam           tvsubject.flgexam%type;
     v_flgelern          tcourse.flgelern%type;
-    
+
     cursor c1 is
       select *
         from tcoursub
@@ -279,7 +279,7 @@
       obj_data.put('codexampo', v_tvcourse.codexampo);
       obj_data.put('codcatpo', v_tvcourse.codcatpo);
       obj_data.put('staresult', v_tvcourse.staresult);
-      
+
       begin
         select count(*) into v_count
           from tlrncourse
@@ -287,7 +287,7 @@
            and stalearn in ('A');                                               --Peerasak || 02/08/22 || Issue#4617
 --           and stalearn in ('A','C');
       end;
-      
+
       if v_count > 0 then
         obj_data.put('flgEdit', 'N');
         obj_data.put('error_msg','HR1450 '||get_terrorm_name('HR1450',global_v_lang));
@@ -304,7 +304,7 @@
         v_chkExist := 'N';
         v_tvcourse := null;
       end;
-      
+
       begin
         select decode(typcours,'1','Y','2','O',typcours) 
         into v_typcours
@@ -313,14 +313,14 @@
       exception when no_data_found then
         v_typcours := null;
       end;
-      
+
 /*      --<< #4628 || 27/05/2022
       if v_typcours = '1' then
         v_typcours := 'Y';
       elsif v_typcours = '2' then
         v_typcours := 'O';
       end if;
-      
+
 */      -->> #4628 || 27/05/2022
       obj_data.put('coderror', '200');
       obj_data.put('codcours', v_tcourse.codcours);
@@ -341,7 +341,7 @@
       obj_data.put('staresult', '');
       obj_data.put('flgEdit', 'Y');
     end if;
-    
+
     obj_row := json_object_t();
     for r1 in c1 loop
       obj_data_row   := json_object_t();

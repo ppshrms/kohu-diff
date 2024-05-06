@@ -171,14 +171,14 @@
     order by dtetestst;
 
     begin
-    
+
         v_dtetest := trunc(sysdate);
-        
+
          obj_row := json_object_t();
 
         if p_flgtest = '2' then
          for r1 in c1 loop
-            
+
             v_flgbtn := 'N';
             if r1.flgtype = 'Post' and r1.codexampo is not null and r1.flgatend = 'Y' then
               begin
@@ -221,7 +221,7 @@
                  v_row := v_row + 1;
                end if;
              end if;
-            
+
              if r1.flgtype = 'Pre' and r1.codexampr is not null then
               begin
                 select 'Y' into v_flgtest_tr

@@ -105,7 +105,7 @@
   v_msgerror      varchar2(4000 char);
   p_flgconfirm    varchar2(1);
   v_typalert      tcontrot.typalert%type;
-  
+
   a_dtestweek           std_ot.a_dtestr;
   a_dteenweek           std_ot.a_dtestr;
   a_sumwork             std_ot.a_qtyotstr;

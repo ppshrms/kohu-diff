@@ -322,7 +322,7 @@
     t_tcompnyc.namcent4     := hcm_util.get_string_t(v_json_input,'namcent4');
     t_tcompnyc.namcent5     := hcm_util.get_string_t(v_json_input,'namcent5');
     v_qtycode               := hcm_util.get_string_t(v_json_input,'qtycode');
-   
+
     v_json_comp   := hcm_util.get_json_t(v_json_input,'param_json');
     insert_tcompnyc(t_tcompnyc);
     for i in 0..(v_json_comp.get_size - 1) loop

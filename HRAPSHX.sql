@@ -22,7 +22,7 @@
     p_codtency              tappcmpf.codtency%type;
     p_codskill              tappcmpf.codskill%type;
     p_desc_codskill         tcodskil.definitt%type;
-    
+
     isInsertReport          boolean := false;
     json_index_rows         json_object_t;
     p_codapp                varchar2(10 char) := 'HRAPSHX';

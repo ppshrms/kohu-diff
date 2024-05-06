@@ -1157,7 +1157,7 @@
                        v_numx4 := v_numx4 +1;
                        insert_ttemprpt_items(v_numx4,'HRPY55X4',get_label_name('HRPY55XC3',global_v_lang,'150'),v_hour,get_label_name('HRPY55XC3',global_v_lang,'170'));  
                     end if;
-                    
+
                     if v_flgqtywk = 'Y' then
                        v_numx4 := v_numx4 +1;
                        insert_ttemprpt_items(v_numx4,'HRPY55X4',get_label_name('HRPY55XC3',global_v_lang,'160'),v_work,get_label_name('HRPY55XC3',global_v_lang,'170'));  

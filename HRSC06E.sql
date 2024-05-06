@@ -12,7 +12,7 @@
   global_v_codpswd          varchar2(100 char);
   global_v_lang             varchar2(10 char) := '102';
   global_v_codempid         varchar2(100 char);
-  
+
   global_v_zminlvl          number;
   global_v_zwrklvl          number;
   global_v_numlvlsalst      number;

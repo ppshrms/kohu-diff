@@ -28,7 +28,7 @@
     -- save index
   -- save index
   json_params               json_object_t;
-  
+
   procedure get_index (json_str_input in clob, json_str_output out clob);
   procedure gen_index (json_str_output out clob);
   procedure get_AssignWidget (json_str_input in clob, json_str_output out clob);

@@ -37,9 +37,9 @@
   p_remarkap                 trefreq.remarkap%type;
   p_approvno                 trefreq.approvno%type;
   p_routeno                  trefreq.routeno%type;
-  
 
-  
+
+
 
   procedure initial_value (json_str in clob);
   function gen_numseq(v_dtereq date) return number;

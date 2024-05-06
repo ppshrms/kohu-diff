@@ -131,7 +131,7 @@
     v_statement     tintrteh.statement%type;
 
     v_dteeffec      varchar2(100 char);
-    
+
     --v_codcomp           temploy1.codcomp%type;
     v_codempmt          temploy1.codempmt%type;
     v_codcompy          tcompny.codcompy%type;
@@ -148,8 +148,8 @@
     v_amtothr           number;
     v_amtday            number;
     v_amtmth            number;
-    
-    
+
+
   begin
     begin
       select codcomp into v_codcomp
@@ -171,7 +171,7 @@
     exception when no_data_found then
       null;
     end;
-    
+
     if v_amtmxlon is null and v_ratelon is not null then
         begin
           select codcomp, codempmt,
@@ -203,8 +203,8 @@
           null;
         end;
       end if;
-      
-      
+
+
     obj_data    := json_object_t();
     obj_data.put('coderror', '200');
     obj_data.put('amtmxlon', v_amtmxlon);
@@ -615,7 +615,7 @@
              delete  ttemprpt where codempid = global_v_codempid and codapp  = v_codapp;
                    v_balamtlon  := v_amtlonap;
                     for i in 1..v_qtyperiod loop
-                          
+
                           if  v_typintr = '1' then
                                  v_amtpint  :=  v_balamtlon * (v_rateilon/12/100);
 --<<user14 27/01/2021
@@ -662,7 +662,7 @@
                             v_sumItem4 := v_sumItem4 + v_amtpfin;
                             v_sumItem5 := v_sumItem5 + v_amtpint;
                             v_sumItem6 := v_sumItem6 + v_amttlpay;
-                            
+
 --                            if i <> v_qtyperiod then
                               v_sumRndItem4  := v_sumRndItem4 + to_number(v_item4,'99,999,990.00');
                               v_sumRndItem5  := v_sumRndItem5 + to_number(v_item5,'99,999,990.00');
@@ -678,7 +678,7 @@
                                   v_numseq,   v_item2,   v_item3,
                                   v_item4,   v_item5,  v_item6,
                                   v_item7);
-                                  
+
                               v_numseq := v_numseq + 1;
 --                            end if;
                     end loop;  --for i in 1..v_qtyperiod loop
@@ -696,7 +696,7 @@
                                   to_char(v_sumItem5,'fm99,999,990.00'), 
                                   to_char(v_sumItem6,'fm99,999,990.00'),
                                   null);
-                      
+
                               v_numseq := v_numseq + 1;
                     --
                     commit;

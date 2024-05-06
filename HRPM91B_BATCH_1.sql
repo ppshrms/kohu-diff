@@ -5516,7 +5516,7 @@ end loop;
     for j in c_comp loop
             for i in c_del loop
               delete tusrcom where coduser = i.coduser and codcomp = i.codcomp;
-        
+
               ins_tusrlog(i.coduser, 'tusrcom', 'coduser', '', i.coduser);
               ins_tusrlog(i.coduser, 'tusrcom', 'codcomp', '', i.codcomp);
             end loop;      
@@ -5567,7 +5567,7 @@ end loop;
     v_amtday			number := 0;
     v_amtmth			number := 0;
     v_check       varchar2(10);
-    
+
     cursor c_del is
       select coduser,codproc,flgauth
         from tusrproc
@@ -5598,7 +5598,7 @@ end loop;
                                       v_codcomp,v_codpos,v_numlvl,v_codjob,v_codempmt,v_typemp,
                                       v_typpayroll,v_codbrlc,v_codcalen,v_jobgrade,v_codgrpgl,
                                       v_amthour,v_amtday,v_amtmth);
-                                  
+
     v_check := 'N';
     for i in c_tcontrusrd loop
       v_check := 'Y';
@@ -5622,7 +5622,7 @@ end loop;
 */
 -->>IPO//16/03/2023
 
- 
+
     for k in c_tcontrusrd loop
       v_flgcal := true;
       if k.syncond is not null then
@@ -5648,7 +5648,7 @@ end loop;
         for l in c_tcontrusrm loop
                   for i in c_del loop
                       delete tusrproc where coduser = i.coduser and codproc = i.codproc;
-                    
+
                       ins_tusrlog(i.coduser, 'tusrproc', 'coduser', '', i.coduser);
                       ins_tusrlog(i.coduser, 'tusrproc', 'codproc', '', i.codproc);
                       ins_tusrlog(i.coduser, 'tusrproc', 'flgauth', '', i.flgauth);
@@ -5656,7 +5656,7 @@ end loop;
                  exit;--for l in c_tcontrusrm loop
         end loop;  --for l in c_tcontrusrm loop
  -->>IPO//16/03/2023
- 
+
         for l in c_tcontrusrm loop          
 --<< user22 : 07/08/2022 : ST11 ||
           v_check := std_sc.chk_license_by_module(l.codproc);
@@ -5674,7 +5674,7 @@ end loop;
             ins_tusrlog(p_coduser, 'tusrproc', 'flgauth', '2');
           end if;--if v_check = 'Y' then -- user22 : 07/08/2022 : ST11 ||
         end loop;  --for l in c_tcontrusrm loop
-       
+
         exit;  --for k in c_tcontrusrd loop
       end if; -- if v_flgcal then
     end loop;  -- for k in c_tcontrusrd loop

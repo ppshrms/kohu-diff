@@ -40,9 +40,9 @@
   procedure gen_index_detail(json_str_output out clob) is
     obj_row         json_object_t;
     obj_data        json_object_t;
-    
+
     obj_rowmain     json_object_t;
-    
+
     v_rcnt          number := 0;
     v_flgdata       varchar2(1 char) := 'N';
     v_flgsecu       varchar2(1 char) := 'N';
@@ -78,7 +78,7 @@
             else
                 obj_data.put('desc_codcomp',get_tcenter_name(b_index_codcomp,global_v_lang));
             end if;
-            
+
             obj_data.put('dteeffec',to_char(i.dteeffec,'dd/mm/yyyy'));
             obj_data.put('desc_codtrn',get_tcodec_name('TCODMOVE',i.codtrn,global_v_lang));
             obj_data.put('dteappr',to_char(i.dteeffec,'dd/mm/yyyy'));
@@ -119,7 +119,7 @@
   procedure gen_index_table(json_str_output out clob) is
     obj_row         json_object_t;
     obj_data        json_object_t;
-    
+
     v_rcnt          number := 0;
     v_flgdata       varchar2(1 char) := 'N';
     v_flgsecu       varchar2(1 char) := 'N';

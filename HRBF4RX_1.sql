@@ -382,7 +382,7 @@
                 exception when no_data_found then
                     v_codgrpcnty := '';
                 end;            
-                
+
                 begin
                   select namimage
                    into v_image
@@ -399,7 +399,7 @@
 --                  v_image := get_tsetup_value('PATHWORKPHP')||'default-emp.png';
                   v_has_image   := 'N';
                 end if;
-                
+
                 if i.typetrav = 'I' then
                     v_ttemprpt.item5 := get_tcodec_name('TCODPROV', i.codprov, global_v_lang);
                     v_ttemprpt.item6 := get_tcodec_name('TCODGRPPROV', v_codgrpprov, global_v_lang);
@@ -411,7 +411,7 @@
                     v_ttemprpt.item23 := get_label_name('HRBF4RXC2',global_v_lang,'55');
                     v_ttemprpt.item24 := get_label_name('HRBF4RXC2',global_v_lang,'65');
                 end if;
-                
+
                 if i.typepay = '1' then
                     v_ttemprpt.item25 := get_label_name('HRBF4RXC2',global_v_lang,'160');
                     v_ttemprpt.item26 := get_label_name('HRBF4RXC2',global_v_lang,'170');
@@ -426,7 +426,7 @@
 --                                         get_nammthful(i.dtemthpay,global_v_lang)||' '||
                                          hcm_util.get_year_buddhist_era(i.dteyrepay);
                 end if;
-    
+
                 insert into ttemprpt (codempid,codapp,numseq,item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,item11,
                             item12,item13,item14,item15,item16,item20,item21,item22,
                             item23, item24, item25, item26, item27)

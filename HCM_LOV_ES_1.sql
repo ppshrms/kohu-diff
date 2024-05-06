@@ -256,7 +256,7 @@
       dbms_sql.column_value(v_cursor,3,v_data3);
       dbms_sql.column_value(v_cursor,4,v_data4);
       dbms_sql.column_value(v_cursor,5,v_data5);
-    
+
       get_service_year(v_data3,trunc(sysdate),'Y',v_year,v_month,v_day);    
       v_row := v_row+1;
       obj_data := json_object_t();

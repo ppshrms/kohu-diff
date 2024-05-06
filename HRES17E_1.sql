@@ -187,7 +187,7 @@
     v_rcnt := 0;
     obj_main := json_object_t();
     obj_row := json_object_t();
-    
+
     if p_numseq = 0 or p_numseq is null then
         begin
             select max(numseq)
@@ -234,7 +234,7 @@
         obj_data.put('flgAdd', false);
         obj_row.put(to_char(v_rcnt-1), obj_data);
     end loop;
-    
+
     if v_rcnt = 0 then
     for r2 in c2 loop
         v_rcnt      := v_rcnt +1;
@@ -243,7 +243,7 @@
         obj_data.put('typkpi',  'D');
         obj_data.put('desc_typkpi',get_tlistval_name('TYPKPI','D',global_v_lang));
         obj_data.put('codkpi', r2.codkpino);
-        
+
         begin
             select kpides 
               into v_kpides
@@ -387,12 +387,12 @@
     obj_plan        := json_object_t();
 
     obj_detail.put('coderror', '200');
-    
+
     select codcomp,codpos
       into v_codcomp,v_codpos
       from temploy1
      where codempid = p_codempid_query;
-    
+
     begin
         select staappr 
           into v_staappr
@@ -405,7 +405,7 @@
     exception when no_data_found then
         v_staappr := '';
     end;
-    
+
     obj_detail.put('codempid', p_codempid_query);
     obj_detail.put('numseq', p_numseq);
     obj_detail.put('dteyreap', p_dteyear);
@@ -454,11 +454,11 @@
             obj_plan.put(to_char(v_rcnt-1), obj_data);
         end loop;
     end loop;
-    
+
     if v_count_found = 0 then
         for r1 in c_tkpidph loop
             v_count_found := 1;
-            
+
             begin
                 select *
                   into v_tkpidpem
@@ -471,7 +471,7 @@
             exception when no_data_found then
                 v_tkpidpem := null;
             end;
-               
+
             obj_detail.put('typkpi', 'D');
             obj_detail.put('desc_typkpi', get_tlistval_name('TYPKPI','D',global_v_lang));
             obj_detail.put('codkpi', r1.codkpino);
@@ -483,7 +483,7 @@
             obj_detail.put('targtend', to_char(v_tkpidpem.targtend,'dd/mm/yyyy'));
             obj_detail.put('flgdefault', 'Y');
             obj_detail.put('staappr', v_staappr); 
-    
+
             v_rcnt := 0;
             for r2 in c_tgradekpi loop
                 v_rcnt      := v_rcnt +1;
@@ -505,7 +505,7 @@
     if v_count_found = 0 then
         for r1 in c_tjobkpi loop
             v_count_found := 1;
-            
+
             obj_detail.put('typkpi', 'J');
             obj_detail.put('desc_typkpi', get_tlistval_name('TYPKPI','J',global_v_lang));
             obj_detail.put('codkpi', r1.codkpi);
@@ -517,7 +517,7 @@
             obj_detail.put('targtend','');
             obj_detail.put('flgdefault', 'Y');
             obj_detail.put('staappr', v_staappr); 
-    
+
             v_rcnt := 0;
             for r2 in c_tgradekpi loop
                 begin
@@ -531,7 +531,7 @@
                 exception when no_data_found then
                     v_tjobkpig := null;
                 end;            
-            
+
                 v_rcnt      := v_rcnt +1;
                 obj_data    := json_object_t();
                 obj_data.put('coderror', '200');
@@ -590,7 +590,7 @@
             obj_score.put(to_char(v_rcnt-1), obj_data);
         end loop;
     end if;
-    
+
     obj_main.put('coderror', '200');
     obj_main.put('detail', obj_detail);
     obj_main.put('scr_cond', obj_score);
@@ -863,7 +863,7 @@
                and dteyreap = p_dteyear
                and numtime = p_numtime
                and codkpi = v_codkpi;
-               
+
             delete tkpireq3 
              where codempid  = p_codempid_query
                and dtereq  = p_dtereq
@@ -871,7 +871,7 @@
                and dteyreap = p_dteyear
                and numtime = p_numtime
                and codkpi = v_codkpi;
-               
+
             delete tkpireq4 
              where codempid  = p_codempid_query
                and dtereq  = p_dtereq

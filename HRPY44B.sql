@@ -15,7 +15,7 @@
   global_v_numlvlsalst      number;
   global_v_numlvlsalen      number;
   v_zupdsal                 varchar2(4 char);
-  
+
   global_v_batch_codapp     varchar2(100 char)  := 'HRPY44B';
   global_v_batch_codalw     varchar2(100 char)  := 'HRPY44B';
   global_v_batch_dtestrt    date;
@@ -115,7 +115,7 @@
 
   procedure get_process(json_str_input in clob, json_str_output out clob);
   procedure process_data(json_str_output out clob);
-  
+
   function check_index_batchtask(json_str_input clob) return varchar2;
 
 end HRPY44B;

@@ -9,17 +9,17 @@
   begin
     global_v_coduser    := hcm_util.get_string_t(json_obj,'p_coduser');
     global_v_lang       := hcm_util.get_string_t(json_obj,'p_lang');
-    
+
     p_codcomp   := hcm_util.get_string_t(json_obj,'codcomp');
     p_codempid  := hcm_util.get_string_t(json_obj,'codempid');
     p_month     := hcm_util.get_string_t(json_obj,'month');
     p_year      := hcm_util.get_string_t(json_obj,'year');
     p_namtpro   := hcm_util.get_string_t(json_obj,'namtpro');
     p_nameval   := hcm_util.get_string_t(json_obj,'nameval');
-    
+
     p_codform   := hcm_util.get_string_t(json_obj,'codform');
     p_dteprint  := hcm_util.get_string_t(json_obj,'dteprint');
-  
+
     if p_codcomp is not null then
       p_dteduepr_str  := to_date('01' || '/' || p_month || '/' || p_year,'dd/mm/yyyy hh24:mi:ss');
       p_dteduepr_end  := to_date(to_char(last_day(p_dteduepr_str),'dd/mm/yyyy'),'dd/mm/yyyy hh24:mi:ss');
@@ -271,17 +271,17 @@
           into v_codempid, v_staemp, v_codcomp_empid, v_numlvl
           from temploy1
          where codempid = p_codempid;
-  
+
         if v_staemp = 0 then
           param_msg_error := get_error_msg_php('HR2102',global_v_lang);
           return;
         end if;
-  
+
         if v_staemp = 9 then
           param_msg_error := get_error_msg_php('HR2101',global_v_lang);
           return;
         end if;
-  
+
         if v_codcomp_empid is not null and v_numlvl is not null then
           v_secur_codempid := secur_main.secur3(v_codcomp_empid,v_codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl ,v_zupdsal);
           if v_secur_codempid = false then
@@ -315,7 +315,7 @@
       end if;
     end if;
   end;
-  
+
   procedure check_probation_form is
     v_codcomp          temploy1.codcomp%type;
     v_codempid         temploy1.codempid%type;
@@ -349,10 +349,10 @@
     v_secur_codempid    boolean;
     v_codrespr          varchar2(100 char);
     v_docnum            varchar2(1000 char);
-    
+
     v_codcomp          temploy1.codcomp%type;
     v_codempid         temploy1.codempid%type;
-    
+
       cursor c_ttprobat is 
         select a.codrespr,a.numlettr,a.dteduepr,a.qtyexpand,a.dteoccup,a.codempid,
                a.typproba,c.numlvl,c.codcomp,c.dteempmt,c.codpos
@@ -423,12 +423,12 @@
     else
       json_str_output := get_response_message(null,param_msg_error,global_v_lang);
     end if;
-  
+
   exception when others then 
     param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure gen_probation_form ( json_str_output out clob ) is
     v_rcnt              number := 0;
     v_flg_permission    boolean := false;
@@ -438,7 +438,7 @@
     v_codrespr          varchar2(100 char);
     v_value             varchar2(1000 char);
     v_numseq            number;
-      
+
     cursor c1 is 
       select *
         from tfmparam
@@ -463,7 +463,7 @@
       obj_data.put('numseq',i.numseq);
       obj_data.put('section',i.section);
       obj_data.put('descript',i.descript);
-      
+
       begin 
         select datainit1 into v_value
           from tinitial 
@@ -474,11 +474,11 @@
         v_flgedit := false;
         v_value := '';
       end;
-      
+
       obj_data.put('flgEdit',v_flgedit);
       obj_data.put('value',v_value);
       obj_row.put(to_char(v_rcnt - 1),obj_data); 
-      
+
       v_numseq := v_numseq + 1;
     end loop;
     json_str_output := obj_row.to_clob;
@@ -496,23 +496,23 @@
     else
       json_str_output := get_response_message(null,param_msg_error,global_v_lang);
     end if;
-  
+
   exception when others then 
     param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end; 
   --
   procedure gen_html_message (json_str_output out clob) AS
-		
+
     o_message1        clob;
     o_namimglet       tfmrefr.namimglet%type;
     o_message2        clob;
     o_typemsg2        tfmrefr2.typemsg%type;
     o_message3        clob;
-    
+
 		obj_data		      json_object_t;
 		v_rcnt			      number := 0;
-    
+
     v_namimglet       tfmrefr.namimglet%type;
     tfmrefr_message   tfmrefr.message%type;
     tfmrefr2_message  tfmrefr2.message%type;
@@ -520,7 +520,7 @@
     tfmrefr3_message  tfmrefr3.message%type;
 	begin
     gen_message(p_codform, o_message1, o_namimglet, o_message2, o_typemsg2, o_message3);
-    
+
     if o_namimglet is not null then
        o_namimglet := get_tsetup_value('PATHDOC')||get_tfolderd('HRPMB9E')||'/'||o_namimglet;
     end if;
@@ -548,12 +548,12 @@
     else
       json_str_output := get_response_message(null,param_msg_error,global_v_lang);
     end if;
-  
+
   exception when others then 
     param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure get_json_obj ( json_str_input in clob ) is
   begin
     p_details       := hcm_util.get_json_t(json_object_t(json_str_input),'details');
@@ -599,7 +599,7 @@
 --    param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
 --    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 --  end;
-  
+
   procedure validateprintreport(json_str_input in clob) as
 		json_obj		json_object_t;
 		codform			varchar2(10 char);
@@ -611,7 +611,7 @@
 		global_v_coduser  := hcm_util.get_string_t(json_obj,'p_coduser');
 		global_v_codpswd  := hcm_util.get_string_t(json_obj,'p_codpswd');
 		global_v_lang     := hcm_util.get_string_t(json_obj,'p_lang');
-    
+
     global_v_zyear := hcm_appsettings.get_additional_year() ;
 		-- index
     p_detail_obj      := hcm_util.get_json_t(json_object_t(json_obj),'details');
@@ -648,7 +648,7 @@
 		end if;
 
 	end validateprintreport;
-  
+
   function explode(p_delimiter varchar2, p_string long, p_limit number default 1000) return arr_1d as
     v_str1        varchar2(4000 char);
     v_comma_pos   number := 0;
@@ -692,17 +692,17 @@
 		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 	end printreport;
-  
+
   procedure gen_report_data ( json_str_output out clob) as
 		itemSelected		json_object_t := json_object_t();
-    
+
     v_codlang		    tfmrefr.codlang%type;
     v_day			      number;
     v_desc_month		varchar2(50 char);
     v_year			    varchar2(4 char);
     v_month         varchar(5 char);
     tdata_dteprint	varchar2(100 char);
-    
+
     v_codempid      temploy1.codempid%type;
     v_codcomp       temploy1.codcomp%type;
     v_numlettr      varchar2(1000 char);
@@ -712,7 +712,7 @@
 
     temploy1_obj		temploy1%rowtype;
     temploy3_obj		temploy3%rowtype;
-    
+
     fparam_codform      varchar2(1000 char);
     fparam_codtable     varchar2(1000 char);
     fparam_ffield       varchar2(1000 char);
@@ -725,7 +725,7 @@
     fparam_descript     varchar2(1000 char);
     fparam_value        varchar2(4000 char);
     fparam_signpic      varchar2(4000 char);
-    
+
     data_file           clob;
 		v_flgstd		        tfmrefr.flgstd%type;
 		v_flgdesc		        tfmparam.flgdesc%type;
@@ -750,7 +750,7 @@
 		v_resultcol		json_object_t ;
 		v_resultrow		json_object_t := json_object_t();
 		v_countrow		number := 0;
-    
+
     obj_fparam      json_object_t := json_object_t();
     obj_rows        json_object_t;
     obj_result      json_object_t;
@@ -772,7 +772,7 @@
 			v_folder := '';
     end;
 		v_codlang := nvl(v_codlang,global_v_lang);
-    
+
 		-- dateprint
 		v_day           := to_number(to_char(p_dateprint_date,'dd'),'99');
 		v_desc_month    := get_nammthful(to_number(to_char(p_dateprint_date,'mm')),v_codlang);
@@ -786,7 +786,7 @@
       v_codcomp     := hcm_util.get_string_t(itemSelected,'codcomp');
       v_numlettr    := hcm_util.get_string_t(itemSelected,'numlettr');
       v_dteduepr    := to_date(hcm_util.get_string_t(itemSelected,'dteduepr'),'dd/mm/yyyy');
-      
+
       if v_numlettr is null then
         begin
           select numlettr  into v_numlettr 
@@ -926,7 +926,7 @@
         end loop;
 
         v_resultcol		:= json_object_t ();
-        
+
         v_resultcol := append_clob_json(v_resultcol,'headhtml',list_msg_html(1));
         v_resultcol := append_clob_json(v_resultcol,'bodyhtml',list_msg_html(2));
         v_resultcol := append_clob_json(v_resultcol,'footerhtml',list_msg_html(3));
@@ -935,24 +935,24 @@
         end if;
         v_resultcol := append_clob_json(v_resultcol,'imgletter',v_pathimg);
         v_filename := global_v_coduser||'_'||to_char(sysdate,'yyyymmddhh24miss')||'_'||(i+1);
-        
+
         v_resultcol.put('filepath',p_url||'file_uploads/'||v_filename||'.doc');
         v_resultcol.put('filename',v_filename);
         v_resultcol.put('numberdocument',v_numlettr);
         v_resultcol.put('codempid',v_codempid);
         v_resultcol.put('dteduepr',to_char(v_dteduepr,'dd/mm/yyyy'));
         v_resultrow.put(to_char(v_countrow), v_resultcol);
-        
+
         v_countrow := v_countrow + 1;
     end loop; -- end of loop data
     obj_rows  :=  json_object_t();
     obj_rows.put('rows',v_resultrow);
-    
+
     obj_result :=  json_object_t();
     obj_result.put('coderror', '200');
     obj_result.put('numberdocument',v_numlettr);
     obj_result.put('table',obj_rows);
-    
+
     json_str_output := obj_result.to_clob;
 	exception when others then
 		param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
@@ -964,7 +964,7 @@
     v_size number;
   begin
     v_size := v_original_json.get_size;
-    
+
     if ( v_size = 0 ) then
       v_summany_json_clob := '{';
     else 
@@ -972,14 +972,14 @@
       v_summany_json_clob := substr(v_convert_json_to_clob,1,length(v_convert_json_to_clob) -1) ;
       v_summany_json_clob := v_summany_json_clob || ',' ;
     end if;
-    
+
     v_new_json_clob :=  v_summany_json_clob || '"' ||v_key|| '"' || ' : '|| '"' ||esc_json(v_value)|| '"' ||  '}';
-    
+
     return json_object_t (v_new_json_clob);
   end;
   function esc_json(message in clob)return clob is 
     v_message clob;
-    
+
     v_result  clob := '';
     v_char varchar2 (2 char);
   BEGIN
@@ -987,10 +987,10 @@
     if (v_message is null) then 
       return v_result;
     end if;
-    
+
     for i in 1..length(v_message) loop
       v_char := SUBSTR(v_message,i,1);     
-      
+
       if (v_char = '"') then
           v_char := '\"' ;
       elsif (v_char = '/') then
@@ -1053,7 +1053,7 @@
       v_codlang := global_v_lang;
     end;
     v_codlang := nvl(v_codlang,global_v_lang);
-    
+
     for i in c1 loop
       v_codtable := i.codtable;
       v_codcolmn := i.ffield;
@@ -1093,7 +1093,7 @@
           v_statmt := 'select to_char('||i.ffield||',''dd/mm/yyyy'') from '||i.codtable ||' where '||i.fwhere;
           v_statmt := std_get_value_replace(v_statmt, p_itemson, v_codtable);
           v_dataexct := execute_desc(v_statmt);
-          
+
           if v_dataexct is not null then
             arr_result := explode('/', v_dataexct, 3);
             v_day := arr_result(1);
@@ -1141,7 +1141,7 @@
      end loop; 
     return v_statmt;
   end std_get_value_replace;   
-  
+
   function name_in (objItem in json_object_t , bykey VARCHAR2) return varchar2 is
 	begin
 		if ( hcm_util.get_string_t(objItem,bykey) = null or hcm_util.get_string_t(objItem,bykey) = ' ') then
@@ -1223,7 +1223,7 @@
     else
       json_str_output := get_response_message(null,param_msg_error,global_v_lang);
     end if;
-  
+
   exception when others then 
     param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -1315,7 +1315,7 @@
           chk_flowmail.replace_text_frmmail(v_template_to, 'ttprobat', v_rowid_query , v_subject , 'HRPM33R', '1', null, global_v_coduser, global_v_lang, v_msg_to,'Y',v_filename);
 
           v_error := chk_flowmail.send_mail_to_emp (v_codempid, global_v_coduser, v_msg_to, NULL, v_subject, 'E', global_v_lang, v_filepath,null,null, null);
-          
+
           if  v_error <> '2046' then
             param_msg_error := get_error_msg_php('HR7522',global_v_lang);
             json_str_output := get_response_message('400',param_msg_error,global_v_lang);

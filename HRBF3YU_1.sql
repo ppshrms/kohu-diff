@@ -74,7 +74,7 @@
             end if;
         end if;
     end if;
-    
+
     if param_msg_error is null then    
         obj_data        := json_object_t();
         obj_data.put('coderror', '200');

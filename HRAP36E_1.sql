@@ -27,7 +27,7 @@
         return;
       end if;
     end if;
-    
+
     begin
       select 'N'
         into v_error
@@ -168,10 +168,10 @@
     obj_row_kpi     json_object_t;
     v_rcnt_act      number := 0;
     v_rcnt_kpi      number := 0;
-    
+
     v_codkpi        tkpicmppl.codkpi%type;
     v_codkpino      tkpicmpdp.codkpino%type;
-    
+
     cursor c_kpicmppl is
       select codkpi,codkpino,kpides,targetkpi
         from tkpicmppl
@@ -179,7 +179,7 @@
          and codcompy   = b_index_codcompy
          and codkpi     = v_codkpi
       order by codkpino;
-      
+
     cursor c_tkpicmpdp is
       select codcomp,target,kpivalue
         from tkpicmpdp
@@ -191,7 +191,7 @@
   begin
     json_input    := json_object_t(json_str_input);
     v_codkpi      := hcm_util.get_string_t(json_input,'p_codkpi');
-    
+
     obj_row   := json_object_t();
     for r1 in c_kpicmppl loop
       obj_data    := json_object_t();
@@ -404,23 +404,23 @@
     json_input            json_object_t;
     param_json            json_object_t;
     json_kpi_detail       json_object_t;
-    
+
     json_score_condition  json_object_t;
     json_scr_cond_row     json_object_t;
-    
+
     json_act_plan         json_object_t;
     json_act_plan_row     json_object_t;  
-    
+
     json_kpi_no           json_object_t;
     json_kpi_no_row       json_object_t;
-    
+
     t_tkpicmph            tkpicmph%rowtype;
     t_tkpicmppl           tkpicmppl%rowtype;
     t_tkpicmpg            tkpicmpg%rowtype;
     t_tkpicmpdp           tkpicmpdp%rowtype;
-    
+
     v_codkpi              tkpicmph.codkpi%type;
-    
+
     v_flg_act_add         boolean;
     v_flg_act_edit        boolean;
     v_flg_act_delete      boolean;
@@ -435,7 +435,7 @@
 
     param_json            := hcm_util.get_json_t(json_input,'param_json');
     v_codkpi              := hcm_util.get_string_t(json_input,'p_codkpi');
-    
+
     json_kpi_detail       := hcm_util.get_json_t(param_json,'detail');
     t_tkpicmph.codkpi     := v_codkpi;
     t_tkpicmph.kpides     := hcm_util.get_string_t(json_kpi_detail,'kpides');
@@ -443,7 +443,7 @@
     t_tkpicmph.kpivalue   := hcm_util.get_string_t(json_kpi_detail,'kpivalue');
     t_tkpicmph.balscore   := hcm_util.get_string_t(json_kpi_detail,'balscore');
     insert_tkpicmph(t_tkpicmph);
-    
+
     json_act_plan   := hcm_util.get_json_t(param_json,'act_plan');
     for i in 0..(json_act_plan.get_size - 1) loop
       json_act_plan_row     := hcm_util.get_json_t(json_act_plan,to_char(i));
@@ -495,7 +495,7 @@
         end if;
       end if;
     end loop;
-    
+
     json_score_condition  := hcm_util.get_json_t(param_json,'scr_cond');
     if param_msg_error is null then
       for i in 0..(json_score_condition.get_size - 1) loop
@@ -513,7 +513,7 @@
         end if;
       end loop;
     end if;
-    
+
     if param_msg_error is null then
       commit;
       param_msg_error   := get_error_msg_php('HR2401',global_v_lang);
@@ -564,7 +564,7 @@
          where dteyreap    = b_index_dteyreap
            and codcompy    = b_index_codcompy
            and codkpi      = v_codkpi;
-           
+
         delete tkpicmpdp
          where dteyreap    = b_index_dteyreap
            and codcompy    = b_index_codcompy

@@ -151,7 +151,7 @@
                           where codcompy = hcm_util.get_codcomp_level(p_codcomp,1)
                             and trunc(dteeffec) <= trunc(to_date('31/12/' || to_char(p_dteyeen), 'DD/MM/YYYY')))
     order by numseq;
-    
+
     cursor c_obfsyn is ----
       select a.codobf,a.syncond,b.numobf,b.syncond syncond2,b.qtyalw into v_codobf,v_syncond,v_numobf,v_syncond2,v_qtyalw
         from tobfcde a,tobfcdet b,tobfcompy c
@@ -164,7 +164,7 @@
                             where codobf = v_codobf
                               and dtestart <= sysdate)        
     order by b.numobf;
-    
+
   BEGIN
     obj_rows := json();
     for i in c1 loop

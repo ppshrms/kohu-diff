@@ -59,10 +59,10 @@
   tworkreq_dtesnd           tworkreq.dtesnd%type;
   tworkreq_dteapph          tworkreq.dteapph%type;
   tworkreq_flgagency        tworkreq.flgagency%type;
-  
+
   p_dteworkst               tworkreq.dtework%type;
   p_dteworken               tworkreq.dtework%type;
-  
+
   p_table                   json_object_t;
   p_flgAfterSave            varchar2(1);
   v_tmp_numseq              number;
@@ -79,7 +79,7 @@
   function get_codshift(json_str_input in clob) return clob;
   procedure get_calendar(json_str_input in clob,json_str_output out clob);
   procedure gen_calendar (json_str_output out clob);
-  
+
   procedure get_create (json_str_input in clob, json_str_output out clob);
   procedure gen_create (json_str_output out clob);
 END HRES6DE;

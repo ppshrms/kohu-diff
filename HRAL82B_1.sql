@@ -34,6 +34,8 @@
       gen_process(json_str_output);
     else
       json_str_output := get_response_message(null,param_msg_error,global_v_lang);
+insert_temp2('82b','82b','1','json_str_output ' ,get_response_message(null,param_msg_error,'102'));
+insert_temp2('82b','82b','1','json_str_output ' ,param_msg_error);
       return;
     end if;
 

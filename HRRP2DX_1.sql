@@ -19,7 +19,7 @@
     b_index_codpos      := hcm_util.get_string_t(json_obj,'p_codpos');
     b_index_year        := hcm_util.get_string_t(json_obj,'p_year');
     b_index_month       := hcm_util.get_string_t(json_obj,'p_month');
-    
+
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
 
   end initial_value;
@@ -73,7 +73,7 @@
              and a.numlvl between global_v_zminlvl and global_v_zwrklvl))
          group by a.codcomp,a.codpos
          order by a.codcomp,a.codpos;
-    
+
     cursor c2 is
       select a.codempid,codcomp,codempmt,
              a.amtincom1,a.amtincom2,
@@ -96,12 +96,12 @@
 
   begin
     obj_row := json_object_t();
-    
+
     v_chksecu := '1';
     for i in c1 loop
         v_flgdata := 'Y';
     end loop;
-    
+
     if v_flgdata = 'Y' then
         v_chksecu := '2';
         for i in c1 loop
@@ -144,7 +144,7 @@
           obj_row.put(to_char(v_rcnt-1),obj_data);
         end loop;
     end if;
-    
+
     if v_flgdata = 'N' then
       param_msg_error := get_error_msg_php('HR2055', global_v_lang, 'ttmovemt');
       json_str_output := get_response_message(null, param_msg_error, global_v_lang);

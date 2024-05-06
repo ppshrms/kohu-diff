@@ -98,9 +98,10 @@
   function get_travel_cost(json_str_input in clob) return clob;         --LOV for List of Travel Cost
   function get_payslip_deduction(json_str_input in clob) return clob;   --LOV for List of Deduction Code
   function get_company_level(json_str_input in clob) return clob;       --LOV for List of Company Level
-  function get_skill_code(json_str_input in clob) return clob;          --LOV for List of Code Skill 
+  function get_skill_code(json_str_input in clob) return clob;          --LOV for List of Code Skill
   function get_menu_link_approve_typ_form(json_str_input in clob) return clob;    --LOV for Menu link to approve
   function get_securities_code(json_str_input in clob) return clob;     --LOV for List of Securities Code
 end;
+
 
 /

@@ -147,7 +147,7 @@
     v_codcompy      tcompny.codcompy%type;
     v_dtestrt       date;
     v_dteend        date;
-    
+
     cursor c1 is
       select a.dteyear,a.codcompy,a.dtetrst,a.dtetren,a.dteupd,
              decode(global_v_lang,'101',b.namcourse
@@ -174,7 +174,7 @@
            connect by level <= v_dteend - v_dtestrt + 1);
   begin
     obj_row   := json_object_t();
-    
+
     for i in c1 loop
       v_dtestrt   := i.dtetrst;
       v_dteend    := i.dtetren;
@@ -305,7 +305,7 @@
     v_stalearn_chapter  tlrnchap.stalearn%type;
     v_stalearn_subject  tlrnsubj.stalearn%type;
     v_stalearn_course   tlrncourse.stalearn%type;
-    
+
     cursor c1 is
       select decode(a.stalearn,null,c.dtetrst,a.dtecourst) as dtetrst,
              decode(a.stalearn,null,c.dtetren,a.dtegradtn) as dtetren,
@@ -343,7 +343,7 @@
                             and c.dteyear     = a.dteyear
                             and c.numclseq    = a.numclseq)
       order by dtetrst;
-      
+
   begin
     obj_row     := json_object_t();
     v_codcompy  := hcm_util.get_codcomp_level(global_v_codcomp,1);
@@ -357,17 +357,17 @@
       obj_data.put('dtetrst',to_char(i.dtetrst,'dd/mm/yyyy hh24:mi'));
       obj_data.put('dtetren',to_char(i.dtetren,'dd/mm/yyyy hh24:mi'));
       obj_data.put('progress',i.pctprogress||'%');
-      
+
       if trunc(sysdate) between trunc(i.dtetrst) and nvl(i.dtetren,trunc(sysdate)) then
         obj_data.put('flgChecklearn', 'Y'); -- flgChecklearn: mockFlglearn[d - 1], // ไว้เช็คกรณียังไม่ถึงกำหนดเรียน Y = เปิดเข้าเรียนได้, N = ยังเข้าเรียนไม่ได้
       end if;
-      
+
       v_chaptno           := i.chaptno;
       v_codsubj           := i.codsubj;
       v_stalearn_chapter  := null;
       v_stalearn_subject  := null;
       v_stalearn_course   := i.stalearn;
-      
+
       if v_chaptno is not null then
         begin
           select stalearn
@@ -377,7 +377,7 @@
              and dtecourst    = i.dtecourst
              and codcours     = i.codcours
              and codsubj      = i.codsubj;
-             
+
           if v_stalearn_subject = 'C' then
             begin
               select min(tv.codsubj)
@@ -398,9 +398,9 @@
           end if;
         exception when no_data_found then null;
         end;
-        
+
         v_chaptno := i.chaptno;
-        
+
         if v_stalearn_course <> 'Y' then
           begin
             select min(tv.chaptno)
@@ -422,7 +422,7 @@
           end if;
         end if;
       end if;
-      
+
       obj_data.put('codsubj',v_codsubj);
       obj_data.put('desccodsubj',get_tsubject_name(v_codsubj,global_v_lang));
       obj_data.put('stalearn_subj',v_stalearn_subject);
@@ -472,10 +472,10 @@
                                and c.codcours = a.codcours)
          and b.stalearn   in ('C','Y')
       order by dtecourst desc;
-      
+
   begin
     obj_row   := json_object_t();
-    
+
     for i in c1 loop
       obj_data    := json_object_t();
       obj_data.put('coderror','200');
@@ -483,7 +483,7 @@
       obj_data.put('codcours',i.codcours);
       obj_data.put('desc_codcours',get_tcourse_name(i.codcours,global_v_lang));
       obj_data.put('flgposttest',i.flgposttest);
-      
+
       if i.flgposttest = 'Y' then
         obj_data.put('staposttest', i.staposttest);
         if i.staposttest <> 'Y' and i.staposttest <> 'N' then 
@@ -492,7 +492,7 @@
       else
         obj_data.put('staposttest','');
       end if;
-      
+
       obj_data.put('dteyear',i.dteyear);
       obj_data.put('numclseq',i.numclseq);
 
@@ -525,7 +525,7 @@
     v_sum_qtycount    number := 0;
 --    v_curr_year       number := to_number(to_char(sysdate,'yyyy'));
     v_codcompy        tcompny.codcompy%type;
-    
+
     cursor c1 is
       select a.codcours,c.filemedia,count(b.codempid) as qtycount
         from tlrncourse a,temploy1 b,tvcourse c
@@ -536,7 +536,7 @@
          and a.typcours   = 'O'
       group by a.codcours,c.filemedia
       order by qtycount desc,codcours;
-      
+
   begin
     v_codcompy      := hcm_util.get_codcomp_level(global_v_codcomp,1);
     obj_output      := json_object_t();
@@ -547,7 +547,7 @@
     obj_data_header.put('dteyear',b_index_dteyear);
 
     obj_row_detail  := json_object_t();
-    
+
     for i in c1 loop
       obj_data_detail    := json_object_t();
       obj_data_detail.put('coderror','200');
@@ -558,12 +558,12 @@
       obj_row_detail.put(to_char(v_rcnt),obj_data_detail);
       v_rcnt  := v_rcnt + 1;
       v_sum_qtycount  := v_sum_qtycount + i.qtycount;
-      
+
       if v_rcnt = 10 then
         exit;
       end if;
     end loop;
-    
+
     obj_data_header.put('valuemax',v_sum_qtycount);
     obj_output.put('header',obj_data_header);
     obj_output.put('table',obj_row_detail);

@@ -21,11 +21,11 @@
   p_codapp          varchar2(10 char) := 'HRPY17E';
   p_codcompy        tcondept.codcompy%type;
   p_dteeffec        tcondept.dteeffec%type;
-  
+
   function find_dteeffec (v_dteeffec in date) return date;
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure save_index(json_str_input in clob, json_str_output out clob);
-  
+
 END HRPY17E;
 
 /

@@ -93,7 +93,7 @@
           from tcenter
          where codcomp = v_codcomp_full
             and flgact = '1';
-  
+
     cursor c_torgprt2_2 is
       select codcompy,decode(numlevel,'1',codcom1,'2',codcom2,
                                       '3',codcom3,'4',codcom4,
@@ -140,7 +140,7 @@
          and dteeffec = p_dtetrial
          and codlinef = p_codlinef
          and codcompp = v_codcomp_full;
-         
+
     cursor c_setcomp is
       select numseq,qtycode
         from tsetcomp
@@ -182,7 +182,7 @@
             v_array(v_codcomp_full) := '';
         end loop;
     end loop;
-    
+
     for r_torgprt2 in c_torgprt2 loop
         v_codcomp_full := r_torgprt2.codcompp;
         v_array(v_codcomp_full) := '';
@@ -209,7 +209,7 @@
                            nvl(r_tcenter2.codcom8,rpad('0',v_arr_comp_digit(8),'0'))||'-'||
                            nvl(r_tcenter2.codcom9,rpad('0',v_arr_comp_digit(9),'0'))||'-'||
                            nvl(r_tcenter2.codcom10,rpad('0',v_arr_comp_digit(10),'0'))||'-';
-        
+
         if global_v_lang = '101' then
           namcent := r_tcenter2.namcente;
         elsif global_v_lang = '102' then
@@ -239,7 +239,7 @@
                                     nvl('', ' ')
                                  );
       end loop;
-      
+
       if not v_flg_exists then
         for r_tcenter2 in c_torgprt2_2 loop
           v_flg_exists := true;
@@ -255,7 +255,7 @@
                              nvl(r_tcenter2.codcom8,rpad('0',v_arr_comp_digit(8),'0'))||'-'||
                              nvl(r_tcenter2.codcom9,rpad('0',v_arr_comp_digit(9),'0'))||'-'||
                              nvl(r_tcenter2.codcom10,rpad('0',v_arr_comp_digit(10),'0'))||'-';
-          
+
           if global_v_lang = '101' then
             namcent := r_tcenter2.namcente;
           elsif global_v_lang = '102' then
@@ -286,7 +286,7 @@
                                    );
         end loop;
       end if;
-      
+
       v_array_key := v_array.NEXT(v_array_key);
     end loop;
     dbms_sql.close_cursor(v_cursor);

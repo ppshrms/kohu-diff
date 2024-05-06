@@ -633,7 +633,7 @@
         v_codform := null;
         v_codformno := null;
       end;
-      
+
       for i in 0..p_selected_rows.get_size-1 loop
           obj_row     := json_object_t();
           obj_row     := hcm_util.get_json_t(p_selected_rows,to_char(i));
@@ -646,7 +646,7 @@
             return;
           end if;
       end loop;
-      
+
       begin
         for i in 0..p_selected_rows.get_size-1 loop
           obj_row     := json_object_t();
@@ -850,21 +850,21 @@
                  and codpos = v_codpos
                  and dtereq = v_dtereq
                  and codempid = v_codempid;
-                 
-                 
+
+
               begin --user36 #4548 10/09/2021
                 v_error := chk_flowmail.send_mail_reply('HRRP34U',v_codempid,v_codreq,v_codappr, global_v_coduser, NULL, 'HRRP34U1', 330, 'U', v_staappr, v_approvno, v_codcomp, v_codpos, 'TPROMOTED', v_rowid, null, null); --user36 #4548 10/09/2021
               exception when others then
                 param_msg_error_mail := get_error_msg_php('HR2403',global_v_lang);
               end;
-              
+
               --Send mail to Next Approve Step
               begin
                 --user36 #4548 10/09/2021
 --                chk_flowmail.get_message('HRRP34U', global_v_lang, v_msg_to, v_templete_to, v_func_appr);
 --                chk_flowmail.replace_text_frmmail(v_templete_to, 'TPROMOTED', v_rowid, get_label_name('HRRP34U1', global_v_lang, 320), v_codform, '1', v_func_appr, global_v_coduser, global_v_lang, v_msg_to);
 --                v_error := chk_flowmail.send_mail_to_approve('HRRP34U' , v_codempid, global_v_coduser, v_msg_to, NULL, get_label_name('HRRP34U1', global_v_lang, 320), 'U', v_staappr, global_v_lang, v_approvno + 1, null, null);
-                
+
                 v_error := chk_flowmail.send_mail_for_approve('HRRP33E', v_codempid, v_codreq, global_v_coduser, null, 'HRRP34U1', 320, 'U', v_staappr, v_approvno + 1, null, null,'TPROMOTED',v_rowid, '1', 'Oracle');
               exception when others then
                 param_msg_error_mail := get_error_msg_php('HR2403',global_v_lang);

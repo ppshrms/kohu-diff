@@ -591,5 +591,4 @@ procedure initial_value(json_str_input in clob) as
 
 END HRTR78X;
 
-
 /

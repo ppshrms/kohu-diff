@@ -106,9 +106,9 @@
       select count(sapcode), count(hcmcode) into v_qtysap,v_qtyhcm 
       from tmapcode 
       where typcode  = r1.typcode;
-      
+
       v_qtysap := v_qtysap - v_qtyhcm;
-      
+
       v_rcnt          := v_rcnt + 1;
       obj_data        := json_object_t();
       obj_data.put('coderror', '200');
@@ -202,7 +202,7 @@
   begin
     initial_value(json_str_input);
     param_json := hcm_util.get_json_t(json_object_t(json_str_input),'json_input_str');
-    
+
     for i in 0..param_json.get_size-1 loop
         param_json_row  := hcm_util.get_json_t(param_json, to_char(i));
 
@@ -244,7 +244,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure save_index(json_str_input in clob, json_str_output out clob) as
     param_json          json_object_t;
     param_json_row      json_object_t;
@@ -262,8 +262,9 @@
         --
         v_typecode   := hcm_util.get_string_t(param_json_row,'typcode');
         v_flg       := hcm_util.get_string_t(param_json_row,'flg');
-       
+
         if v_flg = 'delete' then
+            insert into a(a) values(v_flg||' => '||v_typecode);commit;
             delete tmapcode
              where typcode = v_typecode;
         end if;

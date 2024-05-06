@@ -404,7 +404,7 @@ end;
 --        obj_data.put('qtybon', i.qtybon);
 --        obj_data.put('pctdedbo', i.pctdedbo);
 --        obj_data.put('amtnbon', i.amtnbon);
-        
+
         if v_typbon = 1 then
             obj_data.put('grade', i.grade);
         else
@@ -422,7 +422,7 @@ end;
             end;
             obj_data.put('detail', v_ratecond);
         end if;
-        
+
         obj_data.put('image', get_emp_img(i.codempid));
         obj_data.put('codempid', i.codempid);
         obj_data.put('desc_codempid', get_temploy_name(i.codempid,global_v_lang) );
@@ -433,8 +433,8 @@ end;
         obj_data.put('payrate', i.qtybon);
         obj_data.put('pctdbon', i.pctdedbo);
         obj_data.put('amount', i.amtnbon);
-        
-        
+
+
         v_amtbon := v_amtbon + nvl(i.amtnbon,0);
         obj_row.put(to_char(v_row-1),obj_data);
     end loop;
@@ -479,7 +479,7 @@ end;
 		obj_respone_data    varchar(500);
 		obj_sum			    Json_object_t;
         v_approvno          tbonus.approvno%type;
-    
+
         cursor c_tbonus is
           select codempid,staappr,
                  rowid rwid
@@ -504,7 +504,7 @@ end;
         ELSE
             param_msg_error_mail := get_error_msg_php('HR2403', global_v_lang);
         END IF;
-        
+
         if param_msg_error_mail is null then
           json_str_output := get_response_message(200,param_msg_error,global_v_lang);
         else

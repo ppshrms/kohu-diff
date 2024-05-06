@@ -226,7 +226,7 @@ procedure initial_value(json_str in clob) is
           v_hireyear    := 0;
           v_hiremonth   := i.qtydatrq;
         end if;
-        
+
         insert into ttemprpt (codempid,codapp,numseq,item1,item2,item3,item4,
                               item5,item6,item7,item8,item9,
                               item10,item11,item12,item13,item14,

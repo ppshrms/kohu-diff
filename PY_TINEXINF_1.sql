@@ -45,7 +45,7 @@
         obj_result json_object_t;
 		v_rcnt     NUMBER := 0;
     BEGIN
-	
+
         --send result to web
         IF param_msg_error IS NULL THEN
             obj_row := json_object_t();
@@ -86,10 +86,10 @@
         json_str_input  IN CLOB,
         json_str_output OUT CLOB
     ) AS        
-        
+
         v_rec_tran NUMBER := 0;
         v_rec_err  NUMBER := 0;
-        
+
     BEGIN
         initial_value(json_str_input);
         validate_excel_py_tpfmemb(json_str_input, v_rec_tran, v_rec_err);
@@ -122,7 +122,7 @@
                                || dbms_utility.format_error_backtrace;
             json_str_output := get_response_message('400', param_msg_error, global_v_lang);
     END get_process_py_tinexinf;
-	
+
 	PROCEDURE get_process_py_tempinc (
         json_str_input  IN CLOB,
         json_str_output OUT CLOB
@@ -141,8 +141,8 @@
                                || dbms_utility.format_error_backtrace;
             json_str_output := get_response_message('400', param_msg_error, global_v_lang);
     END get_process_py_tempinc;
-	
-	
+
+
 	PROCEDURE get_process_py_taccodb (
         json_str_input  IN CLOB,
         json_str_output OUT CLOB
@@ -180,7 +180,7 @@
                                || dbms_utility.format_error_backtrace;
             json_str_output := get_response_message('400', param_msg_error, global_v_lang);
     END get_process_py_tempded;
-    
+
     PROCEDURE get_process_py_tempded_sp (
         json_str_input  IN CLOB,
         json_str_output OUT CLOB
@@ -292,7 +292,7 @@
         v_text           text;
         v_field          text;
         TYPE leng IS TABLE OF NUMBER INDEX BY BINARY_INTEGER;
-       
+
         chk_len          leng; --aaa
         v_cnt number; --aa
     BEGIN
@@ -312,13 +312,13 @@
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -326,7 +326,7 @@
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
         for i in 0..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -336,7 +336,7 @@
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	  := false;   
-            
+
 			v_codpay   := hcm_util.get_string_t(param_json_row,'codpay');
 			v_descpayt   := hcm_util.get_string_t(param_json_row,'descpayt');
 			v_descpaye   := hcm_util.get_string_t(param_json_row,'descpaye');
@@ -353,8 +353,8 @@
 			v_flgpvdf   := hcm_util.get_string_t(param_json_row,'flgpvdf');
 			v_flgfml   := hcm_util.get_string_t(param_json_row,'flgfml');
 			v_codtax   := hcm_util.get_string_t(param_json_row,'codtax');
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
@@ -374,7 +374,7 @@
                 v_text(14)   := v_flgpvdf;
                 v_text(15)   := v_flgfml;
                 v_text(16)   := v_codtax;
-    
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -384,7 +384,7 @@
                     data_file := data_file||','||v_text(i);
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 1,2,3,4,6,10,11,12,13,14,15
                 for i in 1..v_column loop
@@ -395,7 +395,7 @@
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 for i in 1..v_column loop
@@ -415,7 +415,7 @@
                       end if;                 
                     end if;
                 end loop;
-                
+
                 --check incorrect data
                 --4.TYPPAY
                 if ((v_text(4) < 1) or (v_text(4) > 7)) then
@@ -424,7 +424,7 @@
                     v_err_field := v_field(4);
                     exit cal_loop;
                 end if;
-                  
+
                 --10.FLGCAL
                 if ((v_text(10) <> 'Y') or (v_text(10) <> 'N')) then
                     v_error	 	:= true;
@@ -432,7 +432,7 @@
                     v_err_field := v_field(10);
                     exit cal_loop;
                 end if;
-    
+
                 --11.FLGSOC
                 if ((v_text(11) <> 'Y') or (v_text(11) <> 'N')) then
                     v_error	 	:= true;
@@ -440,7 +440,7 @@
                     v_err_field := v_field(11);
                     exit cal_loop;
                 end if;	
-                
+
                 --12.FLGTAX
                 if ((v_text(12) <> 1) or (v_text(11) <> 2)) then
                     v_error	 	:= true;
@@ -448,7 +448,7 @@
                     v_err_field := v_field(12);
                     exit cal_loop;
                 end if;	
-    
+
                 --13.FLGWORK
                 if ((v_text(13) <> 'Y') or (v_text(13) <> 'N')) then
                     v_error	 	:= true;
@@ -456,7 +456,7 @@
                     v_err_field := v_field(13);
                     exit cal_loop;
                 end if;
-                  
+
                 --14.FLGPVDF
                 if ((v_text(13) <> 'Y') or (v_text(13) <> 'N')) then
                     v_error	 	:= true;
@@ -464,7 +464,7 @@
                     v_err_field := v_field(13);
                    exit cal_loop;
                 end if;
-    
+
                 --15.FLGFML
                 if ((v_text(15) < 1) or (v_text(15) > 10)) then
                     v_error	 	:= true;
@@ -474,13 +474,13 @@
                 end if;				
                 exit cal_loop;
             end loop; -- cal_loop
-                 
-            
+
+
                 --2.CRUD table--
                 if not v_error then
                     begin
                         delete from TINEXINF where codpay = v_codpay;
-                        
+
                         insert into TINEXINF (	CODPAY, 
 												DESCPAYE, 
 												DESCPAYT, 
@@ -506,7 +506,7 @@
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_codpay, 
 												v_descpaye, 
 												v_descpayt, 
@@ -539,13 +539,13 @@
 												trunc(sysdate),												 
 												global_v_coduser
 											);
-                        
+
                     end;
-                    
+
                     if (v_codtax is not null) then 
                         begin 
                             delete from TTAXTAB where codpay = v_codpay;
-                            
+
                             insert into TTAXTAB (	CODPAY, 
 													CODTAX, 
 													DTECREATE, 
@@ -560,7 +560,7 @@
 													trunc(sysdate),										 
 													global_v_coduser
 												);
-                            
+
                         end;
                     end if;
                 ELSE
@@ -571,10 +571,10 @@
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -660,13 +660,13 @@ PROCEDURE validate_excel_py_tpfmemb (
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -674,7 +674,7 @@ PROCEDURE validate_excel_py_tpfmemb (
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
         for i in 0..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -684,7 +684,7 @@ PROCEDURE validate_excel_py_tpfmemb (
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	  := false;   
-            
+
 			v_codempid   := hcm_util.get_string_t(param_json_row,'codempid');
 			v_nummember   := hcm_util.get_string_t(param_json_row,'nummember');
 			v_dteeffec   := hcm_util.get_string_t(param_json_row,'dteeffec');
@@ -705,8 +705,8 @@ PROCEDURE validate_excel_py_tpfmemb (
 			v_dteeffert   := hcm_util.get_string_t(param_json_row,'dteeffert');
 			v_ratecret   := hcm_util.get_string_t(param_json_row,'ratecret');
 			v_ratecsbt   := hcm_util.get_string_t(param_json_row,'ratecsbt');
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
@@ -730,7 +730,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                 v_text(18)   := v_dteeffert;
                 v_text(19)   := v_ratecret;
                 v_text(20)   := v_ratecsbt;
-    
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -740,7 +740,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     data_file := data_file||','||v_text(i);
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 1,2,3,4,6,10,11,12,13,14,15
                 for i in 1..v_column loop
@@ -751,7 +751,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 /*
@@ -773,7 +773,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     end if;
                 end loop;
                 */
-				
+
                 --check incorrect data
                 --7.FLGEMP
                 if (v_text(7) not in (0,1,2)) then
@@ -782,7 +782,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     v_err_field := v_field(7);
                     exit cal_loop;
                 end if;
-                  
+
                 --16.FLGCONDED
                 if (v_text(17) not in (0,1)) then
                     v_error	 	:= true;
@@ -790,7 +790,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     v_err_field := v_field(16);
                     exit cal_loop;
                 end if;
-    
+
                 --17.FLGDPVF
                 if (v_text(17) not in (0,1)) then
                     v_error	 	:= true;
@@ -798,16 +798,16 @@ PROCEDURE validate_excel_py_tpfmemb (
                     v_err_field := v_field(17);
                     exit cal_loop;
                 end if;	
-                			
+
                 exit cal_loop;
             end loop; -- cal_loop
-                 
-            
+
+
                 --2.CRUD table--
                 if not v_error then
                     begin
                         delete from TPFMEMB  where codempid  = v_codempid ;
-                        
+
                         insert into TPFMEMB (	CODEMPID,
 												DTEEFFEC,
 												FLGEMP,
@@ -834,7 +834,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_codempid,
 												v_dteeffec,
 												v_flgemp,
@@ -861,10 +861,10 @@ PROCEDURE validate_excel_py_tpfmemb (
 												trunc(sysdate), 												 
 												global_v_coduser
 											);
-                        
-                    
+
+
 						delete from TPFMEMRT  where codempid  = v_codempid and dteeffec = v_dteeffert;
-                        
+
                         insert into TPFMEMRT (	CODEMPID,
 												DTEEFFEC,												
 												FLGDPVF,
@@ -875,7 +875,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_codempid,												
 												v_dteeffert,
 												v_flgdpvf,
@@ -886,9 +886,9 @@ PROCEDURE validate_excel_py_tpfmemb (
 												trunc(sysdate), 												 
 												global_v_coduser
 											);
-                    
+
 						delete from TPFIRINF  where codempid  = v_codempid and dteeffec = v_dteeffecp;
-                        
+
                         insert into TPFIRINF (	CODEMPID,
 												DTEEFFEC,
 												CODPLAN,
@@ -898,7 +898,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_codempid,
 												v_dteeffecp,
 												v_codplan,
@@ -917,10 +917,10 @@ PROCEDURE validate_excel_py_tpfmemb (
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -928,7 +928,7 @@ PROCEDURE validate_excel_py_tpfmemb (
         end;
 		end loop;  
 	END validate_excel_py_tpfmemb;
-	
+
 	PROCEDURE validate_excel_py_tempinc (
         json_str_input IN CLOB,
         v_rec_tran     OUT NUMBER,
@@ -992,13 +992,13 @@ PROCEDURE validate_excel_py_tpfmemb (
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -1006,7 +1006,7 @@ PROCEDURE validate_excel_py_tpfmemb (
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
         for i in 0..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -1016,7 +1016,7 @@ PROCEDURE validate_excel_py_tpfmemb (
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	  := false;   
-            
+
 			v_codempid  := hcm_util.get_string_t(param_json_row,'codempid');
 			v_codpay   	:= hcm_util.get_string_t(param_json_row,'codpay');
 			v_dtestrt   := hcm_util.get_string_t(param_json_row,'dtestrt');
@@ -1025,8 +1025,8 @@ PROCEDURE validate_excel_py_tpfmemb (
 			v_amtfix   	:= hcm_util.get_string_t(param_json_row,'amtfix');
 			v_periodpay := hcm_util.get_string_t(param_json_row,'periodpay');
 			v_flgprort  := hcm_util.get_string_t(param_json_row,'flgprort');
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
@@ -1038,7 +1038,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                 v_text(6)   := v_amtfix;
                 v_text(7)   := v_periodpay;
                 v_text(8)   := v_flgprort;
-				
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -1048,7 +1048,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     data_file := data_file||','||v_text(i);
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 
                 for i in 1..v_column loop
@@ -1059,7 +1059,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 /*
@@ -1081,7 +1081,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     end if;
                 end loop;
                 */
-				
+
                 --check incorrect data
                 --7.PERIODPAY
                 if (v_text(7) not in ('1','2','3','4','5','6','7','8','9','N')) then
@@ -1090,7 +1090,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     v_err_field := v_field(7);
                     exit cal_loop;
                 end if;
-                  
+
                 --8.FLGPRORT
                 if (v_text(8) not in ('Y','N')) then
                     v_error	 	:= true;
@@ -1098,16 +1098,16 @@ PROCEDURE validate_excel_py_tpfmemb (
                     v_err_field := v_field(8);
                     exit cal_loop;
                 end if;
-                    			
+
                 exit cal_loop;
             end loop; -- cal_loop
-                 
-            
+
+
                 --2.CRUD table--
                 if not v_error then
                     begin
                         delete from TEMPINC   where codempid  = v_codempid and codpay = v_codpay and dtestrt = v_dtestrt;
-                        
+
                         insert into TEMPINC (	CODEMPID,
 												CODPAY,
 												DTESTRT,
@@ -1121,7 +1121,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_codempid,
 												v_codpay,
 												v_dtestrt,
@@ -1144,10 +1144,10 @@ PROCEDURE validate_excel_py_tpfmemb (
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -1155,8 +1155,8 @@ PROCEDURE validate_excel_py_tpfmemb (
         end;
 		end loop;  
 	END validate_excel_py_tempinc;
-	
-	
+
+
 	PROCEDURE validate_excel_py_taccodb (
         json_str_input IN CLOB,
         v_rec_tran     OUT NUMBER,
@@ -1218,13 +1218,13 @@ PROCEDURE validate_excel_py_tpfmemb (
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -1232,7 +1232,7 @@ PROCEDURE validate_excel_py_tpfmemb (
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
         for i in 0..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -1242,15 +1242,15 @@ PROCEDURE validate_excel_py_tpfmemb (
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	:= false;   
-            
+
 			v_codacc	:= hcm_util.get_string_t(param_json_row,'codacc');
 			v_desacce   := hcm_util.get_string_t(param_json_row,'desacce');
 			v_desacct   := hcm_util.get_string_t(param_json_row,'desacct');
 			v_desacc3   := hcm_util.get_string_t(param_json_row,'desacc3');
 			v_desacc4   := hcm_util.get_string_t(param_json_row,'desacc4');
 			v_desacc5   := hcm_util.get_string_t(param_json_row,'desacc5');
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
@@ -1260,7 +1260,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                 v_text(4)   := v_desacc3;
                 v_text(5)   := v_desacc4;
                 v_text(6)   := v_desacc5;
-				
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -1270,7 +1270,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     data_file := data_file||','||v_text(i);
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 
                 for i in 1..v_column loop
@@ -1281,7 +1281,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 /*
@@ -1303,17 +1303,17 @@ PROCEDURE validate_excel_py_tpfmemb (
                     end if;
                 end loop;
                 */
-				
+
                 --check incorrect data                
-                    			
+
                 exit cal_loop;
             end loop; -- cal_loop
-                             
+
                 --2.CRUD table--
                 if not v_error then
                     begin
                         delete from TACCODB    where codacc  = v_codacc;
-                        
+
                         insert into TACCODB  (	CODACC,
 												DESACCE,
 												DESACCT,
@@ -1325,7 +1325,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_codacc,
 												v_desacce,
 												v_desacct,
@@ -1337,8 +1337,8 @@ PROCEDURE validate_excel_py_tpfmemb (
 												trunc(sysdate), 												 
 												global_v_coduser
 											);
-                    
-                    
+
+
                     end;
                 ELSE
                     v_rec_error := v_rec_error + 1;
@@ -1348,10 +1348,10 @@ PROCEDURE validate_excel_py_tpfmemb (
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -1359,8 +1359,8 @@ PROCEDURE validate_excel_py_tpfmemb (
         end;
 		end loop;  
 	END validate_excel_py_taccodb;
-	
-	
+
+
 	PROCEDURE validate_excel_py_tcoscent (
         json_str_input IN CLOB,
         v_rec_tran     OUT NUMBER,
@@ -1422,13 +1422,13 @@ PROCEDURE validate_excel_py_tpfmemb (
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -1436,7 +1436,7 @@ PROCEDURE validate_excel_py_tpfmemb (
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
         for i in 0..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -1446,15 +1446,15 @@ PROCEDURE validate_excel_py_tpfmemb (
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	:= false;   
-            
+
 			v_costcent	 := hcm_util.get_string_t(param_json_row,'costcent');
 			v_namcente   := hcm_util.get_string_t(param_json_row,'namcente');
 			v_namcentt   := hcm_util.get_string_t(param_json_row,'namcentt');
 			v_namcent3   := hcm_util.get_string_t(param_json_row,'namcent3');
 			v_namcent4   := hcm_util.get_string_t(param_json_row,'namcent4');
 			v_namcent5   := hcm_util.get_string_t(param_json_row,'namcent5');
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
@@ -1464,7 +1464,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                 v_text(4)   := v_namcent3;
                 v_text(5)   := v_namcent4;
                 v_text(6)   := v_namcent5;
-				
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -1474,7 +1474,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     data_file := data_file||','||v_text(i);
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 
                 for i in 1..v_column loop
@@ -1485,7 +1485,7 @@ PROCEDURE validate_excel_py_tpfmemb (
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 /*
@@ -1507,17 +1507,17 @@ PROCEDURE validate_excel_py_tpfmemb (
                     end if;
                 end loop;
                 */
-				
+
                 --check incorrect data                
-                    			
+
                 exit cal_loop;
             end loop; -- cal_loop
-                             
+
                 --2.CRUD table--
                 if not v_error then
                     begin
                         delete from TCOSCENT     where costcent  = v_costcent;
-                        
+
                         insert into TCOSCENT(	COSTCENT,
 												NAMCENTE,
 												NAMCENTT,
@@ -1529,7 +1529,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												DTEUPD, 
 												CODUSER
 											)
-                        
+
 									values(		v_costcent,
 												v_namcente,
 												v_namcentt,
@@ -1541,7 +1541,7 @@ PROCEDURE validate_excel_py_tpfmemb (
 												trunc(sysdate), 												 
 												global_v_coduser
 											);                    
-                    
+
                     end;
                 ELSE
                     v_rec_error := v_rec_error + 1;
@@ -1551,10 +1551,10 @@ PROCEDURE validate_excel_py_tpfmemb (
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -1604,15 +1604,15 @@ PROCEDURE validate_excel_py_tempded (
 			TABLE OF NUMBER INDEX BY BINARY_INTEGER;       
         chk_len         leng; --aaa
         v_cnt 			number; --aa
-		
+
 		TYPE code IS
             TABLE OF VARCHAR2(4) INDEX BY BINARY_INTEGER;
 		arr_code_deduct		code;
-		
+
 		TYPE amount IS
             TABLE OF NUMBER INDEX BY BINARY_INTEGER;
 		arr_amt_deduct	amount;
-			
+
     BEGIN
 		/*
         for i in 1..v_column loop
@@ -1632,13 +1632,13 @@ PROCEDURE validate_excel_py_tempded (
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -1646,13 +1646,13 @@ PROCEDURE validate_excel_py_tempded (
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
 		--keep array column code starting index (row:0, col:1) (row:0, col:2) ... (row:0, col:40)
 		param_json_row  := hcm_util.get_json_t(param_data,to_char(0));
 		for i in 1..param_column.get_size-1 loop
 			arr_code_deduct(i) := hcm_util.get_string_t(param_json_row,'column' || to_char(i));
 		end loop;
-				
+
         for i in 1..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -1662,22 +1662,22 @@ PROCEDURE validate_excel_py_tempded (
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	  := false;   
-            
+
 			v_codempid   := hcm_util.get_string_t(param_json_row,'codempid');
-			
+
 			--keep amount deduct
 			for i in 1..param_column.get_size-1 loop
 				arr_amt_deduct(i) := hcm_util.get_string_t(param_json_row,'column' || to_char(i));
 			end loop;
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
                 v_text(1)   := v_codempid;
                 --v_text(2)   := arr_amt_deduct(i);
-                
-    
+
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -1689,7 +1689,7 @@ PROCEDURE validate_excel_py_tempded (
 					end if;
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 1,2,3,4,6,10,11,12,13,14,15
                 for i in 1..2 loop
@@ -1700,7 +1700,7 @@ PROCEDURE validate_excel_py_tempded (
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 /*
@@ -1722,13 +1722,13 @@ PROCEDURE validate_excel_py_tempded (
                     end if;
                 end loop;
                 */
-				
+
                 --check incorrect data               
-                			
+
                 exit cal_loop;
             end loop; -- cal_loop
-                 
-            
+
+
                 --2.CRUD table--
                 if not v_error then
                     begin
@@ -1744,9 +1744,9 @@ PROCEDURE validate_excel_py_tempded (
 						*/
 						delete from TLASTDED   	where codempid  = v_codempid and dteyrepay = to_char(sysdate,'YYYY');
 						delete from TLASTEMPD   where codempid  = v_codempid and dteyrepay = to_char(sysdate,'YYYY') and amtspded = 0 ;
-						
+
 						for i in 1..param_column.get_size-1 loop
-							 						
+
 							if (arr_amt_deduct(i) > 0) then
 								begin
 									insert into TEMPDED (	CODEMPID,
@@ -1758,7 +1758,7 @@ PROCEDURE validate_excel_py_tempded (
 															DTEUPD, 
 															CODUSER
 														)
-									
+
 												values(		v_codempid,
 															arr_code_deduct(i),
 															arr_amt_deduct(i),
@@ -1774,9 +1774,9 @@ PROCEDURE validate_excel_py_tempded (
 										where 	codempid  = v_codempid 
 												and coddeduct = arr_code_deduct(i)
 												and amtspded <> 0 ;
-												
+
 								end;		
-								
+
 								begin
 									insert into TLASTDED (	DTEYREPAY,
 															CODEMPID,
@@ -1806,7 +1806,7 @@ PROCEDURE validate_excel_py_tempded (
 															DTEUPD, 
 															CODUSER
 														)
-									
+
 												values(		to_char(sysdate,'YYYY'),
 															v_codempid,
 															null,
@@ -1835,9 +1835,9 @@ PROCEDURE validate_excel_py_tempded (
 															trunc(sysdate), 												 
 															global_v_coduser
 														);	
-												
+
 								end;
-								
+
 								begin 	
 									insert into TLASTEMPD (	DTEYREPAY,
 															CODEMPID,
@@ -1850,7 +1850,7 @@ PROCEDURE validate_excel_py_tempded (
 															DTEUPD, 
 															CODUSER
 														)
-									
+
 												values(		to_char(sysdate,'YYYY'),
 															v_codempid,
 															arr_code_deduct(i),
@@ -1869,9 +1869,9 @@ PROCEDURE validate_excel_py_tempded (
 												and codempid  = v_codempid 
 												and coddeduct = arr_code_deduct(i)
 												and amtspded <> 0 ;
-												
+
 								end;
-								
+
 							end if;
 						end loop;
                     end;
@@ -1883,10 +1883,10 @@ PROCEDURE validate_excel_py_tempded (
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -1894,7 +1894,7 @@ PROCEDURE validate_excel_py_tempded (
         end;
 		end loop;  
 	END validate_excel_py_tempded;
-        
+
 PROCEDURE validate_excel_py_tempded_sp (
         json_str_input IN CLOB,
         v_rec_tran     OUT NUMBER,
@@ -1936,15 +1936,15 @@ PROCEDURE validate_excel_py_tempded_sp (
 			TABLE OF NUMBER INDEX BY BINARY_INTEGER;       
         chk_len         leng; --aaa
         v_cnt 			number; --aa
-		
+
 		TYPE code IS
             TABLE OF VARCHAR2(4) INDEX BY BINARY_INTEGER;
 		arr_code_deduct		code;
-		
+
 		TYPE amount IS
             TABLE OF NUMBER INDEX BY BINARY_INTEGER;
 		arr_amt_deduct	amount;
-			
+
     BEGIN
 		/*
         for i in 1..v_column loop
@@ -1964,13 +1964,13 @@ PROCEDURE validate_excel_py_tempded_sp (
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;
-        
+
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         --??
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');
         param_column := hcm_util.get_json_t(param_json, 'p_columns');
         --p_flgconfirm := hcm_util.get_string_t(param_json, 'flgconfirm');
-        
+
         --เก็บ ทุกแถว หรือ 1 แถว ??
         -- get text columns from json
         for i in 0..param_column.get_size-1 loop
@@ -1978,13 +1978,13 @@ PROCEDURE validate_excel_py_tempded_sp (
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-        
+
 		--keep array column code starting index (row:0, col:1) (row:0, col:2) ... (row:0, col:40)
 		param_json_row  := hcm_util.get_json_t(param_data,to_char(0));
 		for i in 1..param_column.get_size-1 loop
 			arr_code_deduct(i) := hcm_util.get_string_t(param_json_row,'column' || to_char(i));
 		end loop;
-				
+
         for i in 1..param_data.get_size-1 loop
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));
             begin
@@ -1994,22 +1994,22 @@ PROCEDURE validate_excel_py_tempded_sp (
             linebuf     := i;
             v_numseq    := v_numseq;
             v_error 	  := false;   
-            
+
 			v_codempid   := hcm_util.get_string_t(param_json_row,'codempid');
-			
+
 			--keep amount deduct
 			for i in 1..param_column.get_size-1 loop
 				arr_amt_deduct(i) := hcm_util.get_string_t(param_json_row,'column' || to_char(i));
 			end loop;
-			
-			
+
+
             --v_numseq ??
             if v_numseq = 0 then
               <<cal_loop>> loop
                 v_text(1)   := v_codempid;
                 --v_text(2)   := arr_amt_deduct(i);
-                
-    
+
+
                 -- push row values
                 data_file := null;
                 for i in 1..v_column loop
@@ -2021,7 +2021,7 @@ PROCEDURE validate_excel_py_tempded_sp (
 					end if;
                   end if;
                 end loop;
-            
+
                 --1.Validate --           
                 --check require data column 1,2,3,4,6,10,11,12,13,14,15
                 for i in 1..2 loop
@@ -2032,7 +2032,7 @@ PROCEDURE validate_excel_py_tempded_sp (
                     exit cal_loop;
                   end if;
                 end loop;
-                
+
                 --check length all column
                 --chk_len:= leng(4, 150, 150, 1, 4, 4, 4, 4, 4, 1 ,1 ,1 ,1 ,1 ,1 ,4);
                 /*
@@ -2054,13 +2054,13 @@ PROCEDURE validate_excel_py_tempded_sp (
                     end if;
                 end loop;
                 */
-				
+
                 --check incorrect data               
-                			
+
                 exit cal_loop;
             end loop; -- cal_loop
-                 
-            
+
+
                 --2.CRUD table--
                 if not v_error then
                     begin
@@ -2076,13 +2076,13 @@ PROCEDURE validate_excel_py_tempded_sp (
 						*/
 						delete from TLASTDED   	where codempid  = v_codempid and dteyrepay = to_char(sysdate,'YYYY');
 						delete from TLASTEMPD   where codempid  = v_codempid and dteyrepay = to_char(sysdate,'YYYY') and amtdeduct = 0 ;
-						
+
                         --save all code deduct
 						for i in 1..param_column.get_size-1 loop
-							
+
                             v_coddeduct	:= arr_code_deduct(i); 	
                             v_amtspded	:= arr_amt_deduct(i);
-                            
+
 							if (v_amtspded > 0) then
 								begin
 									insert into TEMPDED (	CODEMPID,
@@ -2094,7 +2094,7 @@ PROCEDURE validate_excel_py_tempded_sp (
 															DTEUPD, 
 															CODUSER
 														)
-									
+
 												values(		v_codempid,
 															v_coddeduct,
 															0,
@@ -2110,9 +2110,9 @@ PROCEDURE validate_excel_py_tempded_sp (
 										where 	codempid  = v_codempid 
 												and coddeduct = v_coddeduct
 												and amtdeduct <> 0 ;
-												
+
 								end;		
-								
+
 								begin
 									insert into TLASTDED (	DTEYREPAY,
 															CODEMPID,
@@ -2142,7 +2142,7 @@ PROCEDURE validate_excel_py_tempded_sp (
 															DTEUPD, 
 															CODUSER
 														)
-									
+
 												values(		to_char(sysdate,'YYYY'),
 															v_codempid,
 															null,
@@ -2171,9 +2171,9 @@ PROCEDURE validate_excel_py_tempded_sp (
 															trunc(sysdate), 												 
 															global_v_coduser
 														);	
-												
+
 								end;
-								
+
 								begin 	
 									insert into TLASTEMPD (	DTEYREPAY,
 															CODEMPID,
@@ -2186,7 +2186,7 @@ PROCEDURE validate_excel_py_tempded_sp (
 															DTEUPD, 
 															CODUSER
 														)
-									
+
 												values(		to_char(sysdate,'YYYY'),
 															v_codempid,
 															v_coddeduct,
@@ -2205,9 +2205,9 @@ PROCEDURE validate_excel_py_tempded_sp (
 												and codempid  = v_codempid 
 												and coddeduct = v_coddeduct
 												and amtdeduct <> 0 ;
-												
+
 								end;
-								
+
 							end if;
 						end loop;
                     end;
@@ -2219,10 +2219,10 @@ PROCEDURE validate_excel_py_tempded_sp (
                                            || '['
                                            || v_err_field
                                            || ']';
-            
+
                     p_numseq(v_cnt) := i;
                 end if; --not v_error
-            
+
             end if; --v_numseq = 0
             commit;
         exception when others then
@@ -2230,7 +2230,7 @@ PROCEDURE validate_excel_py_tempded_sp (
         end;
 		end loop;  
 	END validate_excel_py_tempded_sp;
-    
+
 END py_tinexinf;
 
 /

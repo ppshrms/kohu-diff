@@ -32,5 +32,4 @@
   procedure get_top_ten_diseases_expense(json_str_input in clob,json_str_output out clob);
 end;
 
-
 /

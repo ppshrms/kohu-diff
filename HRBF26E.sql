@@ -38,5 +38,4 @@
                        v_codempid in varchar2,v_dteyre in varchar2,v_typamt in varchar2, v_typrelate  in varchar2);
 end hrbf26e;
 
-
 /

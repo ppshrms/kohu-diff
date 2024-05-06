@@ -22,16 +22,16 @@
     p_codcatexm         := hcm_util.get_string_t(json_obj,'p_codcatexm');
     p_codexam           := hcm_util.get_string_t(json_obj,'p_codexam');
     p_typtest           := hcm_util.get_string_t(json_obj,'p_typtest');
-    
+
     p_obj_data          := hcm_util.get_json_t(json_obj,'param');
     p_obj_search        := hcm_util.get_json_t(json_obj,'paramSearch');
-    
+
     hcm_secur.get_global_secur(global_v_coduser, global_v_zminlvl, global_v_zwrklvl, global_v_numlvlsalst, global_v_numlvlsalen);
   end;
   procedure gen_index(json_str_output out clob) is
     obj_data            json_object_t;
     obj_row             json_object_t;
-    
+
     v_row               number := 0;
     v_count             number := 0;
 
@@ -61,7 +61,7 @@
                               from temploy1
                              where codempid = a.codempid
                                and numlvl between global_v_zminlvl and global_v_zwrklvl)))
-         
+
     group by a.codexam, decode(a.typtest,'1','1','2')   
     order by a.codexam, decode(a.typtest,'1','1','2');
 
@@ -117,7 +117,7 @@
        where codcomp like p_codcomp || '%' ;
     exception when others then null;
     end;
-    
+
     if v_count_comp < 1 then
       param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCENTER');
       return;
@@ -128,7 +128,7 @@
       return;
     end if;
     --
-    
+
     if p_codcours is not null then
       begin
         select count(*) into v_chkExist
@@ -136,7 +136,7 @@
          where codcours = p_codcours;
       exception when others then null;
       end;
-      
+
       if v_chkExist < 1 then
         param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCOURSE');
         return;
@@ -156,7 +156,7 @@
       end if;
     end if;
     --
-    
+
     if p_codexam is not null then
       begin
         select count(*) into v_chkExist
@@ -164,19 +164,19 @@
          where codexam = p_codexam;
       exception when others then null;
       end;
-      
+
       if v_chkExist < 1 then
         param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCODEXAM');
         return;
       end if;
     end if;
-    
+
     if p_dtestrt > p_dteend then
       param_msg_error := get_error_msg_php('HR2021',global_v_lang);
       return;
     end if;
   end;
-  
+
   procedure get_index (json_str_input in clob,json_str_output out clob) is
   begin
     initial_value(json_str_input);
@@ -196,7 +196,7 @@
     obj_data_child      json_object_t;
     obj_row             json_object_t;
     obj_row_child       json_object_t;
-    
+
     v_row               number := 0;
     v_row_child         number := 0;
     v_count             number := 0;
@@ -283,13 +283,13 @@
     param_json_row    json_object_t;
     v_numseq      number := 0;
     v_number      number := 0;
-    
+
     v_item5      varchar2(500 char);
     v_remark      varchar2(500 char);
     v_codexam	    varchar2(100 char);
     v_typtest	    varchar2(100 char);
     v_empname	    varchar2(200 char);
-    
+
     cursor c1 is
       select a.codempid, a.namtest, decode('1',a.typtest,'1','2') as typtest,
              a.qtyscore, a.score, a.statest 
@@ -302,7 +302,7 @@
        order by a.codempid;
   begin
     initial_value(json_str_input);
-    
+
     p_codcomp           := hcm_util.get_string_t(p_obj_search,'codcomp');
     p_dtestrt           := to_date(hcm_util.get_string_t(p_obj_search,'datest'),'dd/mm/yyyy');
     p_dteend            := to_date(hcm_util.get_string_t(p_obj_search,'dateen'),'dd/mm/yyyy');
@@ -327,7 +327,7 @@
       param_json_row  := hcm_util.get_json_t(p_obj_data,to_char(i));
       v_codexam	      := hcm_util.get_string_t(param_json_row, 'codexam');
       v_typtest	      := hcm_util.get_string_t(param_json_row, 'typtest');
-      
+
       v_item5 := to_char(add_months(p_dtestrt,p_zyear*12),'dd/mm/yyyy') || ' - ' || to_char(add_months(p_dteend,p_zyear*12),'dd/mm/yyyy');
       begin
         insert into ttemprpt (codempid,codapp,numseq,
@@ -346,7 +346,7 @@
         exception when no_data_found then 
           v_remark := '';
         end;
-        
+
         if r1.typtest = 1 then
           begin
             select  decode(global_v_lang,'101',namempe,
@@ -364,8 +364,8 @@
         else
           v_empname := get_temploy_name(r1.codempid, global_v_lang);
         end if;
-        
-        
+
+
         v_number := v_number + 1;
         begin
           insert into ttemprpt (codempid,codapp,numseq,

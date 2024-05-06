@@ -148,7 +148,7 @@
 			obj_row.put('subject', r1.subject);
 			obj_row := append_clob_json(obj_row,'message',r1.message);
 			obj_row.put('syncond', r1.syncond);
-   
+
 			obj_row.put('codempid', r1.codempid);
 			obj_row.put('repname', r1.repname);
 			obj_row.put('qtydayr', r1.qtydayr);

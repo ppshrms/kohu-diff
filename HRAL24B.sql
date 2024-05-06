@@ -19,7 +19,7 @@
   global_v_numlvlsalst      number;
   global_v_numlvlsalen      number;
   global_v_zupdsal          number;
-  
+
   global_v_batch_codapp     varchar2(100 char)  := 'HRAL24B';
   global_v_batch_dtestrt    date;
   global_v_batch_count      number := 3;
@@ -40,7 +40,7 @@
 
   procedure get_data_process(json_str_input in clob, json_str_output out clob);
   procedure gen_data_process(json_str_output out clob);
-  
+
   function check_index_batchtask(json_str_input clob) return varchar2;
 
 end HRAL24B;

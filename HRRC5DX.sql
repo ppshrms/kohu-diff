@@ -29,5 +29,4 @@
   procedure gen_tcolltrl (json_str_output out clob);
 END HRRC5DX;
 
-
 /

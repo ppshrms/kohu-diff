@@ -237,7 +237,7 @@ cursor c1 is
     v_chk_secur     boolean;
     obj_table       json_object_t;
     clob_table      clob;
-        
+
     cursor c1 is
         select codisrp,numisr,codempid, nameinsr,codsex,typrelate,dteempdb,amtisrp,codcomp, numseq
         from
@@ -283,10 +283,10 @@ cursor c1 is
             end;
             obj_data := json_object_t();
             obj_data.put('desc_flgisr',v_desc_flgisr);
-            
+
             gen_detail_table(clob_table);
             obj_data.put('table',json_object_t(clob_table));
-            
+
             obj_data.put('coderror',200);
             json_str_output := obj_data.to_clob;
         elsif v_count = 0 then
@@ -334,7 +334,7 @@ cursor c1 is
         v_secur         varchar2(1 char) := 'Y';
         v_count         number := 0;
         v_chk_secur     boolean;
-        
+
         ---------------------
         cursor c1 is
             select codisrp,numisr,codempid, nameinsr,codsex,typrelate,dteempdb,amtisrp,codcomp, numseq
@@ -387,7 +387,7 @@ cursor c1 is
                 obj_rows.put(to_char(v_row-1),obj_data);
             end if;
         end loop;
-        
+
 --        if v_count = 0 then
 --            param_msg_error := get_error_msg_php('HR2055',global_v_lang,'TINSRER');
 --            json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -399,7 +399,7 @@ cursor c1 is
 --        end if;
         json_str_output := obj_rows.to_clob;
     end gen_detail_table;
-    
+
     procedure get_detail_table(json_str_input in clob, json_str_output out clob) AS
     BEGIN
         initial_value(json_str_input);
@@ -408,7 +408,7 @@ cursor c1 is
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
     END get_detail_table;
-    
+
     -->>nut 
 END HRBF37X;
 

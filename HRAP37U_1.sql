@@ -1014,14 +1014,14 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end import_data;
-  
+
   procedure cal_adjsalary(json_str_input in clob, json_str_output out clob) as
     obj_row         json_object_t;
     obj_data        json_object_t;
     v_codcomp       tapbudgt.codcomp%type;
     v_formusal      tapbudgt.formusal%type;
     v_statement     tapbudgt.statement%type;
-    
+
     v_formusalds    clob;
     v_amtmidsal     number;
     v_pctadjsal     number;
@@ -1029,7 +1029,7 @@
     v_amtbudg       number;
     v_amtadj        number;
     v_amtsaln       number;
-    
+
     obj_searchIndex json_object_t;
     obj_dataRow     json_object_t;
     json_obj        json_object_t;
@@ -1045,15 +1045,15 @@
     json_obj        := json_object_t(json_str_input);
     obj_searchIndex := hcm_util.get_json_t(json_obj,'searchIndex');
     obj_dataRow     := hcm_util.get_json_t(json_obj,'dataRow');
-    
+
     p_dteyreap      := to_number(hcm_util.get_string_t(obj_searchIndex,'dteyreap'));
-    
+
     p_codcomp       := hcm_util.get_string_t(obj_dataRow,'codcomp');
     v_amtmidsal     := hcm_util.get_string_t(obj_dataRow,'amtmidsal');
     v_pctadjsal     := hcm_util.get_string_t(obj_dataRow,'pctadjsal');
     v_amtsal        := hcm_util.get_string_t(obj_dataRow,'amtsal');
     v_amtadj        := hcm_util.get_string_t(obj_dataRow,'amtadj');
-    
+
     obj_data        := json_object_t();
     for r1 in c1 loop
         v_codcomp   := r1.codcomp;
@@ -1061,7 +1061,7 @@
         v_statement := r1.statement;
         exit;
     end loop;
-    
+
     if param_msg_error is null then
         begin
             v_formusalds    := v_formusal;
@@ -1070,7 +1070,7 @@
             v_formusalds    := replace(v_formusalds,'{[AMTSAL]}',''||v_amtsal||'') ;
             v_amtbudg       := execute_sql('select '||v_formusalds||' from dual');
             v_amtsaln       := v_amtsal + v_amtbudg + v_amtadj;
-            
+
             obj_data.put('coderror', '200');
             obj_data.put('amtbudg', v_amtbudg);
             obj_data.put('amtsaln', v_amtsaln);

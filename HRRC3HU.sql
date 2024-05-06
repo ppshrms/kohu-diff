@@ -51,5 +51,4 @@
   procedure gen_tappoinfint (json_str_output out clob);
 END HRRC3HU;
 
-
 /

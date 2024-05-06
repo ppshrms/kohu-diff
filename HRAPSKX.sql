@@ -27,7 +27,7 @@
     b_index_codcomp         varchar2(4000 char);
     b_index_codkpino        varchar2(4000 char);
     b_index_kpides          varchar2(4000 char); ----
-    
+
     p_index_rows            json_object_t;
 
   procedure initial_value(json_str in clob);

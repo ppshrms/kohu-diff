@@ -126,7 +126,7 @@
                                         where ts.coduser = '''||global_v_coduser||'''
                                           and ts.codcomp like tcodsoc.codcompy || ''%''
                                           and rownum <= 1)';
-                                          
+
     v_stmt := ' select codbrsoc,min(codcompy) codcompy,min(codbrlc) codbrlc
                 from tcodsoc '||v_where||
               ' group by codbrsoc
@@ -223,7 +223,7 @@
       dbms_sql.column_value(v_cursor,2,v_data2);
       dbms_sql.column_value(v_cursor,3,v_data3);
       dbms_sql.column_value(v_cursor,4,v_data4);
-      
+
       v_row := v_row+1;
       obj_data    := json_object_t();
       obj_data.put('numbrlvl',v_data1);
@@ -1015,7 +1015,7 @@
       dbms_sql.column_value(v_cursor,2,v_data2);
       dbms_sql.column_value(v_cursor,3,v_data3);
       dbms_sql.column_value(v_cursor,4,v_data4);
-      
+
       v_row := v_row+1;
       obj_data    := json_object_t();
       obj_data.put('codplaninf',v_data1);

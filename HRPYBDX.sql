@@ -16,7 +16,7 @@
 
   p_codcomp             tcenter.codcomp%type;
   p_codpfinf            tpfmemb.codpfinf%type;
- 
+
 
   p_dtestrt                 date;
   p_dteend                  date;

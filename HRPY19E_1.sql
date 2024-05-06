@@ -48,7 +48,7 @@
         obj_data    json_object_t;
         obj_detail  json_object_t;
         obj_main    json_object_t;
-        
+
         cursor c1 is
             select * 
               from tproctax
@@ -66,7 +66,7 @@
         initial_value(json_str_input);
         check_index;
 
-        
+
         if param_msg_error is null then
             gen_flg_status;
             obj_detail  := json_object_t();
@@ -78,7 +78,7 @@
             else
                 obj_detail.put('warning','');
             end if;        
-        
+
             obj_row := json_object_t();
             for i in c1 loop
                 v_row       := v_row +1;
@@ -102,12 +102,12 @@
                 obj_data.put('flgAdd',v_flgAdd);                
                 obj_row.put(to_char(v_row-1),obj_data);
             end loop;
-            
+
             obj_main    := json_object_t();
             obj_main.put('coderror',200);
             obj_main.put('detail',obj_detail);      
             obj_main.put('table',obj_row);            
-            
+
             json_str_output := obj_main.to_clob;
             return;
         end if;
@@ -367,7 +367,7 @@
                 v_fmlmax    := hcm_util.get_string_t(obj_data,'fmlmax');
                 v_fmlmaxtot := hcm_util.get_string_t(obj_data,'fmlmaxtot');
                 v_flg       := hcm_util.get_string_t(obj_data,'flg');
-                
+
                 v_formula_deduct    := hcm_util.get_json_t(obj_data,'formula_deduct');
                 v_formula_items     := hcm_util.get_json_t(obj_data,'formula_items');
                 v_fmlmax_deduct     := hcm_util.get_json_t(obj_data,'fmlmax_deduct');
@@ -439,13 +439,13 @@
       exception when no_data_found then
         v_count := 0;
       end;  
-      
+
       if v_count = 0 then
         select max(dteyreff) into v_maxdteyreff
           from tproctax
          where codcompy = p_codcompy 
            and dteyreff <= p_dteyreff;
-           
+
         if v_maxdteyreff is null then
             select min(dteyreff) into v_maxdteyreff
               from tproctax
@@ -476,7 +476,7 @@
         end if;
         p_dteyreff_query := p_dteyreff;
       end if;
-      
+
       if p_dteyreff_query < p_dteyreff then
         v_flgAdd          := true;  
       else

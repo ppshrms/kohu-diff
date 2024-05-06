@@ -528,20 +528,20 @@
               obj_data.put('codempid', v_item05);
               obj_data.put('amtsoc', v_temp01);
               obj_data.put('amtsoca', v_temp02);
-           
+
               obj_row.put(to_char(v_rcnt-1), obj_data);
-             
+
               --<< response data --<<
             else
-              
+
               v_temp01 	:= nvl(to_number(v_temp01),0) + nvl(r1.amtsoc,0);  --v_amtsoc;
               v_temp02  := nvl(to_number(v_temp02),0) + nvl(r1.amtsoca,0); --v_amtsoca;
-              
+
               -- for print report --
               v_tot_amtsoc 	:= v_tot_amtsoc  + nvl(r1.amtsoc,0);
               v_tot_amtsoca := v_tot_amtsoca + nvl(r1.amtsoca,0);
               v_tot_amtsocc := v_tot_amtsocc + nvl(r1.amtsocc,0);
-             
+
               -->> insert temp detail-->>
               obj_temp_data    := json_object_t();
               obj_temp_data.put('v_numseq', v_num);
@@ -575,9 +575,9 @@
               obj_data.put('amtsoc', v_temp01);
               obj_data.put('amtsoca', v_temp02);
               obj_row.put(to_char(v_rcnt-1), obj_data);
-              
-              
-              
+
+
+
             end if;-- if codempid
           end if;-- end chk codemp
         end if;
@@ -598,7 +598,7 @@
     if v_data1 = 'Y' then
       v_brch_seq_p3   := v_brch_seq_p3 + 1;
       -->> insert temp detail-->>
-       
+
       obj_temp_data   := json_object_t();
       obj_temp_data.put('v_numseq', v_brch_seq_p3);
       obj_temp_data.put('v_item1', v_tot_amtsoc);

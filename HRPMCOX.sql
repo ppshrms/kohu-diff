@@ -20,13 +20,13 @@
     p_codempid_query			temploy1.codempid%type;
     p_dtestr			        temploy1.dteempmt%type;
     p_dteend			        temploy1.dteempmt%type;
-    
+
     p_flglayout			        ttemcard.flglayout%type;
 	p_codcard			        ttemcard.codcard%type;
-    
+
     p_styletemp                 ttemcard.styletemp%type;
     p_namcard                   ttemcard.namcard%type;
-    
+
     p_card                      json_object_t;
     p_listfield                 json_object_t;
 
@@ -53,28 +53,28 @@
     p_listsof_template 	        json_object_t;
 
 	procedure initial_value(json_str in clob);
-    
+
 	procedure check_getindex;    
 	procedure get_index(json_str_input in clob, json_str_output out clob);
 	procedure gen_index(json_str_output out clob);  
-    
+
 	procedure get_setlayout(json_str_input in clob, json_str_output out clob);
 	procedure gen_setlayout(json_str_output out clob);
-    
+
 	procedure get_chooseformat(json_str_input in clob, json_str_output out clob);
 	procedure gen_chooseformat(json_str_output out clob);
 
 	procedure get_customtemplate(json_str_input in clob, json_str_output out clob);
 	procedure gen_customtemplate(json_str_output out clob);
-    
+
     procedure checkupdatetemcard_use(json_str_input in clob);
     procedure updatetemcard_use (json_str_input in clob,json_str_output out clob);
-    
+
 	procedure delete_template(json_str_input in clob,json_str_output out clob);
-    
+
     function getDescData (p_columnname in varchar2) return varchar2;
     function getDescEmp (p_columnname in varchar2, p_codempid varchar2) return varchar2;
-    
+
     procedure gen_listfield (p_flgdata1 in varchar2, p_flgdata2 in varchar2, p_flgdata3 in varchar2, obj_row in out json_object_t);
 
 	procedure save_data(json_str_input in clob,json_str_output out clob);

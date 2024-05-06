@@ -29,7 +29,7 @@
 --  drilldown parameter
         p_numreqst        := hcm_util.get_string_t(data_obj,'p_numreqst');
         p_codpos          := hcm_util.get_string_t(data_obj,'p_codpos');
-    
+
   end initial_params;
 
   procedure check_index as
@@ -285,7 +285,7 @@
         v_treqest2          treqest2%rowtype;
         v_flgjob_statement    tjobcode.statement%type;
         v_count_exists      number;
-        
+
         cursor c1 is
             select *
               from treqest1
@@ -308,7 +308,7 @@
             numappl_obj     := hcm_util.get_json_t(p_index_rows,to_char(i));
             v_numreqst      := hcm_util.get_string_t(numappl_obj,'numreqststd');
             v_codpos        := hcm_util.get_string_t(numappl_obj,'codpos');
-            
+
             select count(*)
               into v_count_exists
               from ttemprpt 
@@ -316,9 +316,9 @@
                and codapp = p_codapp
                and item1 = 'tab1'
                and item2 = v_numreqst;
-            
+
 --            if (v_count_exists = 0) then
-            
+
             for i1 in c1 loop
                 begin
                     select max(numseq) 
@@ -332,7 +332,7 @@
                 end;
 
                 p_numseq := max_numseq + 1;
-                
+
                 insert into ttemprpt (codempid,codapp,numseq,item1,item2,item3,
                                       item4,item5,item6,item7,item8,item9,item10,
                                       item11,item12,item13,item14,item15,item16)
@@ -370,7 +370,7 @@
                 exception when no_data_found then
                     v_flgjob_statement := '';
                 end;
-                
+
                 p_numseq := max_numseq+1;
                 insert into ttemprpt (codempid,codapp,numseq,
                                       item1,item2,item3,item4,item5,

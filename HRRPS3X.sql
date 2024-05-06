@@ -23,11 +23,11 @@
   b_index_codwork     varchar2(4000 char);
   b_index_splitrow    varchar2(4000 char);
   b_index_splitcol    varchar2(4000 char);
-  
+
   p_logic1            varchar2(4000 char);
   p_logic2            varchar2(4000 char);
   p_logic3            varchar2(4000 char);
-  
+
   p_description1  varchar2(3000);  
   p_description2  varchar2(3000);  
   p_description3  varchar2(3000); 
@@ -35,7 +35,7 @@
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure gen_data(json_str_output out clob);
   procedure check_index;
-  
+
 END; -- Package spec
 
 /

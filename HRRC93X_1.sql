@@ -101,7 +101,7 @@
     obj_rows := json_object_t();
     delete from ttemprpt where codempid = global_v_codempid and codapp = 'HRRC93X';
 --    delete from ttemprpt where codempid = global_v_codempid and codapp = 'HRRC93X1';
-    
+
 --    v_numseq := get_max_numseq('HRRC93X1');
 --    insert into ttemprpt(codempid,codapp,numseq,
 --                         item1,item2,item3,item4,item5)
@@ -110,7 +110,7 @@
 --           hcm_util.get_year_buddhist_era(p_year), 
 --           get_nammthful(p_monthst,global_v_lang), 
 --           get_nammthful(p_monthen,global_v_lang));
-    
+
     for i in c1 loop
         v_count := v_count + 1;
         --if secur_main.secur7(i.codcomp, global_v_coduser) then
@@ -140,7 +140,7 @@
             obj_data.put('numapp', v_qtyemp);
             obj_data.put('numppl', v_qtyact);
             obj_rows.put(to_char(v_row-1),obj_data);
-            
+
 --            v_numseq := get_max_numseq('HRRC93X1');
 --            insert into ttemprpt(codempid,codapp,numseq,
 --                                 item1,item2,item3,item4,item5,item6)
@@ -245,7 +245,7 @@
   begin
     obj_rows := json_object_t();
     delete from ttemprpt where codempid = global_v_codempid and codapp = 'HRRC93X1';
-    
+
     v_numseq := get_max_numseq('HRRC93X1');
     insert into ttemprpt(codempid,codapp,numseq,
                          item1,item2,item3,item4,item5)
@@ -254,7 +254,7 @@
            hcm_util.get_year_buddhist_era(p_year), 
            get_nammthful(p_monthst,global_v_lang), 
            get_nammthful(p_monthen,global_v_lang));
-    
+
     for i in c1 loop
         v_count := v_count + 1;
         --if secur_main.secur7(i.codcomp, global_v_coduser) then
@@ -291,7 +291,7 @@
             sum_qtyact := sum_qtyact + v_qtyact;
         --end if;
     end loop;
-    
+
     if v_row > 0 then
         v_row := v_row + 1;
         v_numseq := get_max_numseq('HRRC93X1');

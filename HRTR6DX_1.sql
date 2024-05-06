@@ -423,5 +423,4 @@ procedure insert_ttemprpt_sub(obj_data in json) is
 
 end HRTR6DX;
 
-
 /

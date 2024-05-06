@@ -214,7 +214,7 @@
               and dteeffec = v_dtestrt
               and v_type = '3'
             order by dteeffec;
-        
+
         cursor c_10_adjint is
             select formulao,formulan, dteadjust
             from tloanadj
@@ -431,7 +431,7 @@
                         obj_data_child.put('remain', '');
                         obj_child.put(to_char(v_row_child-1),obj_data_child);
                     end loop;
-                    
+
                     for k in c_10_adjint loop  --tloanadj
                         v_row_child := v_row_child+1;
                         obj_data_child := json;
@@ -467,7 +467,7 @@
                         obj_data_child.put('debit','');
 
                         obj_data_child.put('credit','');
-                       
+
                         v_sum := nvl(k.amtpfinn,0) + nvl(k.amtpinto2,0);
 
                         obj_data_child.put('remain',v_sum);
@@ -494,7 +494,7 @@
                         else
                           v_sum := nvl(k.amtpintn2,0) + nvl(k.amtpfinn,0);
                         end if;
-                        
+
                         obj_data_child.put('remain', v_sum);
                         obj_child.put(to_char(v_row_child-1),obj_data_child);
                     end loop;

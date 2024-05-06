@@ -4,7 +4,7 @@
 
   CREATE OR REPLACE EDITIONABLE PACKAGE "HRBF18B" AS
 --redmine/6855  11/09/2021 14:30
- 
+
   param_msg_error           varchar2(4000 char);
 
   v_chken                   varchar2(10 char);

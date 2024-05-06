@@ -884,7 +884,7 @@
 --            param_msg_error := get_error_msg_php('HR3007', global_v_lang, 'codcomp');
 --            return;
 --          end if;
-            
+
          -- << wanlapa ||issue:#9036 22/02/2023
           if v_flg_delete = false then
             v_flgsecu := secur_main.secur7(v_codcomp, global_v_coduser);
@@ -894,7 +894,7 @@
               end if;
          end if;
          -- >> wanlapa ||issue:#9036 22/02/2023
-         
+
         end if;
       end if;
 

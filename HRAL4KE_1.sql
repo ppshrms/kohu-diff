@@ -1867,7 +1867,7 @@
          and t2.codempid = v_codempid
     order by t1.rteotpay;
   begin
-        
+
     for r1 in c2 loop
       v_exist := true;
       v_secur := secur_main.secur2(r1.codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal,global_v_numlvlsalst,global_v_numlvlsalen);
@@ -2017,7 +2017,7 @@
              hcm_util.cal_dhm_hm (0,0,v_qtyminotx,null,'2',v_token,v_token,v_token,v_token2);
              json_row1.put('ratex',v_token2);
 
-  
+
              select count(codempid)
                into v_countpaydt
                from totpaydt

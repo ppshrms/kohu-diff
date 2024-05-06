@@ -202,5 +202,4 @@
   --<< user18 ST11 03/08/2021 change std
 end; -- Package spec
 
-
 /

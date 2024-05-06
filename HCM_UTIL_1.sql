@@ -522,7 +522,7 @@
     json_obj      := json_object_t(json_str_input);
     json_codapp   := json_object_t(hcm_util.get_string_t(json_obj, 'p_codapp'));
     v_codcompy    := hcm_util.get_codcomp_level(hcm_util.get_string_t(json_obj,'p_codcomp'),1);
-    
+
     obj_row       := json_object_t();
     for i in 0..json_codapp.get_size-1 loop
       v_codapp    := lower(hcm_util.get_string_t(json_codapp, to_char(i)));

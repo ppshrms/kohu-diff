@@ -23,11 +23,11 @@
   b_index_dteyear1   varchar2(4000 char);
   b_index_dteyear2   varchar2(4000 char);
   b_index_dteyear3   varchar2(4000 char);
-  
+
   b_index_v_grp1     varchar2(4000 char);
   b_index_v_grp2     varchar2(4000 char);
   b_index_v_grp3     varchar2(4000 char);
-  
+
   b_index_v_graph1     varchar2(4000 char);
   b_index_v_graph2     varchar2(4000 char);
 

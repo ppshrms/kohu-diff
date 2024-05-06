@@ -37,7 +37,7 @@
   p_remarkap                ttrncanrq.remarkap%type;
   p_approvno                ttrncanrq.approvno%type;
   p_routeno                 ttrncanrq.routeno%type;
-  
+
   p_codtparg                tpotentp.codtparg%type;
 --  p_accuracy                
 

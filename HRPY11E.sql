@@ -7,7 +7,7 @@
   global_v_coduser  varchar2(100 char);
   global_v_codempid varchar2(100 char);
   global_v_lang     varchar2(10 char) := '102';
-  
+
   param_json  json_object_t;
   isEdit      boolean := true;
   isAdd       boolean := true;

@@ -36,5 +36,4 @@
   function check_index_batchtask(json_str_input clob) return varchar2;
 END HRBF5QB;
 
-
 /

@@ -23,13 +23,13 @@
   p_numtime                 tkpireq.numtime%type;
   p_dtestr                  tkpireq.dtereq%type;
   p_dteend                  tkpireq.dtereq%type;
-  
+
   p_codcours                ttrncanrq.codcours%type;
   p_numclseq                ttrncanrq.numclseq%type;
   p_dtereq                  tkpireq.dtereq%type;
   p_numseq                  tkpireq.numseq%type;
   p_codempid_query          tkpireq.codempid%type;
-  
+
 
   p_staappr                 tkpireq.staappr%type;
   p_dtereq2save             tkpireq.dtereq%type;

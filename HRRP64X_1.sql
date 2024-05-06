@@ -297,7 +297,7 @@
          and o1.dteeffec    = b_index_dteeffec
          and o2.numlevel - trunc(o2.numlevel) = 0
       order by o2.numlevel,o2.numorg;
-      
+
     cursor c2 is
       select o2.codcompp,o2.codcompr,o2.numlevel,o2.numorg,
              '' as codimage,o2.codpospr,o2.codresp,o2.qtyexman,
@@ -397,7 +397,7 @@
          and o2.numorg      = 1
          and rownum = 1
       order by o2.numlevel,o2.numorg;
-      
+
       cursor c2 is
       select o2.codcompp,o2.codcompr,o2.numlevel,o2.numorg,
              '' as codimage,o2.codpospr,o2.codresp,o2.qtyexman,
@@ -461,7 +461,7 @@
       if nvl(i.codcompp,'@$%#') <> nvl(i.codcompr,'@$%#') then
         obj_data.put('children',gen_children(i.codcompp));
       end if;
-  
+
       exit;
     end loop;
     obj_row := json_object_t();

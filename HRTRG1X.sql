@@ -30,5 +30,4 @@
   procedure get_number_of_training_by_course(json_str_input in clob,json_str_output out clob);
 end;
 
-
 /

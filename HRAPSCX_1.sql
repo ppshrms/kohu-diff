@@ -62,8 +62,8 @@ procedure get_data1(json_str_input in clob, json_str_output out clob) as
                  where  dteyreap    = b_index_dteyreap
                    and  numseq      = b_index_numtime;
             end;
-            
-            
+
+
             -----
             begin
                 select  count(codempid)
@@ -75,7 +75,7 @@ procedure get_data1(json_str_input in clob, json_str_output out clob) as
                    and nvl(flgappr,'P') = 'C';
             end;
             ----
-            
+
             if cs_emp_tot > 0 then
                 v_flgdata := 'Y';
             end if;
@@ -231,7 +231,7 @@ end;
                              where  dteyreap    = b_index_dteyreap
                                and  numseq      = b_index_numtime;
                         end;
-                        
+
                         cs_emp_poli := ((i.pctemp*cs_emp_tot)/100);
                         obj_data.put('totalemp',i.pctemp);
                         obj_data.put('policy',cs_emp_poli);

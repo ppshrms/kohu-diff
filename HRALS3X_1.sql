@@ -21,7 +21,7 @@
     p_codleave          := upper(hcm_util.get_string_t(json_obj, 'p_codleave'));
     p_dtestrt           := to_date(hcm_util.get_string_t(json_obj, 'p_dtestrt'), 'DDMMYYYY');
     p_dteend            := to_date(hcm_util.get_string_t(json_obj, 'p_dteend'), 'DDMMYYYY');
-    
+
     p_codleave_array    := hcm_util.get_json_t(json_obj, 'p_codleave');
 
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
@@ -255,7 +255,7 @@ procedure gen_index_choose (json_str_output out clob) is
     obj_data            json_object_t;
     v_rcnt_codinc       number := 0;
     obj_codinc          json_object_t;
-    
+
     cursor c_tinitregd is
       select a.numseq, a.codinc
         from tinitregd a, tinitregh b

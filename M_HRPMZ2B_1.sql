@@ -837,7 +837,7 @@
 
                 v_datarec :=    v_codempid||v_dlt||v_codpay||v_dlt||v_numperiod||v_dlt||v_dtemthpay||v_dlt||v_dteyrepay||v_dlt||v_amtpay||v_dlt||v_dtepaymt;
             end if;
---insert into a(d) values(v_datarec); commit;
+--insert into a(a) values(v_datarec); commit;
             if v_datarec is not null then
                 data_file := ltrim(rtrim(v_datarec));  
                 v_numseq  := v_numseq + 1;
@@ -979,6 +979,7 @@
         global_v_coduser := 'AUTO';
         global_v_lang    := '102';
         v_ext := '.txt';
+        v_chken          := hcm_secur.get_v_chken;
         v_sysplat := get_tsetup_value('SYSPLATFORM');
 
         v_dteupd         := get_tsetup_value('PMZ2B_DTEUPD');
@@ -1507,7 +1508,7 @@
                             select joblvlst into v_temploy1.numlvl
                               from tjobpos
                              where codpos  = v_temploy1.codpos
-                               and rownum  = 1;
+                               and rownum = 1;
                                --and codcomp = v_temploy1.codcomp;  --17/11/2023
                         exception when no_data_found then
                             v_temploy1.numlvl := 0;
@@ -1757,6 +1758,23 @@
                         end if;
                     end if;
 
+                    if v_temploy1.numlvl is null then
+                        begin
+                            select numlvl into v_temploy1.numlvl
+                              from temploy1 
+                             where codempid = v_temploy1.codempid;
+                        exception when no_data_found then
+                            v_temploy1.numlvl := null;
+                        end;
+                        if v_temploy1.numlvl is null then
+                            get_default_data(p_typedata,'TEMPLOY1','NUMLVL',v_temploy1.numlvl);
+                            if v_temploy1.numlvl is null then
+                                v_numerr  := v_numerr + 1;
+                                v_remarkerr(v_numerr)   := 'Num Level - '||get_errorm_name('PMZ007',p_lang);		           
+                            end if;
+                        end if;
+                    end if;
+
                     if i = 36 and v_temploy1.stamilit is null then
                         begin
                             select stamilit into v_temploy1.stamilit
@@ -1933,14 +1951,15 @@
             v_temploy1.namlastt  := nvl(v_text(7),v_temploy1_initial.namlastt);
             if v_codtitlett is not null or v_codtitlete is not null then
                 if global_v_lang = '102' then
-                    v_temploy1.codtitle := v_codtitlett;
+                    v_temploy1.codtitle := nvl(v_codtitlett,v_temploy1_initial.codtitle);
                 else
-                    v_temploy1.codtitle := v_codtitlete;
+                    v_temploy1.codtitle := nvl(v_codtitlete,v_temploy1_initial.codtitle);
                 end if; 
             end if;
-
-            v_temploy1.namempe   := replace(get_tlistval_name('CODTITLE',v_temploy1.codtitle,'101'),'.','')||' '||v_temploy1.namfirste||' '||v_temploy1.namlaste;
-            v_temploy1.namempt   := get_tlistval_name('CODTITLE',v_temploy1.codtitle,'102')||' '||v_temploy1.namfirstt||' '||v_temploy1.namlastt;            
+            
+            v_temploy1.namempe   := get_tlistval_name('CODTITLE',nvl(v_temploy1.codtitle,v_temploy1_initial.codtitle),'101')||' '||v_temploy1.namfirste||' '||v_temploy1.namlaste;
+            v_temploy1.namempt   := get_tlistval_name('CODTITLE',nvl(v_temploy1.codtitle,v_temploy1_initial.codtitle),'102')||''||v_temploy1.namfirstt||' '||v_temploy1.namlastt;  
+                        
             begin
                 select codincom1,codincom2,codincom3,codincom4,codincom5,
                        codincom6,codincom7,codincom8,codincom9,codincom10
@@ -2049,7 +2068,7 @@
                   from temploy3
                  where codempid = v_codempid;
             exception when no_data_found then
-                 null;
+                 v_temploy3_initial := null;
             end;
 
             if v_temploy1_initial.codempid is not null and v_temploy1_initial.staemp <> '0' then
@@ -2502,7 +2521,7 @@
             v_temploy3.amtsaid    := stdenc(nvl(v_text(84),nvl(v_temploy3_initial.amtsaid,0)),v_temploy1.codempid,v_chken);
             v_temploy3.amtpf      := stdenc(nvl(v_text(85),nvl(v_temploy3_initial.amtpf,0)),v_temploy1.codempid,v_chken);
             v_temploy3.amtincsp   := stdenc(nvl(v_text(93),nvl(v_temploy3_initial.amtincsp,0)),v_temploy1.codempid,v_chken);
-            v_temploy3.amttaxsp   := stdenc(nvl(v_text(64),nvl(v_temploy3_initial.amttaxsp,0)),v_temploy1.codempid,v_chken);
+            v_temploy3.amttaxsp   := stdenc(nvl(v_text(94),nvl(v_temploy3_initial.amttaxsp,0)),v_temploy1.codempid,v_chken);
             v_temploy3.amtsasp    := stdenc(nvl(v_text(95),nvl(v_temploy3_initial.amtsasp,0)),v_temploy1.codempid,v_chken);
             v_temploy3.amtpfsp    := stdenc(nvl(v_text(96),nvl(v_temploy3_initial.amtpfsp,0)),v_temploy1.codempid,v_chken);
             v_temploy3.qtychldb   := v_text(87);
@@ -3816,49 +3835,79 @@
                         v_sapcode(v_numerr)     := v_text(i);
                     end if;
 
-                    if i = 8 and v_ttmovemt.typpayroll is null then
-                        get_default_data(p_typedata,'TTMOVEMT','TYPPAYROLL',v_ttmovemt.typpayroll);
+                    if i = 8 and v_text(i) is null then
+                        if v_typpayrolt is null then
+                            get_default_data(p_typedata,'TTMOVEMT','TYPPAYROLL',v_ttmovemt.typpayroll);
+                        else
+                            v_ttmovemt.typpayroll := v_typpayrolt;
+                        end if;
+                        
                         if v_ttmovemt.typpayroll is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 9 and v_ttmovemt.typemp is null then
-                        get_default_data(p_typedata,'TTMOVEMT','TYPEMP',v_ttmovemt.typemp);
+                    elsif i = 9 and v_text(i) is null then
+                        if v_typempt is null then
+                            get_default_data(p_typedata,'TTMOVEMT','TYPEMP',v_ttmovemt.typemp);
+                        else
+                            v_ttmovemt.typemp := v_typempt;
+                        end if;	                    
+                        
                         if v_ttmovemt.typemp is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 10 and v_ttmovemt.codcalen is null then
-                        get_default_data(p_typedata,'TTMOVEMT','CODCALEN',v_ttmovemt.codcalen);
+                    elsif i = 10 and v_text(i) is null then                       
+                        if v_codcalet is null then
+                            get_default_data(p_typedata,'TTMOVEMT','CODCALEN',v_ttmovemt.codcalen);
+                        else
+                            v_ttmovemt.codcalen := v_codcalet;
+                        end if;	
+                        
                         if v_ttmovemt.codcalen is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 11 and v_ttmovemt.codjob is null then
-                        get_default_data(p_typedata,'TTMOVEMT','CODJOB',v_ttmovemt.codjob);
+                    elsif i = 11 and v_text(i) is null then                       
+						if v_codjobt is null then
+							get_default_data(p_typedata,'TTMOVEMT','CODJOB',v_ttmovemt.codjob);
+						else
+							v_ttmovemt.codjob := v_codjobt;		
+						end if;		                
                         if v_ttmovemt.codjob is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 12 and v_ttmovemt.flgatten is null then
-                        get_default_data(p_typedata,'TTMOVEMT','FLGATTEN',v_ttmovemt.flgatten);
+                    elsif i = 12 and v_text(i) is null then                        
+						if v_flgattet is null then
+							get_default_data(p_typedata,'TTMOVEMT','FLGATTEN',v_ttmovemt.flgatten);
+						else
+							v_ttmovemt.flgatten := v_flgattet;	
+						end if;		                        
                         if v_ttmovemt.flgatten is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 13 and v_ttmovemt.stapost2 is null then
+                    elsif i = 13 and v_text(i) is null then
                         get_default_data(p_typedata,'TTMOVEMT','STAPOST2',v_ttmovemt.stapost2);
                         if v_ttmovemt.stapost2 is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);	
                         end if;
-                    elsif i = 24 and v_ttmovemt.codcurr is null then
-                        get_default_data(p_typedata,'TTMOVEMT','CODCURR',v_ttmovemt.codcurr);
+                    elsif i = 24 and v_text(i) is null then                      
+						if v_codcurr is null then
+							get_default_data(p_typedata,'TTMOVEMT','CODCURR',v_ttmovemt.codcurr);
+						else
+							v_ttmovemt.codcurr := v_codcurr;
+						end if;	
+                        
                         if v_ttmovemt.codcurr is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);
                         end if;
                     end if;
+
+
 
                 end if;
 
@@ -4037,16 +4086,16 @@
             v_ttmovemt.amtincom10 		:= stdenc(nvl(v_amtincom10,0),v_codempid,v_chken);
             v_ttmovemt.amtothr 		    := stdenc(nvl(v_amth,0),v_codempid,v_chken);
 
-            v_amtadj1 := nvl(v_text(14),0);
-            v_amtadj2 := nvl(v_text(15),0);
-            v_amtadj3 := nvl(v_text(16),0);
-            v_amtadj4 := nvl(v_text(17),0);
-            v_amtadj5 := nvl(v_text(18),0);
-            v_amtadj6 := nvl(v_text(19),0);
-            v_amtadj7 := nvl(v_text(20),0);
-            v_amtadj8 := nvl(v_text(21),0);
-            v_amtadj9 := nvl(v_text(22),0);
-            v_amtadj10 := nvl(v_text(23),0);
+            v_amtadj1 := nvl(v_text(14),v_amtincom1);
+            v_amtadj2 := nvl(v_text(15),v_amtincom2);
+            v_amtadj3 := nvl(v_text(16),v_amtincom3);
+            v_amtadj4 := nvl(v_text(17),v_amtincom4);
+            v_amtadj5 := nvl(v_text(18),v_amtincom5);
+            v_amtadj6 := nvl(v_text(19),v_amtincom6);
+            v_amtadj7 := nvl(v_text(20),v_amtincom7);
+            v_amtadj8 := nvl(v_text(21),v_amtincom8);
+            v_amtadj9 := nvl(v_text(22),v_amtincom9);
+            v_amtadj10 := nvl(v_text(23),v_amtincom10);
 
             if  nvl(v_amtadj1,0) <> v_amtincom1 or nvl(v_amtadj2,0) <> v_amtincom2 or
                 nvl(v_amtadj3,0) <> v_amtincom3 or nvl(v_amtadj4,0) <> v_amtincom4 or
@@ -4235,25 +4284,26 @@
                                             flgtr,flgpy,staemp,
                                             coduser)
                               values       (v_codempid,v_ttmovemt.dteeffec,tm_numseq,
-                                            v_ttmovemt.codtrn,v_ttmovemt.codcompt,v_ttmovemt.codposnow,
-                                            v_ttmovemt.codjobt,v_ttmovemt.numlvlt,v_ttmovemt.codempmtt,
-                                            v_ttmovemt.codcalet,v_ttmovemt.codbrlct,v_ttmovemt.typpayrolt,
-                                            v_ttmovemt.typempt,v_ttmovemt.flgattet,'N',
+                                            v_ttmovemt.codtrn,v_ttmovemt.codcomp,v_ttmovemt.codpos,
+                                            v_ttmovemt.codjob,v_ttmovemt.numlvl,v_ttmovemt.codempmt,
+                                            v_ttmovemt.codcalen,v_ttmovemt.codbrlc,v_ttmovemt.typpayroll,
+                                            v_ttmovemt.typemp,v_ttmovemt.flgatten,'N',
                                             'N','N','N',
                                             'N','N',v_staemp,
                                             p_coduser);
+                                            
                     else
-                        update ttpminf set 	codcomp    = v_ttmovemt.codcompt,
-                                            codpos     = v_ttmovemt.codposnow,
-                                            codjob     = v_ttmovemt.codjobt,
-                                            numlvl     = v_ttmovemt.numlvlt,
-                                            codempmt   = v_ttmovemt.codempmtt,
-                                            codcalen   = v_ttmovemt.codcalet,
-                                            codbrlc    = v_ttmovemt.codbrlct,
-                                            typpayroll = v_ttmovemt.typpayrolt,
-                                            typemp     = v_ttmovemt.typempt,
-                                            flgatten   = v_ttmovemt.flgattet ,
-                                            staemp     = v_staemp ,
+                        update ttpminf set 	codcomp    = v_ttmovemt.codcomp,
+                                            codpos     = v_ttmovemt.codpos,
+                                            codjob     = v_ttmovemt.codjob,
+                                            numlvl     = v_ttmovemt.numlvl,
+                                            codempmt   = v_ttmovemt.codempmt,
+                                            codcalen   = v_ttmovemt.codcalen,
+                                            codbrlc    = v_ttmovemt.codbrlc,
+                                            typpayroll = v_ttmovemt.typpayroll,
+                                            typemp     = v_ttmovemt.typemp,
+                                            flgatten   = v_ttmovemt.flgatten ,
+                                            staemp     = v_staemp,
                                             flgal      = 'N',
                                             flgrp      = 'N',
                                             flgap      = 'N',
@@ -4310,7 +4360,7 @@
                           and codtrn   = v_ttmovemt.codtrn
                           and numseq   = nvl(v_seq,1);
                 end if;
-                hrpm91b_batch.process_movement(null,trunc(sysdate),'AUTO',v_ttmovemt.codempid,v_ttmovemt.dteeffec,v_ttmovemt.codtrn,v_sum,v_err,v_secur,v_errsecur);
+                --hrpm91b_batch.process_movement(null,trunc(sysdate),'AUTO',v_ttmovemt.codempid,v_ttmovemt.dteeffec,v_ttmovemt.codtrn,v_sum,v_err,v_secur,v_errsecur);
             end if;
             insert_timpfiles(p_typedata,p_dteimpt,p_record,p_namefile,p_data,v_ttmovemt.codempid,v_codcomp,to_char(v_ttmovemt.dteeffec,'dd/mm/yyyy'),v_ttmovemt.codtrn,null,null,null,null,null,'Y',v_remark);           
         end if;
@@ -4514,7 +4564,7 @@
                         v_sapcode(v_numerr)     := v_text(i);
                     end if;
 
-                    if i = 6 and v_ttexempt.flgblist is null then
+                    if i = 6 and v_text(i) is null then
                         get_default_data(p_typedata,'TTEXEMPT','FLGBLIST',v_ttexempt.flgblist);
                         if v_ttexempt.flgblist is null then
                             v_numerr  := v_numerr + 1;
@@ -4556,14 +4606,14 @@
             exception when no_data_found then
                 v_minperiod := null; 
             end;
-
+/*
             if v_maxperiod is not null and v_minperiod is not null then
                  if v_maxperiod >= v_minperiod then
                     v_numerr  := v_numerr + 1;
                     v_remarkerr(v_numerr)	:= get_errorm_name('PY0072',p_lang);
                 end if;
             end if;
-
+*/
 
             v_staupd := null;
             begin
@@ -4623,7 +4673,7 @@
                        and dteeffec  = v_ttexempt.dteeffec
                        and codtrn    = v_codtrn;
                 exception when no_data_found then 
-                    v_seqpminf := 1;
+                    v_seqpminf := null;
                 end ;
 
                 --create data to table 'ttpminf'
@@ -4699,7 +4749,7 @@
                                          upper(v_ttexempt.flgssm),'C',v_ttexempt.numexemp,
                                          v_ttexempt.codreq,p_coduser,p_coduser);   
                 end if;
-                hrpm91b_batch.process_exemption(null,v_ttexempt.codempid,trunc(sysdate),'AUTO',v_sum,v_err,trunc(sysdate));
+                --hrpm91b_batch.process_exemption(null,v_ttexempt.codempid,trunc(sysdate),'AUTO',v_sum,v_err,trunc(sysdate));
             end if;  
             insert_timpfiles(p_typedata,p_dteimpt,p_record,p_namefile,p_data,v_ttexempt.codempid,v_codcomp,to_char(v_ttexempt.dteeffec,'dd/mm/yyyy'),null,v_ttexempt.codexemp,null,null,null,null,'Y',v_remark);           
         end if;
@@ -4953,49 +5003,49 @@
                         v_sapcode(v_numerr)     := v_text(i);
                     end if;
 
-                    if i = 9 and v_ttrehire.typpayroll is null then
+                    if i = 9 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','TYPPAYROLL',v_ttrehire.typpayroll);
                         if v_ttrehire.typpayroll is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 10 and v_ttrehire.typemp is null then
+                    elsif i = 10 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','TYPEMP',v_ttrehire.typemp);
                         if v_ttrehire.typemp is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 11 and v_ttrehire.codcalen is null then
+                    elsif i = 11 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','CODCALEN',v_ttrehire.codcalen);
                         if v_ttrehire.codcalen is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 12 and v_ttrehire.codjob is null then
+                    elsif i = 12 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','CODJOB',v_ttrehire.codjob);
                         if v_ttrehire.codjob is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 13 and v_ttrehire.flgatten is null then
+                    elsif i = 13 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','FLGATTEN',v_ttrehire.flgatten);
                         if v_ttrehire.flgatten is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);		           
                         end if;
-                    elsif i = 14 and v_ttrehire.flgreemp is null then
+                    elsif i = 14 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','FLGREEMP',v_ttrehire.flgreemp);
                         if v_ttrehire.flgreemp is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);	
                         end if;
-                    elsif i = 16 and v_ttrehire.staemp is null then
+                    elsif i = 16 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','STAEMP',v_ttrehire.staemp);
                         if v_ttrehire.staemp is null then
                             v_numerr  := v_numerr + 1;
                             v_remarkerr(v_numerr)   := i||' - '||get_errorm_name('PMZ007',p_lang);	
                         end if;
-                    elsif i = 28 and v_ttrehire.codcurr is null then
+                    elsif i = 28 and v_text(i) is null then
                         get_default_data(p_typedata,'TTREHIRE','CODCURR',v_ttrehire.codcurr);
                         if v_ttrehire.codcurr is null then
                             v_numerr  := v_numerr + 1;
@@ -5061,6 +5111,7 @@
 
             v_ttrehire.staemp   := nvl(v_ttrehire.staemp,'3');
             v_ttrehire.amtothr  := null;
+            v_ttrehire.codgrpgl := v_codgrpgl;
 
             v_sumhur	  := 0; v_sumday	  := 0; v_summth	  := 0;
             get_wage_income(b_var_codcompy,upper(v_ttrehire.codempmt),
@@ -5084,6 +5135,7 @@
             v_amtothr := stdenc(nvl(v_sumhur,0),v_ttrehire.codempid,v_chken);
 
 
+            v_seqpminf := null;
             begin
                 select numseq into v_seqpminf
                   from ttpminf
@@ -5091,7 +5143,7 @@
                    and dteeffec  = v_ttrehire.dtereemp
                    and codtrn    = v_codtrn;
             exception when no_data_found then 
-                v_seqpminf := 1;
+                v_seqpminf := null;
             end ;
 
             --create data to table 'ttpminf'
@@ -5200,7 +5252,7 @@
                                       p_coduser,p_coduser);
             end if;
 
-            hrpm91b_batch.process_reemployment(null,trunc(sysdate),'AUTO',null,v_sum,v_err,v_secur,v_errsecur);
+            --hrpm91b_batch.process_reemployment(null,trunc(sysdate),'AUTO',null,v_sum,v_err,v_secur,v_errsecur);
 
             insert_timpfiles(p_typedata,p_dteimpt,p_record,p_namefile,p_data,v_ttrehire.codempid,v_codcomp,to_char(v_ttrehire.dtereemp,'dd/mm/yyyy'),v_codtrn,null,null,null,null,null,'Y',v_remark);  
         end if;

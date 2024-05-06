@@ -95,7 +95,7 @@
     v_typform               tappprof.typform%type;
     v_codformno             tfwmailh.codformno%type;
     v_row                   number := 0;
-    
+
     cursor c_tfwmailc is
         SELECT t.codapp, t.numseq, t.syncond,
                get_logical_desc(t.statement) as syncond_name ,
@@ -107,7 +107,7 @@
           FROM tfwmailc t
          WHERE t.codapp = p_codapp
       ORDER BY t.codapp, t.numseq ;    
-    
+
   begin
     begin
       select t.codform , t.codappap, codformno
@@ -119,7 +119,7 @@
         v_codappap      := null;
         v_codformno     := null;
     end;
-    
+
     begin
         select typform
           into v_typform
@@ -128,14 +128,14 @@
     exception when others then
         v_typform := null;
     end;
-    
+
     obj_detail          := json_object_t();
     obj_detail.put('codapp', p_codapp);
     obj_detail.put('codform', v_codform);
     obj_detail.put('codappap', v_codappap);
     obj_detail.put('codformno', v_codformno);
     obj_detail.put('typform', v_typform);
-    
+
     obj_table           := json_object_t();
     for r_tfwmailc in c_tfwmailc loop
         v_row           := v_row + 1;
@@ -147,12 +147,12 @@
         obj_data.put('cnt_maild', r_tfwmailc.cnt_maild);
         obj_table.put(to_char(v_row-1),obj_data);
     end loop;
-    
+
     obj_main            := json_object_t();
     obj_main.put('coderror', '200');
     obj_main.put('detail', obj_detail);
     obj_main.put('table', obj_table);
-    
+
     json_str_output := obj_main.to_clob;
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
@@ -189,7 +189,7 @@
     v_row                   number := 0;
     v_seqno                 number;
     v_child_data            number;
-    
+
     cursor c_tfwmailc is
         SELECT t.codapp, t.numseq, t.syncond,
                get_logical_desc(t.statement) as syncond_name ,
@@ -222,7 +222,7 @@
         obj_syncond.put('statement', r_tfwmailc.statement);
         obj_detail.put('syncond', obj_syncond);
     end loop;
-    
+
     obj_table           := json_object_t();
     v_row   := 0;
     for r_tfwmaild in c_tfwmaild loop
@@ -249,12 +249,12 @@
         obj_data.put('children', obj_child);
         obj_table.put(to_char(v_row - 1), obj_data);
     end loop;
-    
+
     obj_main            := json_object_t();
     obj_main.put('coderror', '200');
     obj_main.put('detail', obj_detail);
     obj_main.put('table', obj_table);
-    
+
     json_str_output := obj_main.to_clob;
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
@@ -810,7 +810,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
     p_codform       := hcm_util.get_string_t(param_json_detail,'codform');
     p_codformno     := hcm_util.get_string_t(param_json_detail,'codformno');
   end; -- end initial_tab_detail
-  
+
   procedure save_detail (json_str_input in clob, json_str_output out clob) is
     v_flg                   varchar2(100 char);
     v_codapp                tfwmailc.codapp%type;
@@ -864,7 +864,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
         v_flg           := hcm_util.get_string_t(param_json_row, 'flg');
         v_codapp        := hcm_util.get_string_t(param_json_row, 'codapp');
         v_numseq        := hcm_util.get_string_t(param_json_row, 'numseq');
-        
+
         if v_flg = 'delete' then
           delete from tfwmaile where codapp = v_codapp and numseq = v_numseq;
           delete from tfwmaild where codapp = v_codapp and numseq = v_numseq;
@@ -920,7 +920,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
     param_json_children     json_object_t;
     param_row_p             json_object_t;
     param_row_c             json_object_t;
-    
+
     v_flgDelete             boolean;
     v_detail_numseq         tfwmailc.numseq%type;
     v_tfwmailc              tfwmailc%rowtype;
@@ -937,14 +937,14 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
     param_json_table            := hcm_util.get_json_t(hcm_util.get_json_t(json_obj,'table'),'rows');
     param_json_detail2          := hcm_util.get_json_t(json_obj,'detail2');
     param_json_table2           := hcm_util.get_json_t(json_obj,'table2');
-    
+
     -- initial tfwmailc
     v_tfwmailc.codapp           := hcm_util.get_string_t(param_json_detail2,'codapp');
     v_tfwmailc.numseq           := hcm_util.get_string_t(param_json_detail2,'numseq');
     v_tfwmailc.syncond          := hcm_util.get_string_t(hcm_util.get_json_t(param_json_detail2,'syncond'),'code');
     v_tfwmailc.statement        := hcm_util.get_string_t(hcm_util.get_json_t(param_json_detail2,'syncond'),'statement');
 
-    
+
     initial_detail(param_json_detail);
 
     if p_codform = p_codformno then 
@@ -984,13 +984,13 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
         v_flgDelete     := hcm_util.get_boolean_t(param_json_row, 'flgDelete');
         v_codapp        := hcm_util.get_string_t(param_json_row, 'codapp');
         v_numseq        := hcm_util.get_string_t(param_json_row, 'numseq');
-        
+
         if v_flgDelete and v_numseq <> v_tfwmailc.numseq then
           delete from tfwmailc where codapp = v_codapp and numseq = v_numseq;
           delete from tfwmaild where codapp = v_codapp and numseq = v_numseq;
           delete from tfwmaile where codapp = v_codapp and numseq = v_numseq;
         end if;
-        
+
         /*obj_syncond     := hcm_util.get_json_t(param_json_row,'syncond');
         v_syncond       := hcm_util.get_string_t(obj_syncond, 'code');
         v_statement     := hcm_util.get_string_t(obj_syncond, 'statement');*/
@@ -1104,7 +1104,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
           end loop;
         end loop;*/
       end loop;
-      
+
       begin
         insert into tfwmailc(codapp,numseq,syncond,statement,dtecreate,codcreate,dteupd,coduser)
         values (v_tfwmailc.codapp,v_tfwmailc.numseq,v_tfwmailc.syncond,v_tfwmailc.statement,
@@ -1123,7 +1123,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
         rollback ;
         return ;
       end;  
-      
+
       for i in 0..param_json_table2.get_size-1 loop
         param_json_row      := hcm_util.get_json_t(param_json_table2,to_char(i));
         v_flg_d             := hcm_util.get_string_t(param_json_row,'flg');
@@ -1131,7 +1131,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
         v_tfwmaild.codapp   := v_tfwmailc.codapp;
         v_tfwmaild.numseq   := v_tfwmailc.numseq;
         v_tfwmaild.seqno    := hcm_util.get_string_t(param_json_row,'seqno');
-        
+
         if v_flg_d = 'delete' then
             delete from tfwmaild where codapp = v_tfwmaild.codapp and numseq = v_tfwmaild.numseq;
             delete from tfwmaile where codapp = v_tfwmaild.codapp and numseq = v_tfwmaild.numseq;
@@ -1141,7 +1141,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
             values (v_tfwmaild.codapp,v_tfwmaild.numseq,v_tfwmaild.seqno,
                     sysdate,global_v_coduser,sysdate,global_v_coduser);
         end if;
-        
+
         for j in 0..obj_child.get_size-1 loop
             obj_child_row           := hcm_util.get_json_t(obj_child,to_char(j));
             v_flg_e                 := hcm_util.get_string_t(obj_child_row,'flg');
@@ -1153,7 +1153,7 @@ procedure save_index_tfwmaild (json_str_input in clob, json_str_output out clob)
             v_tfwmaile.codcompap    := hcm_util.get_string_t(obj_child_row,'codcompap');
             v_tfwmaile.codposap     := hcm_util.get_string_t(obj_child_row,'codposap');
             v_tfwmaile.codempap     := hcm_util.get_string_t(obj_child_row,'codempap');
-            
+
             if v_flg_e = 'add' then
                 insert into tfwmaile(codapp,numseq,seqno,approvno,
                              flgappr,codcompap,codposap,codempap,

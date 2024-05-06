@@ -76,7 +76,7 @@
     obj_data.put('flgDisable',v_flgDisabled);
     obj_data.put('isAdd',isAdd);
     obj_data.put('isEdit',isEdit);
-    
+
     if v_flgDisabled then
       obj_data.put('msgerror',replace(get_error_msg_php('HR1501',global_v_lang),'@#$%400',''));
     end if;
@@ -392,7 +392,7 @@
       exception when no_data_found then
         v_count := 0;
       end;  
-      
+
       if v_count = 0 then
         select max(dteeffec) 
           into v_maxdteeffec

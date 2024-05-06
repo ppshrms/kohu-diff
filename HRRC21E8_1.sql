@@ -39,7 +39,7 @@
     exception when no_data_found then null;
     end;
     -->> softberry || 176/02/2023 || #8807
-    
+
     obj_data.put('flgcivil',nvl(r_tapploth.flgcivil,'N'));
     obj_data.put('lastpost',r_tapploth.lastpost);
     obj_data.put('departmn',r_tapploth.departmn);

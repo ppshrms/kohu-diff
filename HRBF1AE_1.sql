@@ -214,7 +214,7 @@
             update_thealcde;
         end;
     end;
-    
+
     procedure delete_thealcde as
         v_count1   number := 0;
         v_count2   number := 0;
@@ -339,7 +339,7 @@
         json_obj    := json(json_str_input);
         param_json  := hcm_util.get_json(json_obj,'param_json');
         detail_obj  := hcm_util.get_json(json_obj,'detail');
-        
+
         p_desheale      := hcm_util.get_string(detail_obj,'desheale');
         p_deshealt      := hcm_util.get_string(detail_obj,'deshealt');
         p_desheal3      := hcm_util.get_string(detail_obj,'desheal3');
@@ -352,7 +352,7 @@
         p_qtymth        := to_number(hcm_util.get_string(detail_obj,'qtymth'));
         check_params;
         insert_thealcde;
-        
+
         for i in 0..param_json.count-1 loop
             data_obj        := hcm_util.get_json(param_json,to_char(i));
             p_codheal       := upper(hcm_util.get_string(data_obj,'codheal'));

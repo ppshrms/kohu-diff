@@ -841,7 +841,7 @@
              v_numcotax,v_has_image,v_address2,
              'SUMMARY');
       end;
-    
+
     -- comment by user#18 pongsak 18/12/2019
 --    obj_data := json();
 --    obj_data.put('numtaxid',get_label_name('HRPY93R2',global_v_lang,130)); -- tapplscr

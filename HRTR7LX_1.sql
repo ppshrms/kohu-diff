@@ -312,5 +312,4 @@
   end gen_detail_avglst;
 end HRTR7LX;
 
-
 /

@@ -346,7 +346,7 @@
      where codcompy = p_codcompy
        and coddoc = p_coddoc;
    end;
-    
+
     --<<#6194 || USER39 || 02/09/2021   
     if p_typsign = '2' then
         p_codcomp := hcm_util.get_codcomp_level(p_codcomp,null,null,'Y'); 

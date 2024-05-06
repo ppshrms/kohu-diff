@@ -48,7 +48,7 @@
     end loop;
     array_data := json_array_t();
     array_data.append(array_dataset);
-    
+
     obj_data.put('coderror','200');
     obj_data.put('labels',array_label);
     obj_data.put('data',array_data);
@@ -103,14 +103,14 @@
       exception when no_data_found then
         v_qtyact := 0;
       end;
-      
+
       v_exp   := nvl(i.amtpay / nullif(v_qtyact,0),0);
       array_label.append(get_tpostn_name(i.codpos, global_v_lang));
       array_dataset.append(v_exp);
     end loop;
     array_data := json_array_t();
     array_data.append(array_dataset);
-    
+
     obj_data.put('coderror','200');
     obj_data.put('labels',array_label);
     obj_data.put('data',array_data);
@@ -262,7 +262,7 @@
     array_head_label  := json_array_t();
     array_head_label.append(get_label_name('HRRCG1X1',global_v_lang,810));
     array_head_label.append(get_label_name('HRRCG1X1',global_v_lang,820));
-    
+
     obj_data.put('coderror','200');
     obj_data.put('headLabelGroup',array_head_label);
     obj_data.put('labels',array_label);
@@ -319,7 +319,7 @@
     array_qtytrn  := json_array_t();
     array_qtyinv  := json_array_t();
     array_qtyrec  := json_array_t();
-    
+
     for i in c1 loop
       array_label.append(get_tpostn_name(i.codpos,global_v_lang));
       array_qtyapp.append(i.qtyapp);
@@ -333,14 +333,14 @@
     array_head_label.append(get_label_name('HRRPG1X1',global_v_lang,850));
     array_head_label.append(get_label_name('HRRPG1X1',global_v_lang,860));
     array_head_label.append(get_label_name('HRRPG1X1',global_v_lang,870));
-    
+
     array_data    := json_array_t();
     array_data.append(array_qtyapp);
     array_data.append(array_qtypos);
     array_data.append(array_qtytrn);
     array_data.append(array_qtyinv);
     array_data.append(array_qtyrec);
-    
+
     obj_data.put('coderror','200');
     obj_data.put('headLabelGroup',array_head_label);
     obj_data.put('labels',array_label);

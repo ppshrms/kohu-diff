@@ -278,7 +278,7 @@
                                               dteupd, coduser, staemp, jobgrade)
                              --VALUES ( index_codempid, index_dtereemp, tp_numseq, v_codtrn, v_codcomp,
                              VALUES ( v_codnewid, index_dtereemp, tp_numseq, v_codtrn, v_codcomp,
-                             
+
                                       v_codpos, v_codjob, v_numlvl, v_codempmt, v_codcalen,
                                       v_codbrlc, v_typpayroll, v_typemp, v_flgatten, 'N',
                                       'N', 'N', 'N', 'N', 'N',

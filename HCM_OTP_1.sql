@@ -42,7 +42,7 @@
     obj_data_params json_object_t;
     obj_rows_params json_object_t;
     v_rcnt          number := 0;
-    
+
     cursor c1 is
       select parameter,value
         from tsmsconfig;
@@ -50,7 +50,7 @@
     json_obj        := json_object_t(json_str_input);
     v_otptype       := upper(hcm_util.get_string_t(json_obj,'p_otptype'));
     p_otptype       := nvl(v_otptype,nvl(get_tsetup_value('OTPTYPE'),'M'));
-    
+
     obj_data   := json_object_t();
     obj_data.put('coderror', '200');
     obj_rows_params := json_object_t();
@@ -211,7 +211,7 @@
     else
       v_maillang    := nvl(v_maillang,global_v_lang);
     end if;
-    
+
     -- get message for send otp (mail)
     begin
       select  decode(v_maillang,    '101', messagee,

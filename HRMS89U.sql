@@ -27,22 +27,22 @@
   json_long                 varchar2(4000 char);
   b_index_codempid          varchar2(4000 char);
  param_sqlerrm              varchar2(4000 char);
-  
+
   p_dtereqst                tjobreq.dtereq%type;
   p_dtereqen                tjobreq.dtereq%type;
   p_codempid                tjobreq.codempid%type;
   p_dtereq                  tjobreq.dtereq%type;
   p_numseq                  tjobreq.numseq%type;
   p_codjob                  tjobcode.codjob%type;
-  
-  
+
+
   tjobreq_codappr           tjobreq.codappr%type ;
   tjobreq_staappr           tjobreq.staappr%type;
   tjobreq_dteappr           tjobreq.dteappr%type;
   tjobreq_remarkap          tjobreq.remarkap%type;
   tjobreq_approvno          tjobreq.approvno%type;
   tjobreq_routeno           tjobreq.routeno%type;
-  
+
   p_amtincom                tjobreq.amtincom%type;
   p_codbrlc                 tjobreq.codbrlc%type;
   p_codcomp                 tjobreq.codcomp%type;
@@ -57,20 +57,20 @@
   p_remarkap                tjobreq.remarkap%type;
   p_syncond                 tjobreq.syncond%type;
   p_statement               tjobreq.statement%type;
-  
+
   v_codappr                 varchar2(20 char);
   p_staappr                 varchar2(2 char);
-  
+
   b_sdate                   varchar2(4000 char);
   b_amtintaccu              varchar2(4000 char);
   v_amtintaccu              varchar2(4000 char);
   v_amtinteccu              varchar2(4000 char);
   v_view_codapp             varchar2(100 char);
   global_v_codapp           varchar2(100 char);
-  
+
   p_remark_appr             varchar2(4000 char);
   p_remark_not_appr         varchar2(4000 char);
-         
+
   procedure initial_value(json_str in clob);
 
   procedure get_index(json_str_input in clob, json_str_output out clob);

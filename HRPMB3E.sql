@@ -53,7 +53,7 @@
 	procedure delete_data (json_str_input in clob, json_str_output out clob) ;
 	procedure get_subdetail (json_str_input in clob, json_str_output out clob);
 	procedure gen_subdetail (json_str_output out clob);
-    
+
 END HRPMB3E;
 
 /

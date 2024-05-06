@@ -119,10 +119,10 @@
 
   function get_date_buddhist_era(p_date date) return varchar2;
   function get_year_buddhist_era(p_year varchar2) return varchar2;
-  
+
   function get_date_config(p_date date) return varchar2;
   function get_year_config(p_year varchar2) return varchar2;
-  
+
   function get_split_decimal(p_number varchar2,p_flg varchar2,p_leng_dec number default 2) return varchar2;
   function get_tempimge(json_str in clob) return clob;
   function get_tempimge_emp(json_str in clob) return clob;

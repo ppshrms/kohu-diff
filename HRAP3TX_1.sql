@@ -59,7 +59,7 @@
          where dteyreap = b_index_dteyreap
            and codcompy = b_index_codcompy
         order by balscore,codkpi;
-    
+
     cursor c2 is 
         select codkpino,codcomp,target,kpivalue
           from tkpicmpdp
@@ -86,7 +86,7 @@
                 obj_data.put('codkpi', i.codkpi);
                 obj_data.put('kpides', i.kpides);
                 obj_data.put('target', i.target);
-                
+
                 obj_data.put('codkpino', j.codkpino);
                 begin
                     select kpides
@@ -99,13 +99,13 @@
                 exception when no_data_found then
                     v_kpides := null;
                 end;
-                
+
                 obj_data.put('desc_kpiap', v_kpides);
                 obj_data.put('codcomp', j.codcomp);
                 obj_data.put('desc_codcompap', get_tcenter_name(j.codcomp,global_v_lang));
                 obj_data.put('description', j.target);
                 obj_data.put('value', j.kpivalue);
-                
+
                 obj_data.put('dteyreap', b_index_dteyreap);
                 obj_data.put('codcompy', b_index_codcompy);
                 obj_row.put(to_char(v_rcnt-1),obj_data);

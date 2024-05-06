@@ -131,7 +131,7 @@
    v_codcomp        temploy1.codcomp%type;
    v_codempmt       temploy1.codempmt%type;
    v_codclnsc       temploy2.codclnsc%type;                                       --> Peerasak || Issue# || 30/11/2022
-   
+
    v_amtincom1      temploy3.amtincom1%type;
    v_amtincom2      temploy3.amtincom2%type;
    v_amtincom3      temploy3.amtincom3%type;
@@ -213,7 +213,7 @@
         obj_data.to_clob(json_str_output);
         return;
     end;
-    
+
     obj_data := json();
     obj_data.put('flag','Edit');
     obj_data.put('addwitness',v_thwccase.addrwitness);

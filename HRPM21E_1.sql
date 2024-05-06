@@ -1182,7 +1182,7 @@
     v_datetrans   := to_date(hcm_util.Get_string_t(json_obj, 'datetrans'),'dd/mm/yyyy');
     v_codbrlc     := hcm_util.Get_string_t(json_obj, 'codbrlc');
     v_codempmt    := hcm_util.Get_string_t(json_obj, 'codempmt');
-      
+
     if v_flgmove = 'T' then --โอนย้าย
       begin
         select dteempmt

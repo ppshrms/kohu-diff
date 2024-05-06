@@ -111,7 +111,7 @@
     v_examset           tvtest.namexame%type;
     v_flggrade          varchar2(2 char);
     v_table             varchar2(100 char);
-    
+
     cursor c1 is
       select codcatexm,codexam
       from(
@@ -264,7 +264,7 @@
           obj_row_child.put(to_char(v_row_child), obj_data_child);
           v_row_child := v_row_child + 1;
         end loop;
-        
+
         if v_row_child = 0 then
           obj_data_child := json_object_t();
           obj_data_child.put('codcomp', '');
@@ -319,7 +319,7 @@
     iv_codempid         temploy1.codempid%type;
     iv_staemp           temploy1.staemp%type;
     v_check_codcomp_in_codcomp          VARCHAR2(4 CHAR);
-    
+
   begin  
     -- ## 1 codreview
     if v_codempid is not null then
@@ -331,31 +331,31 @@
         and rownum = 1;
       exception when others then null;    
       end;
-      
+
       if v_count_comp < 1 then
           param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCENTER');
           return;
       end if;
-        
+
       -- ### 1.2 secur_main.secur2;
       v_secur2   := secur_main.secur2(v_codcompy,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal);
       if not v_secur2 then
         param_msg_error := get_error_msg_php('HR3007', global_v_lang);
         return;
       end if;
-      
+
       -- ### 1.3 staemp = 9
       if iv_staemp = 9 then
         param_msg_error := get_error_msg_php('HR2101',global_v_lang,'TCENTER');
         return;
       end if;
-      
+
       -- ### 1.4 staemp = 0
       if iv_staemp = 0 then
         param_msg_error := get_error_msg_php('HR2102',global_v_lang,'TCENTER');
         return;
       end if;
-      
+
       -- ### 1.5 select codempid where codempid and codcomp like p_codcomp || '%'
        begin
         select 'Y'
@@ -368,7 +368,7 @@
         return;
       end;
     end if;
-    
+
     -- ## 2 codcomp    
     if v_codcomp is not null then
       -- ### 2.1  
@@ -378,19 +378,19 @@
          where codcomp like v_codcomp || '%';
       exception when others then null;
       end;
-      
+
       if v_count_comp < 1 then
         param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCENTER');
         return;
       end if;
-      
+
       -- ### 2.2 
       v_secur7 := secur_main.secur7(v_codcomp, global_v_coduser);
       if not v_secur7 then
         param_msg_error := get_error_msg_php('HR3007', global_v_lang);
         return;
       end if;
-      
+
        -- ### 2.3 
         begin
           select hcm_util.get_codcompy(p_codcomp), hcm_util.get_codcompy(v_codcomp) 
@@ -398,12 +398,12 @@
           from dual;
         exception when others then null;
         end;    
-    
+
         if v_codcompy <> v_diff_v_codcompy then
           param_msg_error := get_error_msg_php('HR2010', global_v_lang, 'TCOMPNY');
           return;
         end if;
-        
+
         -- ### 2.4        
         begin
           select 'A' into v_check_codcomp_in_codcomp
@@ -414,7 +414,7 @@
           return;
         end;
     end if;
-   
+
     -- ## 3 codpos
     if v_codpos is not null then
       -- ### 3.1     
@@ -435,20 +435,20 @@
     param_json            json_object_t;
     param_json_child      json_object_t;
     param_json_row_child  json_object_t;
-    
+
     type array_t is table of varchar2(4000) index by binary_integer;
     v_arr_item            array_t;
-    
+
     v_flg                 varchar2(100 char);
     v_numseq              varchar2(100 char);
     v_codexam             ttestchk.codexam%type;
     v_codpos              ttestchk.codposc%type;
     v_codcomp             ttestchk.codcomp%type;
     v_codempid            ttestchk.codempidc%type;
-    
+
   begin
     param_json := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
-    
+
     if param_json.get_size > 0 then
       for i in 0..param_json.get_size-1 loop
         param_json_row  := hcm_util.get_json_t(param_json,to_char(i));
@@ -463,8 +463,8 @@
           v_codcomp   := hcm_util.get_string_t(param_json_row_child,'codcomp');
           v_codpos    := hcm_util.get_string_t(param_json_row_child,'codpos');
           v_flg       := hcm_util.get_string_t(param_json_row_child,'flg');
-          
-          
+
+
           if v_numseq is null then
             begin
               select nvl(max(numseq),0) + 1 into v_numseq
@@ -473,15 +473,15 @@
                  and codexam = v_codexam;
             end;
           end if;
-          
+
           if v_flg = 'add' or v_flg = 'edit' then
             check_save(v_codempid, v_codcomp, v_codpos);  --> Peerasak || Issue#9295 || 05042023
-            
+
             if param_msg_error is not null then            
               json_str_output := get_response_message(400,param_msg_error,global_v_lang);
               return;
             end if;
-            
+
             begin
               insert into ttestchk(codcomp,codexam,numseq,codempidc,codcompc,codposc,codcreate,coduser)
               values(p_codcomp, v_codexam, v_numseq, v_codempid, get_compful(v_codcomp), v_codpos, global_v_coduser, global_v_coduser);

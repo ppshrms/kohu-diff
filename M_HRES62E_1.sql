@@ -5,7 +5,7 @@
   CREATE OR REPLACE EDITIONABLE PACKAGE BODY "M_HRES62E" is
   /* Cust-Modify: KOHU-SM2301 */
   -- last update: 14/12/2023 12:00
-  
+
   procedure get_tleavecc_detail(p_codempid in varchar2,p_seqnor in varchar2,p_dtereqr in date) is
   begin
     begin
@@ -62,7 +62,7 @@
     global_v_codempid       := hcm_util.get_string_t(json_obj,'p_codempid');
     global_v_empid          := hcm_util.get_string_t(json_obj,'codinput');
     global_v_lang           := hcm_util.get_string_t(json_obj,'p_lang');
-    
+
     --block b_index
     b_index_codempid        := hcm_util.get_string_t(json_obj,'p_codempid_query');
     if b_index_codempid is null then
@@ -75,7 +75,7 @@
     b_index_dtereq_st       := to_date(hcm_util.get_string_t(json_obj,'p_dtereq_st'),'dd/mm/yyyy');
     b_index_dtereq_en       := to_date(hcm_util.get_string_t(json_obj,'p_dtereq_en'),'dd/mm/yyyy');
     b_index_dtework         := to_date(hcm_util.get_string_t(json_obj,'p_dtework'),'dd/mm/yyyy');
-    
+
     --block tleaverq
     tleaverq_codempid       := hcm_util.get_string_t(json_obj,'codempid_query');
     tleaverq_seqno          := to_number(hcm_util.get_string_t(json_obj,'seqno'));
@@ -110,7 +110,7 @@
     tleaverq_dteinput       := to_date(trim(hcm_util.get_string_t(json_obj,'dteinput')),'dd/mm/yyyy');
     tleaverq_desleave       := null;
     tleaverq_param_json     := hcm_util.get_json_t(json_obj, 'param_json');
-    
+
     -- paternity leave --
     tleaverq_timprgnt       := hcm_util.get_string_t(json_obj,'timprgnt');
     tleaverq_dteprgntst     := to_date(trim(hcm_util.get_string_t(json_obj,'dteprgntst')),'dd/mm/yyyy');
@@ -198,7 +198,7 @@
         p_day := nvl(v_day,0); p_hour := nvl(v_hour,0); p_min := nvl(v_min,0);
   end;
 --
-  
+
   procedure check_data is
     v_numlvl      temploy1.numlvl%type;
     v_dteeffex    temploy1.dteeffex%type;
@@ -271,7 +271,7 @@
     v_chkleave    number;
     v_flgdlebw    varchar2(2 char);
     v_flgdlefw    varchar2(2 char);
-    
+
     v_check_emp_flow    number;
   begin
       tleaverq_codempid      := b_index_codempid;
@@ -300,7 +300,7 @@
         param_msg_error := get_error_msg_php('HR2045',global_v_lang);
         return;
       end if;
-      
+
       if tleaverq_staappr is null then
         begin
             select count(*)
@@ -309,10 +309,10 @@
             where codempid = b_index_codempid
                 and codapp = 'HRES62E';
         end;
-        
+
         if v_check_emp_flow = 0 then
             param_msg_error := get_error_msg_php('ESZ004', global_v_lang);
-            
+
             return;
         end if;
       end if;
@@ -580,7 +580,7 @@
      tleaverq_staappr  := 'P';
      chk_workflow.find_next_approve(v_codapp,v_routeno,b_index_codempid,to_char(b_index_dtereq,'dd/mm/yyyy'),tleaverq_seqno,v_approvno,b_index_codempid,v_typleave); --user22 : 02/08/2016 : HRMS590307 || chk_workflow.find_next_approve(v_codapp,v_routeno,b_index_codempid,to_char(b_index_dtereq,'dd/mm/yyyy'),tleaverq_seqno,v_approvno,b_index_codempid);
     --<< user22 : 20/08/2016 : HRMS590307 ||
-    
+
     --> [START] [KOHU-SM2301] bow.sarunya || remove code - 07/12/2023
 --      if v_routeno is null then
 --        param_msg_error := get_error_msg_php('HR2055',global_v_lang,'twkflph');
@@ -1473,7 +1473,7 @@
       exception when others then
         v_dteprgntst := null;
       end;
-      
+
       if v_flgtype = 'M' then
         obj_row.put('flgleaveprgnt','Y');
         obj_row.put('dteprgntst',to_char(v_dteprgntst,'dd/mm/yyyy'));
@@ -1764,14 +1764,14 @@
     obj_data                json_object_t;
     v_typleave              varchar2(4000 char);
     v_flgtype               varchar2(1000 char);
-    
+
     v_codpos                temploy1.codpos%type;
     v_codcomp               temploy1.codcomp%type;
     v_count_flow_appr       number := 0;
     obj_row_flow_appr       json_object_t := json_object_t();
     obj_table_flow_appr     json_object_t := json_object_t();
     obj_data_flow_appr      json_object_t;
-    
+
     cursor c1 is
       select a.codempid, a.dtereq, a.seqno, a.codleave, a.dtestrt, a.timstrt, a.dteend, a.timend, a.deslereq, a.numlereq, a.staappr, a.dteappr,
              a.codappr, a.codcomp, a.remarkap, a.approvno, a.routeno, a.flgsend, a.dteupd, a.coduser,
@@ -1793,7 +1793,7 @@
                             and a.codcomp like ts.codcomp||'%'
                             and rownum    <= 1 )))
     order by a.codempid, a.dtereq desc, a.seqno desc;
-    
+
     cursor c_tempaprq is
         select * 
         from tempaprq
@@ -1908,10 +1908,10 @@
                 obj_data.put('timprgnt','');
                 obj_data.put('dteprgntst','');
             end if;
-            
+
             for tempaprq in c_tempaprq loop
                 obj_data_flow_appr := json_object_t();
-                
+
                 begin
                     select codpos, codcomp
                     into v_codpos, v_codcomp
@@ -1921,17 +1921,17 @@
                     v_codpos := null;
                     v_codcomp := null;
                 end;
-                
+
                 obj_data_flow_appr.put('numseq', (v_count_flow_appr + 1));
                 obj_data_flow_appr.put('codappr', tempaprq.codempap);
                 obj_data_flow_appr.put('desc_codappr', get_temploy_name(tempaprq.codempap, global_v_lang));
                 obj_data_flow_appr.put('desc_codpos', get_tpostn_name(v_codpos, global_v_lang));
                 obj_data_flow_appr.put('desc_codcomp', get_tcenter_name(v_codcomp, global_v_lang));
-         
+
                 obj_row_flow_appr.put(to_char(v_count_flow_appr), obj_data_flow_appr);
                 v_count_flow_appr := v_count_flow_appr + 1;
             end loop;
-            
+
             obj_table_flow_appr.put('rows', obj_row_flow_appr);
             obj_data.put('approver_table', obj_table_flow_appr);
 
@@ -1942,7 +1942,7 @@
         json_str_output := get_response_message(null,param_msg_error,global_v_lang);
         return;
       end if;
-      
+
       json_str_output := obj_row.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
@@ -2167,10 +2167,10 @@
     obj_row         json_object_t := json_object_t();
     obj_rows        json_object_t := json_object_t();
     obj_data        json_object_t := json_object_t();
-    
+
     type t_codappr is table of varchar2(30) index by pls_integer;
     v_codappr               t_codappr   := t_codappr();
-    
+
     p_codempid_query        temploy1.codempid%type;
     v_codpos                temploy1.codpos%type;
     v_codcomp               temploy1.codcomp%type;
@@ -2178,7 +2178,7 @@
     json_obj                := json_object_t(json_str_input);
     p_codempid_query        := hcm_util.get_string_t(json_obj, 'p_codempid_query');
     global_v_lang           := hcm_util.get_string_t(json_obj, 'p_lang');
-    
+
     begin
         select codappr1, codappr2, codappr3, codappr4
         into v_codappr(1), v_codappr(2), v_codappr(3), v_codappr(4)
@@ -2188,10 +2188,10 @@
     exception when no_data_found then
         param_msg_error := get_error_msg_php('ESZ004', global_v_lang);
         json_str_output := get_response_message('404', param_msg_error, global_v_lang);
-        
+
         return;
     end;
-    
+
     for i in 1..4 loop
         if v_codappr(i) is not null then
             begin
@@ -2203,23 +2203,23 @@
                 v_codpos := null;
                 v_codcomp := null;
             end;
-            
+
             obj_data.put('numseq', i);
             obj_data.put('codappr', v_codappr(i));
             obj_data.put('desc_codappr', get_temploy_name(v_codappr(i), global_v_lang));
             obj_data.put('desc_codpos', get_tpostn_name(v_codpos, global_v_lang));
             obj_data.put('desc_codcomp', get_tcenter_name(v_codcomp, global_v_lang));
-         
+
             obj_rows.put(to_char(v_num), obj_data);
             v_num := v_num + 1;
         end if;
     end loop;
-    
+
     obj_row.put('rows', obj_rows);
-    
+
     obj_row.put('coderror', '200');
     obj_row.put('desc_coderror', ' ');
-    
+
     json_str_output := obj_row.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;

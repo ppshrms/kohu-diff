@@ -31,5 +31,4 @@ procedure get_dropdown(json_str_input in clob, json_str_output out clob);
 
 END HRBF1IX;
 
-
 /

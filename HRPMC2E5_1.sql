@@ -590,7 +590,7 @@
         param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCODSKIL');
         return;
       end;
-      
+
       begin
         select codskill
           into v_code

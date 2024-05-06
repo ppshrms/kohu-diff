@@ -253,7 +253,7 @@
     v_numrec2    number;
     v_dtestrt    date;
     v_dteend     date;
-    
+
     begin
       v_staappr := p_status ;
       v_zyear   := pdk.check_year(p_lang);
@@ -417,7 +417,7 @@
            where codempid  = rq_codempid
              and dtereq    = r_tleavecc.dtereqr
              and seqno     = r_tleavecc.seqnor;
-  
+
           --<< user39 || STA4580130 || 03/09/2015
           begin
             select dtereqr ,seqnor into vv_dtereqr ,vv_seqnor
@@ -428,7 +428,7 @@
           exception when no_data_found then
             vv_dtereqr := null; vv_seqnor := null;
           end;
-  
+
           begin
             select numlereq,dtestrt,dteend
               into v_numlereq,v_dtestrt,v_dteend -- user22 : 15/02/2022 : ST11 || select  numlereq into v_numlereq          
@@ -445,7 +445,7 @@
           hral56b_batch.gen_leave(rq_codempid,null,v_dtestrt,v_dteend,p_coduser,v_numrec2);        
 -->> user22 : 15/02/2022 : ST11 ||
         end if;
-        
+
         begin
             update tleavecc
                set    staappr   = v_staappr,
@@ -527,7 +527,7 @@
         v_codempid  := hcm_util.get_string_t(json_obj2, 'p_codempid');
         v_dtereq    := hcm_util.get_string_t(json_obj2, 'p_dtereq');
         v_dtereqr   := hcm_util.get_string_t(json_obj2, 'p_dtereqr');
-        
+
         v_staappr := nvl(v_staappr, 'A');
         approve(global_v_coduser,global_v_lang,to_char(v_rowcount),v_staappr,p_remark_appr,p_remark_not_appr,to_char(sysdate,'dd/mm/yyyy'),v_appseq,v_chk,v_codempid,v_seqno,v_dtereq,v_dtereqr);
         exit when param_msg_error is not null;

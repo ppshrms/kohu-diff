@@ -373,14 +373,14 @@
 
       for r1 in c_tgrpplan loop
                     v_total := 1;
-            
+
 --<<error IPO implement 24/02/2023        
                     --param_msg_error := hcm_secur.secur_codcomp(global_v_coduser, global_v_lang, r1.codcomp);
                     --if param_msg_error is not null then
                     --  exit;
                     --end if;
 --error IPO implement 24/02/2023        
-                    
+
                     v_codcomp  := r1.codcomp;
                     v_codcalen := r1.codcalen;
                     begin
@@ -397,13 +397,13 @@
                       v_desc_codcalen := '';
                     end;
                     v_desc_codcomp := get_tcenter_name(v_codcomp, global_v_lang) ;
-                    
+
                     if r1.codcomp <> o_codcomp then
                       o_codcalen := '!@#$';
                       v_day := 0;
                       v_first := true;
                     end if;
-            
+
                     for r2 in c_tgrpplan2 loop
                       v_day := v_day + 1;
                       if r2.codcalen <> o_codcalen then
@@ -519,7 +519,7 @@
             null ;
           end ; 
       end if;
-      
+
       for r1 in c_temploy1 loop
         v_flgpass := secur_main.secur2(r1.codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal,global_v_numlvlsalst,global_v_numlvlsalen);
         if v_flgpass then

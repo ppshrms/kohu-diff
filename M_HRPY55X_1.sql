@@ -1416,6 +1416,7 @@
       p_hm := null;
     end if;
   end;
+
   function cal_dhm_concat (p_qtyday		in  number) RETURN varchar2 IS
     v_min 	number(2);
     v_hour  number(2);

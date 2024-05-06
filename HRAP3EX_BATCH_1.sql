@@ -125,9 +125,9 @@ begin
     --------------------------------------
     --ERROR ต้องหาจาก  TAPBUDGET
     v_formusal := 'MITPOINT * (PCTINCR/100)'; 
-    
+
     ---------------------------------------
-    
+
     for r_tstdis in c_tstdis loop
         v_grade := r_tstdis.grade;
         for i in c_tappemp loop
@@ -173,7 +173,7 @@ begin
                                      (r_tstdis.pctpoend - r_tstdis.pctpostr)) + r_tstdis.pctpostr;
                     */
                     v_pctincrease := (((nvl(i.qtyadjtot,i.qtytotnet) - r_tstdis.pctwkstr)/(r_tstdis.pctwkend - r_tstdis.pctwkstr )) * ((r_tstdis.pctpoend  - r_tstdis.pctpostr))) + r_tstdis.pctpostr ;
-                                    
+
                     if v_formusal is not null then
                         v_formusalds := v_formusal;
                         v_formusalds := replace(v_formusalds,'MITPOINT',''||v_midpoint||'') ;

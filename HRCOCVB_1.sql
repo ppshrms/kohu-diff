@@ -48,7 +48,7 @@ function check_date(p_date  in varchar2) return boolean is
     else 
        p_zyear := 0;
     end if;
-    
+
     return p_year + p_zyear ;
   end;
   --
@@ -109,7 +109,7 @@ function check_date(p_date  in varchar2) return boolean is
     return(v_date);   
   end;
   --
-  
+
 procedure initial_value(json_str in clob) is 
     json_obj json_object_t;
   begin
@@ -122,12 +122,12 @@ procedure initial_value(json_str in clob) is
     global_v_lang 		:= '102'; 
   end;
   --
-  
+
 procedure get_process(json_str_input in clob, json_str_output out clob) is
     v_floore         tcompny.floore%type;
     v_floort         tcompny.floort%type;
   begin
-  
+
 --      p_codproc   := hcm_util.get_json_t(json_object_t(json_str_input),'p_codproc');
 --      p_codmove   := hcm_util.get_json_t(json_object_t(json_str_input),'p_codmove');
 --      if p_codproc = 'HRCOCVBPM' then
@@ -140,9 +140,9 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
     param_msg_error := dbms_utility.format_error_stack|| ' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400', param_msg_error, global_v_lang);
   end;
-  
-  
-  
+
+
+
 	procedure get_process_pm_temploy1 (json_str_input  in clob,
                                        json_str_output out clob) is
         p_rec_tran number := 0;
@@ -160,7 +160,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 	procedure validate_excel_pm_temploy1 (json_str_input in clob,
                                         p_rec_tran     out number,
                                         p_rec_error    out number) is
-    
+
     param_json       json_object_t;
     param_data       json_object_t;
     param_column     json_object_t;
@@ -270,25 +270,25 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 	v_dteupd		temploy1.dteupd%type;
 	v_coduser		temploy1.coduser%type;
 
-    
+
     type text is table of varchar2(1000 char) index by binary_integer;
     v_text           text;--เก็บค่าแต่ละคอลัมน์
     v_field          text;--เก็บชื่อคำอธิบายแต่ละคอลัมน์
-    
+
     type leng is table of number index by binary_integer;       
     chk_len          leng;--เก็บความกว้างของแต่ละคอลัมน์ 
-   
+
     v_chk_exists     number;
     v_int_temp		 number;
-   
+
     begin
-	
+
         --read json        
         param_json   := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
         param_data   := hcm_util.get_json_t(param_json, 'p_filename');        
         param_column := hcm_util.get_json_t(param_json, 'p_columns');       
         v_column := param_column.get_size; 
-        
+
         --assign chk_len := leng(10,4,30,30,30,30,45,45,10,1,1,1,10,10,40,4,99,1,10,1,4,4,4,4,4,4,4,4,10,10,10,10,10,999,25,25,50,50,10,10,1,13,4,10,10,500,1,5,10,1,4,4,3,1,10);
         for i in 1..v_column loop
             if i in (1,9,13,14,19,29,30,31,32,33,39,40,44,45,49,55) then
@@ -323,34 +323,34 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                 chk_len(i) := 0;
             end if;
         end loop;        
-        
-		
+
+
         --default transaction success and error
 		p_rec_tran  := 0;
         p_rec_error := 0;
-        
+
         --assign null to v_field which keep array column name
         for i in 1..v_column loop
           v_field(i) := null;
         end loop;                       
-        
+
         --read columns name       
         for i in 0..param_column.get_size-1 loop          
           param_column_row  := hcm_util.get_json_t(param_column,to_char(i));
           v_num             := v_num + 1;
           v_field(v_num)    := hcm_util.get_string_t(param_column_row,'name');
         end loop;
-                 
+
         --read data each rows 
         for i in 0..param_data.get_size-1 loop            
             param_json_row  := hcm_util.get_json_t(param_data,to_char(i));         
-               
+
             begin
                 v_err_code  := null;
                 v_err_field := null;
                 v_err_table := null;
                 v_error 	:= false;           
-           				
+
 				v_text(1)    	:= hcm_util.get_string_t(param_json_row,'codempid');
 				v_text(2)    	:= hcm_util.get_string_t(param_json_row,'codtitle');
 				v_text(3)    	:= hcm_util.get_string_t(param_json_row,'namfirste');
@@ -406,14 +406,14 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 				v_text(53)		:= hcm_util.get_string_t(param_json_row,'maillang');
 				v_text(54)		:= hcm_util.get_string_t(param_json_row,'flgpdpa');
 				v_text(55)		:= hcm_util.get_string_t(param_json_row,'dtepdpa');
-                          
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
                     for i in 2..v_column loop                     
                         data_file := data_file||','||v_text(i);                     
                     end loop;
-                                        
+
                     --1.validate --                                
                     for i in 1..v_column loop
                         --check require data column
@@ -425,7 +425,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                                 exit cal_loop;
                             end if;
                         end if;
-                    
+
                         --check length all columns     
                         if v_text(i) is not null or length(trim(v_text(i))) is not null then                               
                             if length(v_text(i)) > chk_len(i) then                                
@@ -448,7 +448,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             end if;
                         end if;
                     end loop;	
-										
+
 					--assign value to var
 					v_codempid		:= v_text(1);
 					v_codtitle		:= v_text(2);
@@ -544,8 +544,8 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 					if v_text(55) is not null or length(trim(v_text(55))) is not null then
 						v_dtepdpa	:= check_dteyre(v_text(55));
 					end if;	
-					
-                    
+
+
                     --check incorrect data      
                     --check codtitle  
                     if v_codtitle not in ('003','004','005') then
@@ -554,7 +554,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field     := v_field(5);
                         exit cal_loop;
                     end if;
-                           
+
                     --check dteempdb 
 					select floor(months_between(sysdate, v_dteempdb) /12) into v_int_temp from dual;
 					if v_int_temp < 18 then
@@ -563,7 +563,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(9);                                
                         exit cal_loop;
 					end if;
-                    
+
 					--check stamarry 
                     if(v_stamarry not in ('S','M','D','W','I')) then
                         v_error	 	:= true;
@@ -571,7 +571,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(10);
                         exit cal_loop;
                     end if;
-					
+
 					--check codsex 
                     if(v_codsex not in ('M','F')) then
                         v_error	 	:= true;
@@ -579,7 +579,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(8);
                         exit cal_loop;
                     end if;
-					 
+
 					--check stamilit 
                     if(v_codsex = 'M' and ((v_stamilit is null) or length(trim(v_stamilit)) is null)) then
                         v_error	 	:= true;
@@ -587,14 +587,14 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(12);
                         exit cal_loop;
                     end if;
-					
+
 					if(v_codsex = 'M' and v_stamilit not in ('P','N','O') ) then
                         v_error	 	:= true;
                         v_err_code  := 'HR2020';
                         v_err_field := v_field(12);
                         exit cal_loop;
                     end if;
-					
+
 					--check codcomp				
                     v_chk_exists := 0;
                     begin 
@@ -607,7 +607,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TCENTER';
                         exit cal_loop;
                     end;
-					
+
 					--check codpos				
                     v_chk_exists := 0;
                     begin 
@@ -620,7 +620,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TPOSTN';
                         exit cal_loop;
                     end;					
-                        
+
 					--check staemp 
                     if(v_staemp not in ('0','1','3','9')) then
                         v_error	 	:= true;
@@ -628,7 +628,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(18);
                         exit cal_loop;
                     end if;
-                    					
+
 					--check dteeffex 
                     if(v_staemp = '9' and ((v_dteeffex is null) or length(trim(v_dteeffex)) is null)) then
                         v_error	 	:= true;
@@ -636,7 +636,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(19);
                         exit cal_loop;
                     end if;
-					
+
 					if((v_dteeffex is not null) or length(trim(v_dteeffex)) is not null) then
 						if v_dteeffex < v_dteempmt then
 							v_error	 	:= true;
@@ -645,7 +645,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 							exit cal_loop;
 						end if;	
                     end if;
-					
+
 					--check flgatten 
                     if(v_flgatten not in ('Y','N','O')) then
                         v_error	 	:= true;
@@ -653,7 +653,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(20);
                         exit cal_loop;
                     end if;
-										
+
                     --check codbrlc 
                     v_chk_exists := 0;
                     begin 
@@ -666,7 +666,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TCODLOCA';
                         exit cal_loop;
                     end;
-                    
+
                     --check codempmt 
                     v_chk_exists := 0;
                     begin 
@@ -718,7 +718,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TCODWORK';
                         exit cal_loop;
                     end;
-					
+
 					--check codjob 
                     v_chk_exists := 0;
                     begin 
@@ -731,7 +731,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TJOBCODE';
                         exit cal_loop;
                     end;
-					
+
                     --check jobgrade 
                     v_chk_exists := 0;
                     begin 
@@ -744,7 +744,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TCODJOBG';
                         exit cal_loop;
                     end;
-					
+
 					--check codgrpgl 
                     v_chk_exists := 0;
                     begin 
@@ -757,7 +757,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_table := 'TCODGRPGL';
                         exit cal_loop;
                     end;
-					
+
 					--check dteduepr 
                     if(v_staemp in ('1','3') and ((v_dteduepr is null) or length(trim(v_dteduepr)) is null)) then
                         v_error	 	:= true;
@@ -765,7 +765,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(32);
                         exit cal_loop;
                     end if;
-					
+
 					--check stadisb 
                     if v_stadisb is not null or length(trim(v_stadisb)) is not null then
                         if v_stadisb not in ('Y','N') then
@@ -775,7 +775,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             exit cal_loop;
                         end if;
                     end if;
-					
+
 					--check flgpdpa 
                      if v_flgpdpa is not null or length(trim(v_flgpdpa)) is not null then
                         if v_flgpdpa not in ('Y','N' )then
@@ -785,7 +785,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             exit cal_loop;
                         end if;
                     end if;
-					
+
 					--check numdisab, typdisp, dtedisb, dtedisen, desdisp
 					 if v_flgpdpa = 'Y' then
 						 for i in 42..46 loop
@@ -797,7 +797,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 							end if;
 						 end loop;
 					 end if;
-					 
+
 					 --check typdisp 
                     if v_typdisp is not null or length(trim(v_typdisp)) is not null then
                         v_chk_exists := 0;
@@ -812,7 +812,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             exit cal_loop;
                         end;
 					 end if;
-					 					 
+
 					--check typtrav 
                     if v_typtrav is not null or length(trim(v_typtrav)) is not null then
                         if(v_typtrav not in ('1','2','3'))then
@@ -822,7 +822,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             exit cal_loop;
                         end if; 
                     end if; 
-					 
+
 					--check typfuel 
                     if v_typfuel is not null or length(trim(v_typfuel)) is not null then
                         if(v_typfuel not in ('1','2'))then
@@ -847,7 +847,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             exit cal_loop;
                         end;
                     end if;
-					
+
 					--check cobusrt 
                     if v_codbusrt is not null or length(trim(v_codbusrt)) is not null then
                         v_chk_exists := 0;
@@ -862,7 +862,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                             exit cal_loop;
                         end;
                     end if;
-					
+
 					--check maillang 
                     if(v_maillang not in ('101','102'))then
                         v_error	 	:= true;
@@ -870,13 +870,13 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                         v_err_field := v_field(53);
                         exit cal_loop;
                     end if; 
-                    
+
                     exit cal_loop;
                 end loop;
-                                 
+
                 --2.crud table--
                 if not v_error then      
-					
+
 					v_namfirst3	    := v_namfirste;
 					v_namfirst4	    := v_namfirste;
 					v_namfirst5 	:= v_namfirste;
@@ -910,10 +910,10 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
 					v_remarkap  	:= null;
 					v_codreq	    := null;
 					v_approvno  	:= null;
-					                    
+
                     begin 
 						delete from temploy1 where codempid  = v_codempid;                        
-													 
+
 						insert into temploy1(codempid,codtitle,namfirste,namfirstt,namfirst3,namfirst4,namfirst5,
                                                         namlaste,namlastt,namlast3,namlast4,namlast5,
                                                         namempe,namempt,namemp3,namemp4,namemp5,
@@ -948,7 +948,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                                                         v_desdisp,v_typtrav,v_qtylength,v_carlicen,v_typfuel,v_codbusno,
                                                         v_codbusrt,v_maillang,v_dteprgntst,v_flgpdpa,v_dtepdpa,v_approvno,
                                                         trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);	
-											
+
                     end;
                 else        
                     p_rec_error := p_rec_error + 1;                   
@@ -957,15 +957,15 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
                     p_error_code(v_cnt) := '[' || v_err_field || '] - ' || replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null);
                     p_numseq(v_cnt) := i; 
                 end if;            
-            
+
                 commit;
             exception when others then  
                 param_msg_error := get_error_msg_php('HR2508',global_v_lang);                  
             end;
 		end loop;  
-       
+
 	end;	
-  
+
   function get_result(p_rec_tran   in number,
                       p_rec_err    in number) return clob is     
     obj_row    json_object_t;
@@ -998,7 +998,7 @@ procedure get_process(json_str_input in clob, json_str_output out clob) is
           obj_result.put(to_char(v_rcnt - 1), obj_data);
         end loop;
       end if;
-      
+
       obj_row.put('datadisp', obj_result);
       return obj_row.to_clob;
     else

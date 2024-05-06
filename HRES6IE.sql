@@ -26,7 +26,7 @@
   p_longitude               thotelif.longitude%type;
   p_dtereqst                ttrnreq.dtereq%type;
   p_dtereqen                ttrnreq.dtereq%type;
-  
+
   p_dteyear                 tpotentp.dteyear%type;
   p_year                 tpotentp.dteyear%type;  
   p_codcompy                tpotentp.codcompy%type;
@@ -37,8 +37,8 @@
   p_flgConfirm              varchar2(1 char);
   p_staappr                 ttrnreq.staappr%type;
   p_dtereq2save             ttrnreq.dtereq%type;
-  
-  
+
+
 
   p_dtecancel               ttrnreq.dtecancel%type;
   p_codappr                 ttrnreq.codappr%type;

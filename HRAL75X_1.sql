@@ -71,7 +71,7 @@
             return; -- for procedure
           end if;
       end if;
-      
+
       begin
         select codcomp into p_codcomp
           from temploy1
@@ -79,7 +79,7 @@
       exception when no_data_found then
         p_codcomp := null;
       end;
-      
+
     end if;
 
     if p_dteyrepay is null then
@@ -165,8 +165,8 @@
         if global_v_zupdsal = 'Y' then
           v_amtpay := to_char(stddec(r1.amtpay, r1.codempid, v_chken), 'fm999,999,990.00');
         end if;
-       
-  
+
+
         v_rcnt        := v_rcnt + 1;
         obj_data      := json_object_t();
         obj_data.put('coderror', '200');

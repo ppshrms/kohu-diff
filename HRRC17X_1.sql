@@ -186,7 +186,7 @@
     obj_data.put('dteappchse', to_char(v_dteappchse,'dd/mm/yyyy'));
     obj_data.put('qtyappchse', round((v_dteappchse - v_dteintview) + 1) ); 
     obj_data.put('qtyall', (round((v_dtepost - v_dtereq) + 1) + round((v_dtechoose - v_dtepost) + 1) + round((v_dteintview - v_dtechoose) + 1)) ); 
-    
+
     obj_row.put(to_char(0), obj_data);
     if param_msg_error is null then
       json_str_output := obj_row.to_clob;

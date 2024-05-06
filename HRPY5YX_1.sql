@@ -589,7 +589,7 @@
          and codempid  = nvl(p_codempid,codempid)
          and codcomp   like hcm_util.get_codcomp_level(p_codcomp,1) || '%';
     end;
-    
+
     obj_json.put('coderror','200');
     json_str_output := obj_json.to_clob;
   exception when others then

@@ -10,10 +10,10 @@
       global_v_coduser  := hcm_util.get_string_t(json_obj,'p_coduser');
       global_v_codempid := hcm_util.get_string_t(json_obj,'p_codempid');
       global_v_lang     := hcm_util.get_string_t(json_obj,'p_lang');
-  
+
       p_codcomp       := hcm_util.get_string_t(json_obj,'codcomp');
       p_codempid      := hcm_util.get_string_t(json_obj,'codempid');
-      
+
       hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
   end initial_value;
 
@@ -55,7 +55,7 @@
               param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TEMPLOY1');
               return;
           end;
-  
+
           -- ตรวจสอบ Secure เรียก secur_main.secur2 (HR3007)
           if secur_main.secur2(p_codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal) = false then
               param_msg_error := get_error_msg_php('HR3007',global_v_lang);
@@ -69,7 +69,7 @@
       obj_data  json_object_t;
       v_row     number :=0;
       v_secur   boolean;
-      
+
       cursor c1 is
         select distinct a.codempid,b.codcomp,b.codpos,numprdst,dtemthst,dteyearst,numprden,dtemthen,dteyearen
           from tcostemp a,temploy1 b
@@ -114,7 +114,7 @@
       param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
       json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end get_index;
-  
+
   procedure check_get_detail(v_numprdst number,v_dtemthst number,v_dteyearst number) as
       v_temp varchar2(1 char);
       v_secur boolean;
@@ -152,12 +152,12 @@
     v_dteyearen number(4,0);
     v_flgEdit   varchar2(10 char);
     v_codcompy  varchar2(10 char);
-  
+
     obj_result  json_object_t;
     obj_row     json_object_t;
     obj_data    json_object_t;
     v_row       number :=0;
-  
+
     cursor c1 is
         select * from tcostemp
         where codempid = v_codempid and
@@ -168,7 +168,7 @@
               dtemthen   = v_dtemthen and
               dteyearen  = v_dteyearen
         order by codpay;
-  
+
     cursor c2 is
         select dteyearen,dtemthen,numprden from tcostemp
         where codempid = v_codempid
@@ -231,12 +231,12 @@
       v_dtemthen  number(2,0);
       v_dteyearen number(4,0);
       v_flgEdit   varchar2(10 char);
-  
+
       obj_result  json_object_t;
       obj_row     json_object_t;
       obj_data    json_object_t;
       v_row       number :=0;
-  
+
     cursor c1 is
       select CODCOMP,CODPAY,COSTCENT,PCTCHG 
         from tcostemp
@@ -248,7 +248,7 @@
          and dtemthen = v_dtemthen 
          and dteyearen = v_dteyearen
        order by codpay;
-  
+
     cursor c2 is
         select dteyearen,dtemthen,numprden from tcostemp
         where codempid = v_codempid
@@ -265,7 +265,7 @@
       v_numprden  := to_number(hcm_util.get_string_t(json_obj,'numprden'));
       v_dtemthen  := to_number(hcm_util.get_string_t(json_obj,'dtemthen'));
       v_dteyearen := to_number(hcm_util.get_string_t(json_obj,'dteyearen'));
-  
+
       if v_numprden is null then
           for g in c2 loop
               v_numprden  := g.numprden;
@@ -307,7 +307,7 @@
       v_dtemthen  number(2,0);
       v_dteyearen number(4,0);
       v_flgEdit   varchar2(10 char);
-  
+
   begin
       initial_value(json_str_input);
       json_obj        := json_object_t(json_str_input);
@@ -321,16 +321,16 @@
           v_numprden  := to_number(hcm_util.get_string_t(obj_data,'numprden'));
           v_dtemthen  := to_number(hcm_util.get_string_t(obj_data,'dtemthen'));
           v_dteyearen := to_number(hcm_util.get_string_t(obj_data,'dteyearen'));
-  
+
           delete from tcostemp
           where
               codempid = v_codempid and
               numprdst = v_numprdst and
               dtemthst = v_dtemthst and
               dteyearst = v_dteyearst;
-  
+
       end loop;
-  
+
       if param_msg_error is null then
           commit;
           param_msg_error := get_error_msg_php('HR2401',global_v_lang);
@@ -339,7 +339,7 @@
           rollback;
           json_str_output := get_response_message('400',param_msg_error,global_v_lang);
       end if;
-  
+
   exception when others then
       param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
       json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -411,7 +411,7 @@
       v_count number := 0;
       v_check boolean := true;
       v_codcompy  tinexinfc.codcompy%type;
-  
+
       cursor c1 is
           select * from tcostemp
           where
@@ -430,7 +430,7 @@
 --          param_msg_error := get_error_msg_php('HR2045',global_v_lang);
 --          return;
 --      end if;
-  
+
       if v_flgEdit = 'add' or v_flgEdit = 'edit' or v_flgEdit is null then
           -- ในรหัสรายได้เดียวกัน เลือกได้แค่แบบใดแบบหนึ่งเท่านั้น แจ้งเตือน “PY0054 - ต่อหนึ่งรหัสรายได้ สามารถเลือกวิธีการ Charge ได้แบบใดแบบหนึ่งเท่านั้น”
 --          if v_isMatchChg = 'N' then
@@ -484,7 +484,7 @@
               param_msg_error := get_error_msg_php('HR2507',global_v_lang);
               return;
           end if;
-  
+
           -- รหัสรายได้ จะต้องมีอยู่จริงในตาราง TINEXINF (HR2010)
           begin
               select 'X' into v_temp
@@ -537,7 +537,7 @@
 --              return;
 --          end if;
       end if; -- end v_flgEdit = 'Add','Edit'
-  
+
       if v_flgEdit = 'add' then
           -- ตรวจสอบ การ Dup ของ PK : กรณีรหัสซ้า (HR2005 TCOSTEMP)
           begin
@@ -557,7 +557,7 @@
           end if;
       end if; -- end v_flgEdit = 'Add'
   end;
-  
+
   procedure save_detail(json_str_input in clob,json_str_output out clob) as
       json_obj    json_object_t;
       obj_data    json_object_t;
@@ -570,7 +570,7 @@
       v_dtemthen  number(2,0);
       v_dteyearen number(4,0);
       v_fldEditM  varchar2(10 char);
-  
+
       v_codpay    varchar2(4 char);
       v_flgcharge varchar2(1 char);
       v_codcomp   varchar2(40 char);
@@ -593,10 +593,10 @@
       v_dtemthen  := to_number(hcm_util.get_string_t(json_obj,'dtemthen'));
       v_dteyearen := to_number(hcm_util.get_string_t(json_obj,'dteyearen'));
       v_fldEditM   := hcm_util.get_string_t(json_obj,'flgEdit');
-  
+
       param_json      := hcm_util.get_json_t(obj_param,'param_json');
       validate_save_1(v_codempid,v_numprdst,v_dtemthst,v_dteyearst,v_numprden,v_dtemthen,v_dteyearen,param_json);
-      
+
       if param_msg_error is null then
           for i in 0..param_json.get_size-1 loop
               obj_data    := hcm_util.get_json_t(param_json,to_char(i));
@@ -616,7 +616,7 @@
               if param_msg_error is not null then
                 exit;
               end if;
-  
+
               if v_flgEdit = 'add' then
                 insert into tcostemp (codempid, numprdst, dtemthst, dteyearst, numprden, dtemthen, 
                                        dteyearen, codpay, flgcharge, codcomp, costcent, pctchg, remark, codcreate, coduser)
@@ -683,7 +683,7 @@
       param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
       json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end save_detail;
-  
+
   procedure get_name_costcent(json_str_input in clob,json_str_output out clob) as
       json_obj    json_object_t;
       obj_result  json_object_t;

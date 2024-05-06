@@ -50,16 +50,16 @@
   p_remarkap        tjobreq.remarkap%type;
   p_syncond         tjobreq.syncond%type;
   p_statement       tjobreq.statement%type;
-  
+
   b_sdate           varchar2(4000 char);
   b_amtintaccu      varchar2(4000 char);
   v_amtintaccu      varchar2(4000 char);
   v_amtinteccu      varchar2(4000 char);
   v_view_codapp     varchar2(100 char);
   global_v_codapp   varchar2(100 char);
-         
+
   procedure initial_value(json_str in clob);
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure get_detail(json_str_input in clob, json_str_output out clob);
   procedure get_job_remark(json_str_input in clob, json_str_output out clob);

@@ -114,7 +114,7 @@
   begin
     obj_row     := json_object_t();
     obj_result  := json_object_t();
-    
+
     for r_tattence in c_tattence loop
       v_exists    := true;
 

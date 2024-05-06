@@ -26,10 +26,10 @@
   p_year                number;
   params_syncond        json_object_t;
   params_json           json_object_t;
-  
+
   procedure initial_value (json_str in clob);
   procedure check_index;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob);  
   procedure get_detail(json_str_input in clob, json_str_output out clob);
   procedure gen_report(json_str_input in clob, json_str_output out clob);  

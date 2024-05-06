@@ -3,7 +3,7 @@
 --------------------------------------------------------
 
   CREATE OR REPLACE EDITIONABLE PACKAGE "STD_AL" is
--- last update: 29/04/2024, 21/04/2021 15:00        --redmine895
+-- last update: 21/04/2021 15:00        --redmine895
 
 	v_chken varchar2(4 char) := check_emp(get_emp);
 

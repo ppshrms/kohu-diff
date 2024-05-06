@@ -321,7 +321,7 @@
             obj_data.put('desc_codempid', get_temploy_name(c1.codempid,global_v_lang));
             obj_data.put('dteempmt', to_char(c1.dteempmt,'dd/mm/yyyy'));
             obj_data.put('codpay', rt_tcontraw.codpay);
-            
+
             for k in 1..2 loop
             v_loop := k ;
             for c2 in c_tpaysum (c1.codempid) loop
@@ -330,13 +330,13 @@
                  obj_data.put('icon','<i class="fa fa-info-circle"></i>'); 
                 obj_data.put('codempid2', c1.codempid);
                 obj_data.put('desc_codempid2', get_temploy_name(c1.codempid,global_v_lang)); 
-                
+
               else
                  obj_data.put('typdiligent', v_label2 );
                  obj_data.put('icon',''); 
                 obj_data.put('codempid2', '');
                 obj_data.put('desc_codempid2', ''); 
-                
+
               end if;
               --if c2.amtpay1 is not null and c2.amtpay2 is not null 
               --   and c2.amtpay3 is not null and c2.amtpay4 is not null 
@@ -344,7 +344,7 @@
               --   and c2.amtpay7 is not null and c2.amtpay8 is not null 
               --   and c2.amtpay9 is not null and c2.amtpay10 is not null 
               --   and c2.amtpay11 is not null and c2.amtpay12 is not null    then  
-              
+
                   v_exist_tpaysum := true; -- fix issue #5381
                   -- clear array
                   for i in 1..13 loop

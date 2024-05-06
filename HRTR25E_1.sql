@@ -389,5 +389,4 @@
     end save_detail;
 END HRTR25E;
 
-
 /

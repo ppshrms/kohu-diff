@@ -26,7 +26,7 @@
          and dtefoll    = (select max(dtefoll)
                              from tappfoll
                             where numappl    = b_index_numappl);
-    
+
     cursor c_applinf is
       select stasign,codappr,dteempmt,numreqc,codcompl,
              codposl,codempmt,flgblkls,remark,numreql,
@@ -110,7 +110,7 @@
     exception when no_data_found then
       v_numoffid    := null;
     end;
-    
+
     obj_row   := json_object_t();
     for i in c_applinf loop
       obj_data    := json_object_t();
@@ -172,7 +172,7 @@
     v_dtefoll     := to_date(hcm_util.get_string_t(json_input,'p_dtefoll'),'dd/mm/yyyy');
     v_codrej      := hcm_util.get_string_t(json_input,'p_codrej');
     v_statappl    := hcm_util.get_string_t(json_input,'p_statappl');
-    
+
     if v_statappl in ('42','62') then
       begin
         insert into tappfoll(numappl,dtefoll,statappl,codrej,codcreate,coduser)
@@ -183,17 +183,17 @@
          where numappl    = b_index_numappl;
       end;
     end if;
-    
+
     update tapplinf
        set dtefoll    = v_dtefoll,
            statappl   = v_statappl,
            codrej     = v_codrej,
            coduser    = global_v_coduser
      where numappl    = b_index_numappl;
-     
+
     param_msg_error := get_error_msg_php('HR2401',global_v_lang);
     commit;
-    
+
     json_str_output := get_response_message(null,param_msg_error,global_v_lang);
   exception when others then
     param_msg_error   := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;

@@ -218,5 +218,4 @@
   end save_detail;
 end HRRC44E;
 
-
 /

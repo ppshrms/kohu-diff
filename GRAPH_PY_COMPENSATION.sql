@@ -5,7 +5,7 @@
   CREATE OR REPLACE EDITIONABLE PACKAGE "GRAPH_PY_COMPENSATION" AS
   conf_display_codcomp  boolean;
   conf_defalut_complvl  varchar2(10 char);
-  
+
   global_v_coduser      varchar2(4000 char);
   global_v_codpswd      varchar2(4000 char);
   global_v_lang         varchar2(4000 char) := '102';

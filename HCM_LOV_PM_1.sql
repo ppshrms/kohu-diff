@@ -1955,7 +1955,7 @@
     return json_str_output;
   end;
   ---
-  
+
   function get_approval_request_number(json_str_input in clob) return clob is
     obj_row         json_object_t;
     obj_data        json_object_t;

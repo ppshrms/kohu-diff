@@ -187,7 +187,7 @@ procedure get_message(p_codform     in varchar2,
                       p_column_value in t_array_var2,
                       p_column_width in t_array_var2) is
     v_msg_to    long ;
-    
+
     v_max_col        number := 0;
     v_data_table     clob;
     v_data_list      clob;

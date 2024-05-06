@@ -35,7 +35,7 @@
     procedure gen_data_withdraw (json_str_output out clob);
     procedure get_table_withdraw (json_str_input in clob, json_str_output out clob);
     procedure gen_table_withdraw (json_str_output out clob);
-    
+
     procedure clear_ttemprpt;
     procedure get_report(json_str_input in clob, json_str_output out clob);
 END HRBF1FX;

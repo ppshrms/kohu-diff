@@ -58,7 +58,7 @@
     procedure get_drilldown(json_str_input in clob, json_str_output out clob);
 
     procedure get_drilldown_interview(json_str_input in clob, json_str_output out clob);
-    
+
 END HRRC34E;
 
 /

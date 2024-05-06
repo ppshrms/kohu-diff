@@ -15,7 +15,7 @@
   v_zupdsal             varchar2(4000 char);
   global_v_codpswd      varchar2(100 char);
   global_v_lang         varchar2(10 char) := '102';
-  
+
   b_index_codcompy      tstdisd.codcomp%type;
   b_index_codaplvl      tstdisd.codaplvl%type; --03/03/2021
   procedure initial_value(json_str in clob);

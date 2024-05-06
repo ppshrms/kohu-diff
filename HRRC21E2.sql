@@ -18,7 +18,7 @@
   global_v_numlvlsalen      number;
 
   b_index_numappl           tapplinf.numappl%type;
-  
+
   procedure get_applinf_step(json_str_input in clob, json_str_output out clob);
 
   procedure get_applinf_history(json_str_input in clob, json_str_output out clob);

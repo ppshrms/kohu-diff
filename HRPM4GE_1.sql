@@ -441,7 +441,7 @@
 		v_periodstr := v_ttpunded.dteyearst - hcm_appsettings.get_additional_year() ||lpad(v_ttpunded.dtemthst,2,0)||lpad(v_ttpunded.numprdst,2,0);
 		v_periodend := v_ttpunded.dteyearen - hcm_appsettings.get_additional_year() ||lpad(v_ttpunded.dtemthen,2,0)||lpad(v_ttpunded.numprden,2,0);
 		begin
-             
+
 			select hcm_util.get_codcomp_level(codcomp, 1),typpayroll into gen_codcomp,gen_typpayroll
 			  from temploy1
 			 where codempid = v_ttpunded.codempid;
@@ -1588,9 +1588,9 @@
 		v_flgssm		ttpunsh.flgssm%type;
 		v_jobgrade		ttpunsh.jobgrade%type;
 		v_codgrpgl		ttpunsh.codgrpgl%type;
-    
+
 		v_codpay		ttpunded.codpay%type;
-    
+
 		v_obj_itemtab2	json_object_t;
 		v_count_ttpunsh	json_object_t;
 		v_mode			varchar2(10 char);
@@ -1630,7 +1630,7 @@
 			v_mode          := hcm_util.get_string_t(v_obj_itemtab2,'mode');
             v_dtestart      := to_date(hcm_util.get_string_t(v_obj_itemtab2,'dtestart'),'dd/mm/yyyy');
             v_dteend        := to_date(hcm_util.get_string_t(v_obj_itemtab2,'dteend'),'dd/mm/yyyy');
-      
+
       v_obj_itemtab3  := hcm_util.get_json_t(v_objdatatab3,i);
       v_codpay        := hcm_util.get_string_t(v_obj_itemtab3,'codpay');
 			if (upper(v_mode) = 'EDIT') then

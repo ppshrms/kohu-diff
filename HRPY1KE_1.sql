@@ -499,7 +499,7 @@
                                             '103',descnam3,
                                             '104',descnam4,
                                             '105',descnam5) desc_coddeduct
-                                            
+
         from  tcodeduct
     order by  coddeduct;
   begin

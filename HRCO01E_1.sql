@@ -200,7 +200,7 @@
   exception when others then
     null;
   end;
-  
+
   procedure check_dteeffec_detail AS
     v_dteeffec TPDPAITEM.dteeffec%type;
     v_chkExist number;
@@ -339,7 +339,7 @@
   exception when others then
     null;
   end;
-  
+
   procedure check_dteeffec AS
     v_dteeffec TPDPAITEM.dteeffec%type;
     v_chkExist number;
@@ -742,7 +742,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   END gen_detail;
-  
+
   procedure gen_detail_PDPA (json_str_output out clob) AS
     obj_data        json_object_t;
     obj_pdpa        json_object_t;
@@ -750,10 +750,10 @@
   begin
       obj_data    := json_object_t();
       obj_pdpa := json_object_t();
-      
+
       obj_data.put('coderror', '200');
       obj_data.put('msgerror', '');
-      
+
       check_dteeffec;
       obj_pdpa := get_policy(p_codcompy);
       obj_data.put('table', obj_pdpa);
@@ -775,7 +775,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   END gen_detail_PDPA;
-  
+
   procedure get_detail_PDPA (json_str_input in clob,json_str_output out clob) AS
     obj_row json_object_t;
   begin
@@ -789,7 +789,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end get_detail_PDPA;
-  
+
   function get_policy(v_codcompy in varchar2) return json_object_t is
     v_out_json    json_object_t;
     obj_data      json_object_t;
@@ -832,7 +832,7 @@
     end loop;
     return obj_row;
   end get_policy;
-  
+
   procedure gen_popupPdpa (json_str_output out clob) AS
     obj_data        json_object_t;
     obj_pdpa        json_object_t;
@@ -882,7 +882,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   END gen_popupPdpa;
-  
+
   procedure popupPdpa (json_str_input in clob,json_str_output out clob) AS
     obj_row json_object_t;
   begin
@@ -896,7 +896,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end popupPdpa;
-  
+
   procedure gen_list_pdpa (json_str_output out clob) AS
     obj_data        json_object_t;
     obj_row         json_object_t;
@@ -923,7 +923,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   END gen_list_pdpa;
-  
+
   procedure list_pdpa (json_str_input in clob,json_str_output out clob) AS
     obj_row json_object_t;
   begin
@@ -937,7 +937,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end list_pdpa;
-  
+
   procedure save_index (json_str_input in clob, json_str_output out clob) is
     obj_data          json_object_t;
     v_codcompy        tcompny.codcompy%type;
@@ -992,61 +992,61 @@
     v_building3 varchar2(200 char);
     v_building4 varchar2(200 char);
     v_building5 varchar2(200 char);
-    
+
     v_roomnoe varchar2(200 char);
     v_roomnot varchar2(200 char);
     v_roomno3 varchar2(200 char);
     v_roomno4 varchar2(200 char);
     v_roomno5 varchar2(200 char);
-    
+
     v_floore varchar2(200 char);
     v_floort varchar2(200 char);
     v_floor3 varchar2(200 char);
     v_floor4 varchar2(200 char);
     v_floor5 varchar2(200 char);
-    
+
     v_villagee varchar2(200 char);
     v_villaget varchar2(200 char);
     v_village3 varchar2(200 char);
     v_village4 varchar2(200 char);
     v_village5 varchar2(200 char);
-    
+
     v_addrnoe varchar2(200 char);
     v_addrnot varchar2(200 char);
     v_addrno3 varchar2(200 char);
     v_addrno4 varchar2(200 char);
     v_addrno5 varchar2(200 char);
-    
+
     v_mooe 		varchar2(200 char);
     v_moot 		varchar2(200 char);
     v_moo3 		varchar2(200 char);
     v_moo4 		varchar2(200 char);
     v_moo5 		varchar2(200 char);
-    
+
     v_soie 		varchar2(200 char);
     v_soit 		varchar2(200 char);
     v_soi3 		varchar2(200 char);
     v_soi4 		varchar2(200 char);
     v_soi5 		varchar2(200 char);
-    
+
     v_roade 	varchar2(200 char);
     v_roadt 	varchar2(200 char);
     v_road3 	varchar2(200 char);
     v_road4 	varchar2(200 char);
     v_road5 	varchar2(200 char);
-    
+
     v_subdise  varchar2(200 char);
     v_subdist  varchar2(200 char);
     v_subdis3  varchar2(200 char);
     v_subdis4  varchar2(200 char);
     v_subdis5  varchar2(200 char);
-    
+
     v_dise     varchar2(200 char);
     v_dist     varchar2(200 char);
     v_dis3     varchar2(200 char);
     v_dis4     varchar2(200 char);
     v_dis5     varchar2(200 char);
-    
+
     v_prove    varchar2(200 char);
     v_provt    varchar2(200 char);
     v_prov3    varchar2(200 char);
@@ -1055,7 +1055,7 @@
 
 
     v_codapp    varchar2(10 char) := 'HRCO01EC2';
-    
+
     obj_data    json_object_t;
     v_flg       varchar2(10 char);
     v_numseq       tpdpaitem.numitem%type;
@@ -1347,7 +1347,7 @@
             where codcomp = v_codcomp;
         end;
       end if;
-    
+
       --
       for i in 0..param_json.get_size-1 loop
         obj_data    := hcm_util.get_json_t(param_json, to_char(i));
@@ -1363,7 +1363,7 @@
         v_desitem3      := hcm_util.get_string_t(obj_data, 'desitem3');
         v_desitem4      := hcm_util.get_string_t(obj_data, 'desitem4');
         v_desitem5      := hcm_util.get_string_t(obj_data, 'desitem5');
-        
+
         if v_numseq is null then
           begin
             select nvl(max(numitem),0) + 1 into v_numseq

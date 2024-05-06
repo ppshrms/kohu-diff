@@ -33,5 +33,4 @@
   function get_latest_dteeffec(v_codcompy in varchar2,v_codlon  in varchar2) return varchar2;
 end hrbf5je;
 
-
 /

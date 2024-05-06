@@ -22,9 +22,9 @@
   p_codcomp         tothded.codcomp%type;
   p_codempid_query  tothded.codempid%type;
   p_typpayroll      tothded.typpayroll%type;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob);
-  
+
 END HRPY59X;
 
 /

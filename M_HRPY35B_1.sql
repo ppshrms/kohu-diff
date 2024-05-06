@@ -123,17 +123,30 @@
         v_amtpos        varchar2(500 char);  
         v_costcnte      varchar2(500 char);  
 
+        /*cursor c_tgltrans	is
+          select a.apcode,a.costcent,a.codacc codacc,a.scodacc,a.typpaymt,a.flgdrcr,
+                  decode(a.flgdrcr,'DR',sum(to_number(stddec(a.amtgl,a.codcompy,v_chken))),0) amtdr,
+                  decode(a.flgdrcr,'CR',to_number(sum(stddec(a.amtgl,a.codcompy,v_chken))),0) amtcr,
+           from tgltrans a,taccodb b
+          where a.codcompy   = p_codcompy
+            and a.dteyrepay  = p_dteyrepay
+            and a.dtemthpay  = p_dtemthpay
+            and a.codacc     = b.codacc
+            and a.numperiod between v_periodst and v_perioden
+          /*group by a.apcode,a.costcent,a.codacc,a.scodacc,a.typpaymt,a.flgdrcr
+          order by a.apcode,a.costcent,a.codacc,a.scodacc,a.typpaymt,a.flgdrcr desc; */        
+         /* group by a.apcode,a.costcent,a.codacc,a.scodacc,a.typpaymt,a.flgdrcr,b.poskeycr
+          order by a.apcode,b.poskeycr,a.costcent,a.codacc,a.scodacc,a.typpaymt,a.flgdrcr desc;*/  
         cursor c_tgltrans	is
-          select apcode,costcent,codacc,scodacc,typpaymt,flgdrcr,
-                  decode(flgdrcr,'DR',sum(to_number(stddec(amtgl,codcompy,v_chken))),0) amtdr,
-                  decode(flgdrcr,'CR',to_number(sum(stddec(amtgl,codcompy,v_chken))),0) amtcr
+          select costcent,codacc,postkey,sum(to_number(stddec(amtgl,codcompy,v_chken))) amtgl
            from tgltrans
           where codcompy   = p_codcompy
             and dteyrepay  = p_dteyrepay
             and dtemthpay  = p_dtemthpay
-            and numperiod between v_periodst and v_perioden
-          group by apcode,costcent,codacc,scodacc,typpaymt,flgdrcr
-          order by apcode,costcent,codacc,scodacc,typpaymt,flgdrcr desc;
+            and numperiod between v_periodst and v_perioden    
+          group by scodacc,postkey,codacc,costcent,typpaymt
+          order by scodacc,postkey,codacc,costcent,typpaymt;
+
 
     begin
         if nvl(p_numperiod,0) > 0 then
@@ -157,25 +170,32 @@
         --
         out_file 	:= UTL_FILE.Fopen(p_file_dir,p_filename,'w');
 
-        if p_typetext = '1' then
+        if nvl(p_typetext,'1') = '1' then
             for r_tgltrans in c_tgltrans loop
-                begin  
+                /*begin  
                     select poskeydb,poskeycr into v_poskeydb,v_poskeycr
                       from taccodb
                      where codacc = r_tgltrans.codacc;
                 exception when no_data_found then
-                    null;
+                    v_poskeydb := null;
+                    v_poskeycr := null;
                 end;
-
+                /*v_poskey := null;
                 if r_tgltrans.amtdr <> 0 then
                     v_poskey := v_poskeydb;
-                    v_amtpos := ltrim(to_char((r_tgltrans.amtdr * 100),'000000000000'));
+                    --v_amtpos := to_char(r_tgltrans.amtdr,'fm99999999990.00');                  
                 elsif r_tgltrans.amtcr <> 0 then
                     v_poskey := v_poskeycr;
-                    v_amtpos := ltrim(to_char((r_tgltrans.amtcr * 100),'000000000000'));
-                end if;
+                    --v_amtpos := to_char(r_tgltrans.amtcr,'fm99999999990.00');
+                end if;*/
+                
+                
+               data_file := r_tgltrans.postkey||chr(9)||
+                             r_tgltrans.codacc||chr(9)||
+                             r_tgltrans.costcent||chr(9)||
+                             r_tgltrans.amtgl;
 
-                data_file := ''||v_tab||
+                /*data_file := ''||v_tab||
                             ''||v_tab||
                             to_char(sysdate,'DDMMYYYY')||v_tab||
                             ''||v_tab||
@@ -190,7 +210,7 @@
                             v_costcnte||v_tab||
                             v_amtpos||v_tab||
                             r_tgltrans.costcent||v_tab||
-                            ''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||'';   
+                            ''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''||v_tab||''; */  
 
                 if data_file is not null then
                     UTL_FILE.Put_line(out_file,data_file);
@@ -200,7 +220,8 @@
 
             end loop; -- for c_tgltrans      
         else
-            for r_tgltrans in c_tgltrans loop
+        null;
+            /*for r_tgltrans in c_tgltrans loop
                 data_file :=   rpad(r_tgltrans.costcent,10,' ')||
                                rpad(r_tgltrans.codacc,10,' ')||
                                rpad(r_tgltrans.scodacc,10,' ')||
@@ -218,7 +239,7 @@
 
                 v_numrec := v_numrec + 1;
 
-            end loop; -- for c_tgltrans        
+            end loop; -- for c_tgltrans   */     
         end if;
 
         UTL_FILE.FClose(out_file);
@@ -299,6 +320,7 @@
           order by numseq;
 
     begin
+
         check_index;
         v_dtestr := sysdate;
 

@@ -88,5 +88,4 @@
   procedure gen_detail_descpay (json_str_output out clob);
 END HRBF53E;
 
-
 /

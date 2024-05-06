@@ -68,11 +68,11 @@ AS
 	procedure gen_index21e (json_str_output out clob);
 	procedure get_detail21e (json_str_input in clob,json_str_output out clob);
 	procedure gen_detail21e (json_str_output out clob);
-  
+
   procedure gen_id (json_str_input in clob,json_str_output out clob);
-  
+
   procedure genallowance(json_str_input in clob, json_str_output out clob);
-  
+
 	procedure get_save_21e (json_str_input in clob,json_str_output out clob);
 	procedure save_data21e (json_str_output out clob);
 	procedure get_delete21e (json_str_input in clob,json_str_output out clob);

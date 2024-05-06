@@ -32,7 +32,7 @@
         if param_msg_error is not null then
             return;
         end if;
-      
+
         begin
             select count(*) into v_count
               from treqest1
@@ -45,7 +45,7 @@
             return;
         end if;       
     end if;
-    
+
     if p_numreqst is not null then
         begin
             select count(*) into v_count
@@ -59,7 +59,7 @@
             return;
         end if;           
     end if;
-    
+
     if p_numreqen is not null then
         begin
             select count(*) into v_count
@@ -73,7 +73,7 @@
             return;
         end if;            
     end if;
-    
+
     if p_numreqst is not null and p_numreqen is not null then 
         if p_numreqst > p_numreqen then
             param_msg_error := get_error_msg_php('HR2022', global_v_lang);
@@ -81,62 +81,62 @@
         end if;
     end if;                                                                                                  
   end check_index;
-  
+
   procedure process_data (json_str_input in clob, json_str_output out clob) is
     obj_row                         json_object_t;
     obj_data                        json_object_t;
     obj_main                        json_object_t;
     json_obj                        json_object_t;
     v_response                      varchar2(4000);
-    
+
     tapplinf_response               json_object_t;
     tapplinf_complete_all           number := 0;
     tapplinf_error_all              number := 0;
-    
+
     teducatn_response               json_object_t;
     teducatn_complete_all           number := 0;
     teducatn_error_all              number := 0;
-    
+
     tapplwex_response               json_object_t;
     tapplwex_complete_all           number := 0;
     tapplwex_error_all              number := 0;
-    
+
     ttrainbf_response               json_object_t;
     ttrainbf_complete_all           number := 0;
     ttrainbf_error_all              number := 0;
-    
+
     tapploth_response               json_object_t;
     tapploth_complete_all           number;
     tapploth_error_all              number;
-    
+
     tapplfm_response                json_object_t;
     tapplfm_complete_all            number := 0;
     tapplfm_error_all               number := 0;
-    
+
     tapplrel_response               json_object_t;
     tapplrel_complete_all           number := 0;
     tapplrel_error_all              number := 0;
-    
+
     tapplref_response               json_object_t;
     tapplref_complete_all           number := 0;
     tapplref_error_all              number := 0;
-    
+
     tlangabi_response               json_object_t;
     tlangabi_complete_all           number := 0;
     tlangabi_error_all              number := 0;
-    
+
     addinfo_response                json_object_t;
     addinfo_complete_all            number := 0;
     addinfo_error_all               number := 0;
-    
+
     tappldoc_response               json_object_t;      
     tappldoc_complete_all           number := 0;      
     tappldoc_error_all              number := 0;  
-    
+
     v_email                         varchar2(100 char);
     v_msg                           clob;
     v_error                         varchar2(4000 char);
-    
+
     cursor c_treqest1 is
         select codemprc
           from treqest1
@@ -168,9 +168,9 @@
         p_rel                     := hcm_util.get_json_t(p_data_sheet, 'p_rel');
         p_spouse                  := hcm_util.get_json_t(p_data_sheet, 'p_spouse');
         p_train                   := hcm_util.get_json_t(p_data_sheet, 'p_train');
-        
+
         obj_row         := json_object_t();
-        
+
         --1.tapplinf
         insert_tapplinf(tapplinf_response, tapplinf_complete_all, tapplinf_error_all);
         obj_data        := json_object_t();
@@ -182,7 +182,7 @@
         obj_data.put('error', tapplinf_error_all);
         obj_data.put('table', tapplinf_response);   
         obj_row.put(to_char(0), obj_data);
-        
+
         --2.teducatn
         insert_teducatn(teducatn_response, teducatn_complete_all ,teducatn_error_all);
         obj_data        := json_object_t();
@@ -194,7 +194,7 @@
         obj_data.put('error', teducatn_error_all);
         obj_data.put('table', teducatn_response);   
         obj_row.put(to_char(1), obj_data);
-        
+
         --3.tapplwex
         insert_tapplwex(tapplwex_response, tapplwex_complete_all ,tapplwex_error_all);
         obj_data        := json_object_t();
@@ -206,7 +206,7 @@
         obj_data.put('error', tapplwex_error_all);
         obj_data.put('table', tapplwex_response);   
         obj_row.put(to_char(2), obj_data);
-        
+
         --4.ttrainbf
         insert_ttrainbf(ttrainbf_response, ttrainbf_complete_all ,ttrainbf_error_all);
         obj_data        := json_object_t();
@@ -218,7 +218,7 @@
         obj_data.put('error', ttrainbf_error_all);
         obj_data.put('table', ttrainbf_response);   
         obj_row.put(to_char(3), obj_data);
-        
+
         --5.tapploth
         insert_tapploth(tapploth_response, tapploth_complete_all ,tapploth_error_all);
         obj_data        := json_object_t();
@@ -230,7 +230,7 @@
         obj_data.put('error', tapploth_error_all);
         obj_data.put('table', tapploth_response);   
         obj_row.put(to_char(4), obj_data);
-        
+
         --6.tapplfm
         insert_tapplfm(tapplfm_response, tapplfm_complete_all ,tapplfm_error_all);
         obj_data        := json_object_t();
@@ -242,7 +242,7 @@
         obj_data.put('error', tapplfm_error_all);
         obj_data.put('table', tapplfm_response);   
         obj_row.put(to_char(5), obj_data);
-        
+
         --7.tapplrel
         insert_tapplrel(tapplrel_response, tapplrel_complete_all ,tapplrel_error_all);
         obj_data        := json_object_t();
@@ -254,7 +254,7 @@
         obj_data.put('error', tapplrel_error_all);
         obj_data.put('table', tapplrel_response);   
         obj_row.put(to_char(6), obj_data);
-        
+
         --8.tapplref
         insert_tapplref(tapplref_response, tapplref_complete_all ,tapplref_error_all);
         obj_data        := json_object_t();
@@ -266,7 +266,7 @@
         obj_data.put('error', tapplref_error_all);
         obj_data.put('table', tapplref_response);   
         obj_row.put(to_char(7), obj_data);
-        
+
         --9.tlangabi
         insert_tlangabi(tlangabi_response, tlangabi_complete_all ,tlangabi_error_all);
         obj_data        := json_object_t();
@@ -278,7 +278,7 @@
         obj_data.put('error', tlangabi_error_all);
         obj_data.put('table', tlangabi_response);   
         obj_row.put(to_char(8), obj_data);
-        
+
         --10.addinfo
         insert_addinfo(addinfo_response, addinfo_complete_all ,addinfo_error_all);
         obj_data        := json_object_t();
@@ -290,7 +290,7 @@
         obj_data.put('error', addinfo_error_all);
         obj_data.put('table', addinfo_response);   
         obj_row.put(to_char(9), obj_data);
-        
+
         --11.tappldoc
         insert_tappldoc(tappldoc_response, tappldoc_complete_all ,tappldoc_error_all);     
         obj_data        := json_object_t();
@@ -302,11 +302,11 @@
         obj_data.put('error', tappldoc_error_all);
         obj_data.put('table', tappldoc_response);
         obj_row.put(to_char(10), obj_data);
-        
+
         if (tapplinf_error_all + teducatn_error_all + tapplwex_error_all + ttrainbf_error_all + 
             tapploth_error_all + tapplfm_error_all + tapplrel_error_all + tapplref_error_all + 
             tlangabi_error_all + addinfo_error_all + tappldoc_error_all = 0) then
-              
+
               begin
                   select decode(global_v_lang,'101',messagee,
                                        '102',messaget,
@@ -320,7 +320,7 @@
             exception when others then
               v_msg := null ;
             end ;  
-            
+
             for r1 in c_treqest1 loop
                 begin
                     select email
@@ -330,13 +330,13 @@
                 exception when no_data_found then
                     v_email := null;
                 end;
-                
+
                 if v_email is not null then
                     v_error := send_mail(v_email,v_msg);
                 end if;
             end loop;
         end if;
-        
+
         obj_main        := json_object_t();
         obj_main.put('coderror', '200'); 
         obj_main.put('response', hcm_util.get_string_t(json_object_t(get_response_message(null,get_error_msg_php('HR2715',global_v_lang),global_v_lang)),'response')); 
@@ -349,10 +349,10 @@
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output     := get_response_message('400',param_msg_error,global_v_lang);
   end process_data;
-  
+
   procedure insert_tapplinf(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     v_error         varchar2(4000 char);
-    
+
     tmp_adrcontt    varchar2(4000);
     tmp_adrregt     varchar2(4000);
     tmp_codblood    varchar2(4000);
@@ -402,17 +402,17 @@
     tmp_statappl    varchar2(4000);
     tmp_typdisp     varchar2(4000);
     tmp_weight      varchar2(4000); 
-    
+
     v_tapplinf                  tapplinf%rowtype;
     parameter_groupid           varchar2(100);
     parameter_year              number;
     parameter_month             number;
     parameter_running           varchar2(100);
     v_table                     varchar2(10);
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
-    
+
     v_last_numappl          varchar2(100);
     v_num_appl              number;
     v_chk                   varchar2(1) := 'N';
@@ -420,9 +420,9 @@
       select numappl
         from tapplinf
       order by 1 desc;
-    
-    
-    
+
+
+
   begin
     check_index;
     if param_msg_error is null then
@@ -527,7 +527,7 @@
         check_error(tmp_typdisp, 1, v_rcnt, v_num_error_row , 'TAPPLINF', 'TYPDISP', 'TEXT', obj_response);
         check_error(tmp_weight, 1, v_rcnt, v_num_error_row , 'TAPPLINF', 'WEIGHT', 'NUMBER', obj_response);
     end if;
-    
+
     if v_num_error_row = 0 then
         v_tapplinf.dteappl          := to_date(tmp_dteappl,'dd/mm/yyyy');
         v_tapplinf.codposl          := tmp_codpos1;
@@ -585,7 +585,7 @@
         v_tapplinf.dtedisb          := to_date(tmp_dtedisb,'dd/mm/yyyy');
         v_tapplinf.dtedisen         := to_date(tmp_dtedisen,'dd/mm/yyyy');
         v_tapplinf.desdisp          := tmp_desdisp;
-        
+
         v_tapplinf.namempe          := get_tlistval_name('CODTITLE',tmp_codtitle,'101')||tmp_namfirste||' '||tmp_namlaste;
         v_tapplinf.namempt          := get_tlistval_name('CODTITLE',tmp_codtitle,'102')||tmp_namfirstt||' '||tmp_namlastt;
         v_tapplinf.namemp3          := v_tapplinf.namempe;
@@ -599,7 +599,7 @@
         v_tapplinf.adrreg3          := tmp_adrregt;
         v_tapplinf.adrreg4          := tmp_adrregt;
         v_tapplinf.adrreg5          := tmp_adrregt;
-        
+
         begin
             select codcomp
               into v_tapplinf.codcompl
@@ -609,15 +609,15 @@
         exception when no_data_found then
             v_tapplinf.codcompl := '';
         end;
-        
+
         select count(*)
           into v_count_tapplinf
           from tapplinf
          where numoffid = v_tapplinf.numoffid
            and numreql = v_tapplinf.numreql;
-        
+
         if v_count_tapplinf = 0 then
-           
+
           --gen numappl
           for i in c1 loop
             begin
@@ -646,7 +646,7 @@
               exit;
             end;
           end loop;            
-            
+
             begin
                 insert into tapplinf(numappl,dteappl,codpos1,codpos2,numreql,statappl,flgqualify,
                                      dtetrnjo,namimage,codtitle,namfirste,namlaste,
@@ -675,7 +675,7 @@
                          v_tapplinf.namempe,v_tapplinf.namempt,v_tapplinf.namemp3,v_tapplinf.namemp4,v_tapplinf.namemp5,
                          v_tapplinf.adrconte,v_tapplinf.adrcont3,v_tapplinf.adrcont4,v_tapplinf.adrcont5,
                          v_tapplinf.adrrege,v_tapplinf.adrreg3,v_tapplinf.adrreg4,v_tapplinf.adrreg5);
-            
+
                 insert into tappfoll (numappl,dtefoll,statappl,codrej,
                                       remark,codappr,numreqst,codpos,
                                       dtecreate,codcreate,dteupd,coduser)   
@@ -708,7 +708,7 @@
 
   procedure insert_teducatn(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row  json_object_t;
-    
+
     tmp_codcount                varchar2(4000); 
     tmp_coddglv                 varchar2(4000); 
     tmp_codedlv                 varchar2(4000); 
@@ -719,18 +719,18 @@
     tmp_numgpa                  varchar2(4000); 
     tmp_numseq                  varchar2(4000); 
     tmp_stayear                 varchar2(4000); 
-    
+
     v_teducatn                  teducatn%rowtype;
-    
+
     max_dtegyear                number;
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
   begin
 --    if v_count_tapplinf = 0 then
         delete teducatn 
          where numappl = p_numappl;
-        
+
         for i in 0..p_edu.get_size-1 loop 
             v_num_error_row := 0;
             param_json_row              := hcm_util.get_json_t(p_edu,to_char(i));
@@ -755,7 +755,7 @@
             check_error(tmp_numgpa, i + 1, v_rcnt, v_num_error_row , 'TEDUCATN', 'NUMGPA', 'NUMBER', obj_response);
             check_error(tmp_numseq, i + 1, v_rcnt, v_num_error_row , 'TEDUCATN', 'NUMSEQ', 'NUMBER', obj_response);
             check_error(tmp_stayear, i + 1, v_rcnt, v_num_error_row , 'TEDUCATN', 'STAYEAR', 'NUMBER', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_teducatn.codcount         := tmp_codcount;
                 v_teducatn.coddglv          := tmp_coddglv;
@@ -767,7 +767,7 @@
                 v_teducatn.numgpa           := tmp_numgpa;
                 v_teducatn.numseq           := tmp_numseq;
                 v_teducatn.stayear          := tmp_stayear;  
-                
+
                 begin
                     insert into teducatn(numappl,numseq,codempid,codedlv,coddglv,
                                          codmajsb,codminsb,codinst,codcount,
@@ -785,12 +785,12 @@
                 v_num_error_all := v_num_error_all + 1;
             end if;
         end loop;
-        
+
         select max(dtegyear)
           into max_dtegyear
           from teducatn
          where numappl = p_numappl;
-         
+
         update teducatn  
            set flgeduc = decode(dtegyear,max_dtegyear,'1','2')
          where numappl = p_numappl;
@@ -798,10 +798,10 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_teducatn;
-  
+
   procedure insert_tapplwex(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row  json_object_t;
-    
+
     tmp_amtincom                varchar2(4000); 
     tmp_codcurr                 varchar2(4000); 
     tmp_desjob                  varchar2(4000); 
@@ -811,17 +811,17 @@
     tmp_dteend                  varchar2(4000); 
     tmp_dtestart                varchar2(4000); 
     tmp_numseq                  varchar2(4000); 
-    
+
     v_tapplwex                  tapplwex%rowtype;
     v_tapplinf                  tapplinf%rowtype;
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
   begin
 --    if v_count_tapplinf = 0 then
         delete tapplwex 
          where numappl = p_numappl;
-        
+
         for i in 0..p_exp.get_size-1 loop 
             v_num_error_row             := 0;
             param_json_row              := hcm_util.get_json_t(p_exp,to_char(i));
@@ -844,7 +844,7 @@
             check_error(tmp_dteend, i + 1, v_rcnt, v_num_error_row , 'TAPPLWEX', 'DTEEND', 'DATE', obj_response);
             check_error(tmp_dtestart, i + 1, v_rcnt, v_num_error_row , 'TAPPLWEX', 'DTESTART', 'DATE', obj_response);
             check_error(tmp_numseq, i + 1, v_rcnt, v_num_error_row , 'TAPPLWEX', 'NUMSEQ', 'NUMBER', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_tapplwex.amtincom         := stdenc(tmp_amtincom,p_numappl,v_chken);
                 v_tapplwex.desjob           := tmp_desjob;
@@ -866,11 +866,11 @@
                              null,v_tapplwex.amtincom,v_tapplwex.dtestart,v_tapplwex.dteend,
                              null,v_tapplwex.desjob,null,null,null,
                              sysdate,global_v_coduser,sysdate,global_v_coduser);
-                             
+
                     update tapplinf 
                        set codcurr = v_tapplinf.codcurr
                      where numappl = p_numappl;
-                     
+
                     v_num_complete_all                  := v_num_complete_all + 1;
                 exception when others then
                     v_num_error_all := v_num_error_all + 1;
@@ -883,19 +883,19 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_tapplwex;
-    
+
   procedure insert_ttrainbf(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row              json_object_t;
-   
+
     tmp_desinstu                varchar2(4000); 
     tmp_desplace                varchar2(4000); 
     tmp_destrain                varchar2(4000); 
     tmp_dtetrain                varchar2(4000); 
     tmp_dtetren                 varchar2(4000); 
     tmp_numseq                  varchar2(4000); 
-    
+
     v_ttrainbf                  ttrainbf%rowtype;
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
 
@@ -903,7 +903,7 @@
 --    if v_count_tapplinf = 0 then
         delete ttrainbf 
          where numappl = p_numappl;
-        
+
         for i in 0..p_train.get_size-1 loop 
             v_num_error_row             := 0;
             param_json_row              := hcm_util.get_json_t(p_train,to_char(i));
@@ -920,7 +920,7 @@
             check_error(tmp_dtetrain, i + 1, v_rcnt, v_num_error_row , 'TTRAINBF', 'DTETRAIN', 'DATE', obj_response);
             check_error(tmp_dtetren, i + 1, v_rcnt, v_num_error_row , 'TTRAINBF', 'DTETREN', 'DATE', obj_response);
             check_error(tmp_numseq, i + 1, v_rcnt, v_num_error_row , 'TTRAINBF', 'NUMSEQ', 'NUMBER', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_ttrainbf.desinstu         := tmp_desinstu;
                 v_ttrainbf.desplace         := tmp_desplace;
@@ -928,7 +928,7 @@
                 v_ttrainbf.dtetrain         := to_date(tmp_dtetrain,'dd/mm/yyyy');
                 v_ttrainbf.dtetren          := to_date(tmp_dtetren,'dd/mm/yyyy');
                 v_ttrainbf.numseq           := tmp_numseq;
-                
+
                 begin
                     insert into ttrainbf(numappl,numseq,codempid,destrain,dtetrain,
                                          dtetren,desplace,desinstu,filedoc,numrefdoc,
@@ -948,10 +948,10 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_ttrainbf;
-   
+
   procedure insert_tapploth(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row  json_object_t;
-    
+
     tmp_codlocat                varchar2(4000); 
     tmp_dtewkst                 varchar2(4000); 
     tmp_flgoversea              varchar2(4000); 
@@ -960,9 +960,9 @@
     tmp_jobdesc                 varchar2(4000); 
     tmp_qtydayst                varchar2(4000); 
     tmp_reason                  varchar2(4000); 
-        
+
     v_tapploth                  tapploth%rowtype;
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
   begin
@@ -978,7 +978,7 @@
             tmp_jobdesc                 := hcm_util.get_string_t(param_json_row, 'jobdesc');
             tmp_qtydayst                := hcm_util.get_string_t(param_json_row, 'qtydayst');
             tmp_reason                  := hcm_util.get_string_t(param_json_row, 'reason');
-            
+
             check_error(tmp_codlocat, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'CODLOCAT', 'TEXT', obj_response);
             check_error(tmp_dtewkst, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'DTEWKST', 'DATE', obj_response);
             check_error(tmp_flgoversea, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'FLGOVERSEA', 'FLG', obj_response);
@@ -987,7 +987,7 @@
             check_error(tmp_jobdesc, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'JOBDESC', 'TEXT', obj_response);
             check_error(tmp_qtydayst, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'QTYDAYST', 'NUMBER', obj_response);
             check_error(tmp_reason, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'REASON', 'TEXT', obj_response);            
-            
+
             if v_num_error_row = 0 then
                 v_tapploth.codlocat         := tmp_codlocat;
                 v_tapploth.dtewkst          := tmp_dtewkst;
@@ -997,7 +997,7 @@
                 v_tapploth.jobdesc          := tmp_jobdesc;
                 v_tapploth.qtydayst         := tmp_qtydayst;
                 v_tapploth.reason           := tmp_reason;
-                
+
                 begin
                     insert into tapploth(numappl,reason,jobdesc,codlocat,flgprov,
                                          flgoversea,flgstrwk,dtewkst,qtydayst,
@@ -1032,7 +1032,7 @@
 
   procedure insert_tapplfm(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row              json_object_t;
-    
+
     tmp_codspocc                varchar2(4000); 
     tmp_codtitle                varchar2(4000); 
     tmp_desnoffi                varchar2(4000); 
@@ -1040,9 +1040,9 @@
     tmp_namlast                 varchar2(4000); 
     tmp_numoffid                varchar2(4000); 
     tmp_stalife                 varchar2(4000); 
-    
+
     v_tapplfm                   tapplfm%rowtype;
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
 
@@ -1050,7 +1050,7 @@
 --    if v_count_tapplinf = 0 then
         delete tapplfm 
          where numappl = p_numappl;
-        
+
         for i in 0..p_spouse.get_size-1 loop
             v_num_error_row             := 0; 
             param_json_row              := hcm_util.get_json_t(p_spouse,to_char(i));
@@ -1069,7 +1069,7 @@
             check_error(tmp_namlast, i + 1, v_rcnt, v_num_error_row , 'TAPPLFM', 'NAMLAST', 'TEXT', obj_response);
             check_error(tmp_numoffid, i + 1, v_rcnt, v_num_error_row , 'TAPPLFM', 'NUMOFFID', 'TEXT', obj_response);
             check_error(tmp_stalife, i + 1, v_rcnt, v_num_error_row , 'TAPPLFM', 'STALIFE', 'FLG', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_tapplfm.codspocc          := tmp_codspocc;
                 v_tapplfm.codtitle          := tmp_codtitle;
@@ -1078,7 +1078,7 @@
                 v_tapplfm.namlast           := tmp_namlast;
                 v_tapplfm.numoffid          := tmp_numoffid;
                 v_tapplfm.stalife           := tmp_stalife;
-                
+
                 begin
                     insert into tapplfm(numappl,codtitle,namfirst,namlast,namsp,
                                         numoffid,stalife,codspocc,desnoffi,
@@ -1098,17 +1098,17 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_tapplfm;   
-  
+
   procedure insert_tapplrel(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row              json_object_t;
-    
+
     tmp_adrcomt                 varchar2(4000); 
     tmp_namrel                  varchar2(4000); 
     tmp_numseq                  varchar2(4000); 
     tmp_numtelec                varchar2(4000); 
-        
+
     v_tapplrel                  tapplrel%rowtype;
-    
+
     v_num_error_row             number := 0;
     v_rcnt                      number := 0;
 
@@ -1116,7 +1116,7 @@
 --    if v_count_tapplinf = 0 then
         delete tapplrel 
          where numappl = p_numappl;
-        
+
         for i in 0..p_rel.get_size-1 loop 
             v_num_error_row             := 0; 
             param_json_row              := hcm_util.get_json_t(p_rel,to_char(i));
@@ -1129,7 +1129,7 @@
             check_error(tmp_namrel, i + 1, v_rcnt, v_num_error_row , 'TAPPLREL', 'NAMREL', 'TEXT', obj_response);
             check_error(tmp_numseq, i + 1, v_rcnt, v_num_error_row , 'TAPPLREL', 'NUMSEQ', 'NUMBER', obj_response);
             check_error(tmp_numtelec, i + 1, v_rcnt, v_num_error_row , 'TAPPLREL', 'NUMTELEC', 'TEXT', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_tapplrel.adrcomt          := tmp_adrcomt;
                 v_tapplrel.namrel           := tmp_namrel;
@@ -1152,10 +1152,10 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_tapplrel;     
-  
+
   procedure insert_tapplref(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row                  json_object_t;
-    
+
     tmp_adrcont1                    varchar2(4000); 
     tmp_codtitle                    varchar2(4000); 
     tmp_desnoffi                    varchar2(4000); 
@@ -1168,9 +1168,9 @@
     tmp_namlastt                    varchar2(4000); 
     tmp_numseq                      varchar2(4000); 
     tmp_numtele                     varchar2(4000); 
-        
+
     v_tapplref                      tapplref%rowtype;
-    
+
     v_num_error_row                 number := 0;
     v_rcnt                          number := 0;
 
@@ -1178,7 +1178,7 @@
 --    if v_count_tapplinf = 0 then
         delete tapplref 
          where numappl = p_numappl;
-        
+
         for i in 0..p_ref.get_size-1 loop 
             v_num_error_row                 := 0; 
             param_json_row                  := hcm_util.get_json_t(p_ref,to_char(i));
@@ -1221,7 +1221,7 @@
                 v_tapplref.namlastt             := tmp_namlastt;
                 v_tapplref.numseq               := tmp_numseq;
                 v_tapplref.numtele              := tmp_numtele;
-                
+
                 v_tapplref.namfirst3            := tmp_namfirste;
                 v_tapplref.namfirst4            := tmp_namfirste;
                 v_tapplref.namfirst5            := tmp_namfirste;
@@ -1233,7 +1233,7 @@
                 v_tapplref.namref3              := v_tapplref.namrefe;
                 v_tapplref.namref4              := v_tapplref.namrefe;
                 v_tapplref.namref5              := v_tapplref.namrefe;
-                
+
                 begin
                     insert into tapplref(numappl,numseq,codtitle,
                                          namfirste,namfirstt,namfirst3,namfirst4,namfirst5,
@@ -1258,7 +1258,7 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_tapplref;  
-   
+
   procedure insert_tlangabi(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row                  json_object_t;
 
@@ -1267,16 +1267,16 @@
     tmp_flgread                     varchar2(4000); 
     tmp_flgspeak                    varchar2(4000); 
     tmp_flgwrite                    varchar2(4000); 
-        
+
     v_tlangabi                      tlangabi%rowtype;
-    
+
     v_num_error_row                 number := 0;
     v_rcnt                          number := 0;
   begin
 --    if v_count_tapplinf = 0 then
         delete tlangabi 
          where numappl = p_numappl;
-        
+
         for i in 0..p_lng.get_size-1 loop 
             v_num_error_row := 0;
             param_json_row                  := hcm_util.get_json_t(p_lng,to_char(i));
@@ -1285,20 +1285,20 @@
             tmp_flgread                     := hcm_util.get_string_t(param_json_row, 'flgread');
             tmp_flgspeak                    := hcm_util.get_string_t(param_json_row, 'flgspeak');
             tmp_flgwrite                    := hcm_util.get_string_t(param_json_row, 'flgwrite');
-            
+
             check_error(tmp_codlang, i + 1, v_rcnt, v_num_error_row , 'TLANGABI', 'CODLANG', 'TEXT', obj_response);
             check_error(tmp_flglist, i + 1, v_rcnt, v_num_error_row , 'TLANGABI', 'FLGLIST', 'FLGLANG', obj_response);
             check_error(tmp_flgread, i + 1, v_rcnt, v_num_error_row , 'TLANGABI', 'FLGREAD', 'FLGLANG', obj_response);
             check_error(tmp_flgspeak, i + 1, v_rcnt, v_num_error_row , 'TLANGABI', 'FLGSPEAK', 'FLGLANG', obj_response);
             check_error(tmp_flgwrite, i + 1, v_rcnt, v_num_error_row , 'TLANGABI', 'FLGWRITE', 'FLGLANG', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_tlangabi.codlang              := tmp_codlang;
                 v_tlangabi.flglist              := tmp_flglist;
                 v_tlangabi.flgread              := tmp_flgread;
                 v_tlangabi.flgspeak             := tmp_flgspeak;
                 v_tlangabi.flgwrite             := tmp_flgwrite;
-                
+
                 begin
                     insert into tlangabi(numappl,codlang,codempid,
                                          flglist,flgspeak,flgread,flgwrite,
@@ -1306,7 +1306,7 @@
                     values ( p_numappl,v_tlangabi.codlang,null,
                              v_tlangabi.flglist,v_tlangabi.flgspeak,v_tlangabi.flgread,v_tlangabi.flgwrite,
                              sysdate,global_v_coduser,sysdate,global_v_coduser);
-                    
+
                     v_num_complete_all                  := v_num_complete_all + 1;
                 exception when others then
                     v_num_error_all := v_num_error_all + 1;
@@ -1319,10 +1319,10 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_tlangabi;    
-  
+
   procedure insert_addinfo(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row  json_object_t;
- 
+
     tmp_actstudy                            varchar2(4000); 
     tmp_specabi                             varchar2(4000); 
     tmp_compabi                             varchar2(4000); 
@@ -1349,10 +1349,10 @@
     tmp_agewrkyr                            varchar2(4000); 
     tmp_agewrkmth                           varchar2(4000); 
     tmp_hobby                               varchar2(4000); 
-    
+
     v_tapplinf                              tapplinf%rowtype;
     v_tapploth                              tapploth%rowtype;
-    
+
     v_num_error_row                         number := 0;
     v_rcnt                                  number := 0;
   begin
@@ -1413,7 +1413,7 @@
             check_error(tmp_agewrkyr, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'AGEWRKYR', 'NUMBER', obj_response);
             check_error(tmp_agewrkmth, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'AGEWRKMTH', 'NUMBER', obj_response);
             check_error(tmp_hobby, i + 1, v_rcnt, v_num_error_row , 'TAPPLOTH', 'HOBBY', 'TEXT', obj_response);
-            
+
             if v_num_error_row = 0 then
                 v_tapplinf.actstudy                     := tmp_actstudy;
                 v_tapplinf.specabi                      := tmp_specabi;
@@ -1442,7 +1442,7 @@
                 v_tapploth.agewrkyr                     := tmp_agewrkyr;
                 v_tapploth.agewrkmth                    := tmp_agewrkmth;
                 v_tapploth.hobby                        := tmp_hobby;
-                
+
                 begin
                     update tapplinf
                        set actstudy = v_tapplinf.actstudy,
@@ -1453,8 +1453,8 @@
                            typeng = v_tapplinf.typeng,
                            stamilit = v_tapplinf.stamilit
                      where numappl = p_numappl;
-                    
-                    
+
+
                     update tapploth
                        set flgcivil = v_tapploth.flgcivil,
                            lastpost = v_tapploth.lastpost,
@@ -1477,7 +1477,7 @@
                            agewrkmth = v_tapploth.agewrkmth,
                            hobby = v_tapploth.hobby
                      where numappl = p_numappl;
-                     
+
                     v_num_complete_all                  := v_num_complete_all + 1;
                 exception when others then
                     v_num_error_all := v_num_error_all + 1;
@@ -1490,26 +1490,26 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_addinfo;   
-  
+
   procedure insert_tappldoc(obj_response  in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number) is
     param_json_row                      json_object_t;
-    
+
     tmp_numseq                          varchar2(4000); 
     tmp_namdoc                          varchar2(4000); 
     tmp_typdoc                          varchar2(4000); 
     tmp_flgresume                       varchar2(4000); 
     tmp_filedoc                         varchar2(4000); 
     tmp_desnote                         varchar2(4000); 
-        
+
     v_tappldoc                          tappldoc%rowtype;
-    
+
     v_num_error_row                     number := 0;
     v_rcnt                              number := 0;
   begin
 --    if v_count_tapplinf = 0 then
         delete tappldoc 
          where numappl = p_numappl;
-        
+
         for i in 0..p_lng.get_size-1 loop 
             v_num_error_row := 0;
             param_json_row                      := hcm_util.get_json_t(p_lng,to_char(i));
@@ -1519,7 +1519,7 @@
             tmp_flgresume                       := hcm_util.get_string_t(param_json_row, 'flgresume');
             tmp_filedoc                         := hcm_util.get_string_t(param_json_row, 'filedoc');
             tmp_desnote                         := hcm_util.get_string_t(param_json_row, 'desnote');
-            
+
             -- check error
             check_error(tmp_numseq, i + 1, v_rcnt, v_num_error_row , 'TAPPLDOC', 'NUMSEQ', 'NUMBER', obj_response);
             check_error(tmp_namdoc, i + 1, v_rcnt, v_num_error_row , 'TAPPLDOC', 'NAMDOC', 'TEXT', obj_response);
@@ -1557,7 +1557,7 @@
   exception when others then
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end insert_tappldoc;   
-  
+
   procedure check_error(p_item in varchar2, p_line in number, p_numseq in out number,p_num_error_row in out number , p_table in varchar2, p_column in varchar2, p_type in varchar2, obj_response in out json_object_t) is
     obj_data            json_object_t;
     v_chk_error         boolean;
@@ -1616,7 +1616,7 @@
                     obj_response.put(to_char(p_numseq-1), obj_data);
                 end if;
             end if;
-            
+
             begin
                 select count(*)
                   into v_count
@@ -1626,7 +1626,7 @@
             exception when no_data_found then
                 v_count := 0;
             end;
-            
+
             if v_count = 0 then
                 p_num_error_row := p_num_error_row + 1;
                 obj_data        := json_object_t();
@@ -1662,7 +1662,7 @@
             exception when no_data_found then
                 v_count := 0;
             end;
-            
+
             if v_count > 0 then
                 p_num_error_row := p_num_error_row + 1;
                 obj_data        := json_object_t();

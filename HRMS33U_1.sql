@@ -5058,7 +5058,7 @@
     flgdeduct_flg       varchar2(10 char) := 'N';
     stabf_flg           varchar2(10 char) := 'N';
     filename_flg        varchar2(10 char) := 'N';
-    
+
     v_flg_name          boolean;
     --Cursor
     cursor c1 is
@@ -5378,7 +5378,7 @@
       for i in c_2 loop
 --        v_new_exist := true;
         tab7_numseq := i.seqno;
-        
+
         ---------- set first name
         if global_v_lang = '101' and i.fldedit = 'NAMFIRSTE' then
             obj_data.put('namfirst',i.DESNEW);
@@ -5391,7 +5391,7 @@
         elsif global_v_lang = '105' and i.fldedit = 'NAMFIRST5'  then
             obj_data.put('namfirst',i.DESNEW);
         end if;
-        
+
         -------- set last name
         if global_v_lang = '101' and i.fldedit = 'NAMLASTE' then
             obj_data.put('namlast',i.DESNEW);
@@ -6201,7 +6201,7 @@
     desplace_flg          varchar2(10 char) := 'N';
     desinstu_flg          varchar2(10 char) := 'N';
     filedoc_flg           varchar2(10 char) := 'N';
-    
+
     --Cursor
     cursor c1 is
       select numappl,numseq,codempid,destrain,dtetrain,
@@ -6573,12 +6573,12 @@
     v_dteend         varchar2(500 char) ;
     v_codseq         varchar2(150 char);
     v_row_id         varchar2(200 char);
-    
+
     v_chk_empoth     varchar2(1 char)   := 'N';
     v_stmt_upd       varchar2(4000 char)   := ' ';
     v_col_insert     varchar2(4000 char)   := ' ';
     v_val_insert     varchar2(4000 char)   := ' ';
-    
+
     type v_data is table of varchar2(250 char) index by binary_integer;
         v_arrnumseq         v_data;
         v_arrcodedlv        v_data;
@@ -6972,7 +6972,7 @@
         select *
           from temploy3
          where codempid = rq_codempid ;
-         
+
     cursor c_empothlog1 is
       select fldedit,desold,desnew,itemtype
         from temeslog1 elog, tempothd othc 
@@ -10213,7 +10213,7 @@
         end if ;
         if rq_chk = 'E' and p_status = 'A' then
              v_staappr := 'Y';
-  
+
              begin
                   select 'Y' into v_chk_empoth
                   from   tempothr
@@ -10221,7 +10221,7 @@
               exception when no_data_found then
                  v_chk_empoth := 'N';
               end;
-  
+
               for i in c_empothlog1 loop
                 if i.itemtype = '2' then
 --                  upd_log1('tempothr','61',i.fldedit,'N',i.desold,i.desnew,'N',v_upd);
@@ -10243,7 +10243,7 @@
                   v_val_insert    := v_val_insert||''''||i.desnew||''',';
                 end if;
               end loop;
-              
+
               if v_chk_empoth = 'Y' then
                 execute immediate ' update tempothr set '||v_stmt_upd||'coduser = '''||p_coduser||''' where numappl = '''||v_numappl||'''';
               else
@@ -10563,7 +10563,7 @@
           v_value   := '';
         end;
       end if;
-      
+
       begin
         select desold, desnew
           into v_value, v_value_n

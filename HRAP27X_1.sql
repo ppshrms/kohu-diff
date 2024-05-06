@@ -15,7 +15,7 @@
     global_v_codpswd    := hcm_util.get_string_t(json_obj,'p_codpswd');
     global_v_lang       := hcm_util.get_string_t(json_obj,'p_lang');
     --block b_index
-    
+
     b_index_dteyear     := to_number(hcm_util.get_string_t(json_obj,'p_dteyear'));
     b_index_numtime     := to_number(hcm_util.get_string_t(json_obj,'p_numtime'));
     b_index_codcomp     := hcm_util.get_string_t(json_obj,'p_codcomp');
@@ -73,11 +73,11 @@
         order by b.codcomp,b.codempid;
   begin
     obj_row := json_object_t();
-    
-     
+
+
     for i in c1 loop
         v_flgdata := 'Y';
-        
+
         flgpass := secur_main.secur1(i.codcomp,i.numlvl,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal,global_v_numlvlsalst,global_v_numlvlsalen);
         if flgpass then
             v_flgsecu := 'Y';
@@ -117,7 +117,7 @@
             obj_row.put(to_char(v_rcnt-1),obj_data);
         end if;
     end loop;
-    
+
     if v_flgdata = 'N' then
       param_msg_error := get_error_msg_php('HR2055', global_v_lang, 'ttemadj2');
       json_str_output := get_response_message(null, param_msg_error, global_v_lang);

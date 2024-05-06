@@ -84,7 +84,7 @@ procedure gen_typemail1 (  p_codcompy  in varchar2,
        and mailalno = v_mailalno
        and dteeffec = v_dteeffec
   order by numseq;    
-  
+
 	cursor c_tapasign  is
         select seqno,flgappr,codcompap,codposap,codempap,message
           from tapasign
@@ -92,7 +92,7 @@ procedure gen_typemail1 (  p_codcompy  in varchar2,
            and mailalno = v_mailalno
            and dteeffec = v_dteeffec
       order by seqno;  
-      
+
     cursor c_receiver is
         select item1 receiver, to_number(item8) seqno
           from ttemprpt2
@@ -100,14 +100,14 @@ procedure gen_typemail1 (  p_codcompy  in varchar2,
            and codapp = p_codapp_receiver
       group by item1, to_number(item8)
       order by item1;     
-      
+
     cursor c_group_sendmail is
         select distinct item4 receiver, item2 dteyreap, item3 numtime, item5 seqno
           from ttemprpt2
          where codapp = p_codapp
            and codempid = p_coduser
       order by receiver,dteyreap,numtime,seqno;
-           
+
     cursor c_sendmail is
         select item1 codempid, item2 dteyreap,
                item3 numtime, item4 receiver
@@ -195,9 +195,9 @@ begin
         end loop;
 
         v_dummy := dbms_sql.execute(v_cursor);
-        
+
         delete ttemprpt2 where codapp = p_codapp and codempid = p_coduser;
-        
+
         loop
             if dbms_sql.fetch_rows(v_cursor) = 0 then
                 exit;
@@ -228,10 +228,10 @@ begin
             if flg_log = 'N' then
                v_count := 0;
             end if;
-            
+
             delete ttemprpt2 where codapp = p_codapp_receiver and codempid = p_coduser;
             commit;
-            
+
             if v_count = 0 then
                 v_seq := v_seq + 1;
                 if v_typesend = 'A' then
@@ -300,7 +300,7 @@ begin
                     v_numseq := v_numseq + 1;
                     ALERTMSG_AP.gen_file(p_codcompy,v_mailalno,v_dteeffec,'tempaplvl.codempid = '''||i.codempid||''' and tempaplvl.dteyreap = '||i.dteyreap||' and tempaplvl.numseq = '||i.numtime||' ',v_numseq,'1');
                 end loop;
-                
+
                 v_filename  := to_char(sysdate,'yyyymmddhh24mi');
                 excel_mail(v_item,v_label,null,'AUTO',p_codapp,v_filename); 
                 sendmail_alert(p_codcompy, v_receiver,i.mailalno,
@@ -370,7 +370,7 @@ procedure gen_typemail2 (  p_codcompy  in varchar2,
        and mailalno = v_mailalno
        and dteeffec = v_dteeffec
   order by numseq;    
-  
+
 	cursor c_tapasign  is
         select seqno,flgappr,codcompap,codposap,codempap,message
           from tapasign
@@ -378,7 +378,7 @@ procedure gen_typemail2 (  p_codcompy  in varchar2,
            and mailalno = v_mailalno
            and dteeffec = v_dteeffec
       order by seqno;  
-      
+
     cursor c_receiver is
         select item1 receiver, to_number(item8) seqno
           from ttemprpt2
@@ -386,14 +386,14 @@ procedure gen_typemail2 (  p_codcompy  in varchar2,
            and codapp = p_codapp_receiver
       group by item1, to_number(item8)
       order by item1;     
-      
+
     cursor c_group_sendmail is
         select distinct item4 receiver, item2 dteyreap, item3 numtime, item5 seqno
           from ttemprpt2
          where codapp = p_codapp
            and codempid = p_coduser
       order by receiver,dteyreap,numtime,seqno;
-           
+
     cursor c_sendmail is
         select item1 codempid, item2 dteyreap,
                item3 numtime, item4 receiver
@@ -472,10 +472,10 @@ begin
         if i.syncond is not null then
             v_where := v_where || ' and ('||i.syncond||')';
         end if;
-        
+
         v_where    := v_where ||' and (tstdisd.dteaplast - nvl(tstdisd.qtyalert1,0) - ' || to_char(nvl(i.qtydayb,0)) || ' <= trunc(sysdate)';
         v_where    := v_where ||' or tstdisd.dteaplast - nvl(tstdisd.qtyalert2,0) - ' || to_char(nvl(i.qtydayb,0)) || ' <= trunc(sysdate))';
-    
+
         v_stment := 'select tempaplvl.codempid,tempaplvl.dteyreap,tempaplvl.numseq from tempaplvl, tstdisd ';
         v_stment := v_stment || ' where tempaplvl.dteyreap = tstdisd.dteyreap
                                     and tempaplvl.numseq = tstdisd.numseq 
@@ -488,9 +488,9 @@ begin
         end loop;
 
         v_dummy := dbms_sql.execute(v_cursor);
-        
+
         delete ttemprpt2 where codapp = p_codapp and codempid = p_coduser;
-        
+
         loop
             if dbms_sql.fetch_rows(v_cursor) = 0 then
                 exit;
@@ -521,10 +521,10 @@ begin
             if flg_log = 'N' then
                v_count := 0;
             end if;
-            
+
             delete ttemprpt2 where codapp = p_codapp_receiver and codempid = p_coduser;
             commit;
-            
+
             if v_count = 0 then
                 v_seq := v_seq + 1;
                 if v_typesend = 'A' then
@@ -593,7 +593,7 @@ begin
                     v_numseq := v_numseq + 1;
                     ALERTMSG_AP.gen_file(p_codcompy,v_mailalno,v_dteeffec,'tempaplvl.codempid = '''||i.codempid||''' and tempaplvl.dteyreap = '||i.dteyreap||' and tempaplvl.numseq = '||i.numtime||' ',v_numseq,'1');
                 end loop;
-                
+
                 v_filename  := to_char(sysdate,'yyyymmddhh24mi');
                 excel_mail(v_item,v_label,null,'AUTO',p_codapp,v_filename); 
                 sendmail_alert(p_codcompy, v_receiver,i.mailalno,
@@ -922,7 +922,7 @@ procedure auto_execute_mail (p_codcompy in varchar2,
            and codapp = p_codapp
       group by item1
       order by item1;
-    
+
 begin
     begin
         select codcomp,codpos,email
@@ -1053,7 +1053,7 @@ procedure auto_execute_mail_group (p_codcompy in varchar2,
   v_http            varchar2(1000);
   v_codusr	        varchar2(100);
   v_othmessage      tapasign.message%type;
-  
+
 	cursor c_tapasign  is
         select message
           from tapasign
@@ -1061,7 +1061,7 @@ procedure auto_execute_mail_group (p_codcompy in varchar2,
            and mailalno = p_mailalno
            and dteeffec = p_dteeffec
            and seqno = p_seqno;  
-  
+
 begin
     begin
         select codcomp,codpos,email
@@ -1078,7 +1078,7 @@ begin
      where codcompy = p_codcompy
        and mailalno = p_mailalno
        and dteeffec = p_dteeffec;
-       
+
     select message
       into v_othmessage
       from tapasign
@@ -1199,7 +1199,7 @@ procedure find_approve_name(p_codempid    in varchar2,    --EMPLOYEE for find al
                             p_codapp      in varchar2,
                             p_coduser     in varchar2,
                             p_stcodempid  in varchar2 ) is --EMPLOYEE for find all approver
-                           
+
 
   v_codempap        temploy1.codempid%type;
   v_codcompap       temploy1.codcomp%type;

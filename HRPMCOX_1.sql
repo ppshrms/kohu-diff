@@ -10,19 +10,19 @@
 		global_v_coduser        := hcm_util.get_string_t(json_obj,'p_coduser');
 		global_v_codempid        := hcm_util.get_string_t(json_obj,'p_codempid');
         global_v_lang 			:= hcm_util.get_string_t(json_obj,'p_lang');
-        
+
         p_codcomp 				:= hcm_util.get_string_t(json_obj,'p_codcomp');
         p_codempid_query 		:= hcm_util.get_string_t(json_obj,'p_codempid_query');
         p_dtestr 				:= TO_DATE(hcm_util.get_string_t(json_obj,'p_dtestrt'),'dd/mm/yyyy');
         p_dteend 				:= TO_DATE(hcm_util.get_string_t(json_obj,'p_dteend'),'dd/mm/yyyy');
-        
+
         p_flglayout 			:= hcm_util.get_string_t(json_obj,'p_flglayout');
-        
+
         p_codcard 				:= hcm_util.get_string_t(json_obj,'p_codcard');
-        
+
         p_card                  := hcm_util.get_json_t(json_obj,'p_card');
         p_listfield             := hcm_util.get_json_t(json_obj,'p_listFields');
-        
+
 		hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
 	END initial_value;
 
@@ -132,7 +132,7 @@
         v_obj_main              json_object_t;
         v_obj_template          json_object_t;
         v_ttemcard              ttemcard%rowtype;
-        
+
 		cursor c1 IS 
             select codempid, codcomp, numlvl,
                    get_tlistval_name('CODTITLE',codtitle,global_v_lang) ||decode(global_v_lang,'101',namfirste,
@@ -151,11 +151,11 @@
 		       and dteempmt between nvl(p_dtestr,dteempmt) AND nvl(p_dteend,dteempmt)
 		       and staemp IN ( '1', '3' )
 		  order by codempid;
-          
+
 	BEGIN
 		obj_row			:= json_object_t();
         v_obj_template  := json_object_t();
-        
+
         begin 
             select *
               into v_ttemcard
@@ -190,7 +190,7 @@
         v_obj_template.put('flgstd',v_ttemcard.flgstd);
         v_obj_template.put('flguse',v_ttemcard.flguse);
         v_obj_template.put('styletemp',v_ttemcard.styletemp);
-        
+
 		FOR r1 IN c1 LOOP
             v_rcnt_found    := v_rcnt_found + 1;
             v_secur         := secur_main.secur1(r1.codcomp,r1.numlvl,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal);
@@ -207,7 +207,7 @@
                 obj_data.put('desc_data1',getDescEmp (v_ttemcard.flgdata1, r1.codempid));
                 obj_data.put('desc_data2',getDescEmp (v_ttemcard.flgdata2, r1.codempid));
                 obj_data.put('desc_data3',getDescEmp (v_ttemcard.flgdata3, r1.codempid));
-                
+
                 obj_row.put(TO_CHAR(v_rcnt - 1),obj_data);            
             end if;
 		END LOOP;
@@ -226,14 +226,14 @@
             json_str_output := get_response_message('400',param_msg_error,global_v_lang);
             return;
         END IF;
-        
 
-        
+
+
         v_obj_main      := json_object_t();
         v_obj_main.put('coderror','200');
         v_obj_main.put('table',obj_row);
         v_obj_main.put('template',v_obj_template);
-        
+
 		json_str_output := v_obj_main.to_clob;
 	EXCEPTION WHEN OTHERS THEN
 		param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
@@ -267,13 +267,13 @@
 		param_msg_error := dbms_utility.format_error_stack|| ' '|| dbms_utility.format_error_backtrace;
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 	END;
-    
+
 	PROCEDURE gen_setlayout ( json_str_output OUT CLOB ) IS
 		v_rcnt			        NUMBER := 0;
 		v_rcnt_found		    NUMBER := 0;
 		v_secur_codempid	    BOOLEAN;
         v_secur			        boolean;
-        
+
 		cursor c1 IS 
             select *
 		      from ttemcard
@@ -281,7 +281,7 @@
               and flglayout = '1'
               and rownum = 1
 		  order by codcard;
-        
+
 		cursor c2 IS 
             select *
 		      from ttemcard
@@ -317,7 +317,7 @@
             obj_data.put('styletemp',r1.styletemp);
             obj_row.put(TO_CHAR(v_rcnt - 1),obj_data);            
 		END LOOP;
-        
+
 		FOR r1 IN c2 LOOP
             v_rcnt          := v_rcnt + 1;
             obj_data		:= json_object_t ();
@@ -364,10 +364,10 @@
 		param_msg_error := dbms_utility.format_error_stack|| ' '|| dbms_utility.format_error_backtrace;
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 	END;
-    
+
 	PROCEDURE gen_chooseformat ( json_str_output OUT CLOB ) IS
 		v_rcnt			        NUMBER := 0;
-        
+
 		cursor c1 IS 
             select *
 		      from ttemcard
@@ -401,7 +401,7 @@
             obj_data.put('styletemp',r1.styletemp);
             obj_row.put(TO_CHAR(v_rcnt - 1),obj_data);            
 		END LOOP;
-        
+
 		json_str_output := obj_row.to_clob;
 	EXCEPTION WHEN OTHERS THEN
 		param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
@@ -421,7 +421,7 @@
 		param_msg_error := dbms_utility.format_error_stack|| ' '|| dbms_utility.format_error_backtrace;
 		json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 	END;
-    
+
 	PROCEDURE gen_customtemplate ( json_str_output OUT CLOB ) IS
 		v_rcnt			        NUMBER := 0;
 		v_rcnt_found		    NUMBER := 0;
@@ -466,9 +466,9 @@
             obj_data.put('footer2',r1.footer2);
             obj_data.put('flgstd','N');
             obj_data.put('styletemp',r1.styletemp);
-        
+
             obj_row             := json_object_t();
-            
+
             gen_listfield(r1.flgdata1, r1.flgdata2, r1.flgdata3, obj_row);
 --            -- CODPOS
 --            obj_listFields      := json_object_t();
@@ -506,12 +506,12 @@
 --            obj_listFields.put('descode',getDescData ('CODEMPID'));
 --            obj_row.put(TO_CHAR(2),obj_listFields);
 		END LOOP;
-        
+
 		obj_main			:= json_object_t();
         obj_main.put('coderror','200');
         obj_main.put('card',obj_data);
         obj_main.put('listFields',obj_row);
-        
+
 		json_str_output := obj_main.to_clob;
 	EXCEPTION WHEN OTHERS THEN
 		param_msg_error := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
@@ -527,12 +527,12 @@
         param_json_row      json_object_t;
         v_numseq            number := 0;
         v_obj_data          json_object_t;
-        
+
         v_flgstd            ttemcard.flgstd%type;
-        
+
 	BEGIN
 		initial_value(json_str_input);
-        
+
         p_codcard 				:= hcm_util.get_string_t(p_card,'codcard');
         p_flglayout 			:= hcm_util.get_string_t(p_card,'flglayout');
         p_namlogo 				:= hcm_util.get_string_t(p_card,'namlogo');
@@ -548,11 +548,11 @@
         p_flguse 				:= hcm_util.get_string_t(p_card,'flguse');
         p_namcard 				:= hcm_util.get_string_t(p_card,'namcard');
         p_styletemp 			:= hcm_util.get_string_t(p_card,'styletemp'); 
-        
+
         p_flgdata1 				:= null;
         p_flgdata2 				:= null;
         p_flgdata3 				:= null;
-        
+
         begin
             select flgstd
               into v_flgstd
@@ -576,17 +576,17 @@
                 end if;
             end if;
         end loop;
-        
+
 		check_save;
 		IF param_msg_error IS NULL THEN
-        
+
             if v_flgstd = 'Y' then
                 SELECT MAX(codcard)
                   INTO v_numcard
                   FROM ttemcard;
-    
+
                 v_numcard := to_number(v_numcard);
-                
+
                 LOOP
                     v_numcard := v_numcard + 1;
                     BEGIN
@@ -598,9 +598,9 @@
                         EXIT;
                     END;
                 END LOOP;
-                
+
                 v_numcard_txt := lpad(v_numcard,10,'0');  
-                
+
 				insert into ttemcard (codcard, flglayout, namlogo, flgcomny, slogan,
                                       flgname, flgdata1, flgdata2, flgdata3,
                                       footer1, footer2, flgstd, flguse, namcard, styletemp,
@@ -609,7 +609,7 @@
                         p_flgname, p_flgdata1, p_flgdata2, p_flgdata3,
                         p_footer1, p_footer2, p_flgstd, p_flguse, p_namcard, p_styletemp,
                         global_v_coduser,global_v_coduser,SYSDATE,SYSDATE);    
-                        
+
                 p_codcard := v_numcard_txt;
             else
 				update ttemcard
@@ -658,7 +658,7 @@
         v_flguse            ttemcard.flguse%type;
     BEGIN
 		initial_value(json_str_input);
-        
+
         begin
             select flguse 
               into v_flguse
@@ -667,19 +667,19 @@
         exception when no_data_found then
             v_flguse := 'N';
         end;
-        
+
 		IF v_flguse = 'Y' THEN
 			param_msg_error := get_error_msg_php('PM0092',global_v_lang);
 			json_str_output := get_response_message('400',param_msg_error,global_v_lang);
 			return;
 		END IF;
-        
+
         begin
             delete ttemcard
              where codcard = p_codcard;
             param_msg_error := NULL;
         exception when others then null; end; 
-		
+
 		IF param_msg_error IS NULL THEN
 			param_msg_error := get_error_msg_php('HR2425',global_v_lang);
 			COMMIT;
@@ -705,7 +705,7 @@
       v_outobj := json_object_t ();
       for i in c1 loop
           v_objdata		:= json_object_t ();
-      
+
           v_objdata.put('codcard',i.codcard);
           v_objdata.put('namcard',i.namcard);
           v_objdata.put('flglayout',i.flglayout);
@@ -722,7 +722,7 @@
           v_objdata.put('footer2',i.footer2);
           v_objdata.put('flgstd',i.flgstd);
           v_objdata.put('flguse',i.flguse);
-      
+
          v_countrow := v_countrow + 1;
          v_outobj.put(v_countrow,v_objdata);
       end loop;
@@ -770,7 +770,7 @@
     begin
         initial_value(json_str_input);
         checkupdatetemcard_use(json_str_input);
-        
+
         if (param_msg_error is not null or length (param_msg_error) > 0) then
             json_str_output := get_response_message('400',param_msg_error,global_v_lang);
         else
@@ -819,7 +819,7 @@
              where codempid = global_v_codempid
                and codapp = 'HRPMCOX';
         end;
-        
+
         begin
           select namimage
             into v_imageh
@@ -833,7 +833,7 @@
           v_imageh      := get_tsetup_value('PATHWORKPHP')||get_tfolderd('HRPMC2E1')||'/'||v_imageh;
           v_has_image   := 'Y';
         end if;
-          
+
 
           INSERT INTO ttemprpt (codempid,codapp,numseq,
                                   item1,
@@ -874,7 +874,7 @@
                   v_imagedata); 
             v_numseq := v_numseq + 1;      
         end loop;
-          
+
         if (param_msg_error is not null or param_msg_error <> ' ') then
             json_str_output := get_response_message('400',param_msg_error,global_v_lang);
         else
@@ -1357,7 +1357,7 @@
             return '';
         end if;
       end getDescData;
-      
+
       function getDescEmp (p_columnname in varchar2, p_codempid varchar2) return varchar2 is
         v_codcomp   temploy1.codcomp%type;
         v_codpos    temploy1.codpos%type;
@@ -1382,7 +1382,7 @@
             return '';
         end if;
       end getDescEmp;
-      
+
       procedure gen_listfield (p_flgdata1 in varchar2, p_flgdata2 in varchar2, p_flgdata3 in varchar2, obj_row in out json_object_t) is
             v_numseq                number;
             obj_listFields          json_object_t;
@@ -1393,7 +1393,7 @@
             v_flg_codcomp           boolean;
             v_flg_codempid          boolean;
       begin
-      
+
             -- CODPOS
             obj_listFields      := json_object_t();
             obj_listFields.put('coderror','200');
@@ -1404,7 +1404,7 @@
             end if;
             obj_listFields.put('flgdata','CODPOS');
             obj_listFields.put('descode',getDescData ('CODPOS'));
-            
+
             if p_flgdata1 = 'CODPOS' then
                 v_numseq := 0;
                 obj_listFields1 := obj_listFields;
@@ -1437,7 +1437,7 @@
             end if;
             obj_listFields.put('flgdata','CODCOMP');
             obj_listFields.put('descode',getDescData ('CODCOMP'));
-            
+
             if p_flgdata1 = 'CODCOMP' then
                 v_numseq := 0;
                 obj_listFields1 := obj_listFields;
@@ -1467,7 +1467,7 @@
             end if;
             obj_listFields.put('flgdata','CODEMPID');
             obj_listFields.put('descode',getDescData ('CODEMPID'));
-            
+
             if p_flgdata1 = 'CODEMPID' then
                 v_numseq := 0;
                 obj_listFields1 := obj_listFields;

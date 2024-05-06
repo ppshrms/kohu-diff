@@ -59,6 +59,4 @@
 --  function check_leave_after(p_codcomp varchar2,p_dtereq date,p_dteleave date,p_daydelay number, p_codcalen varchar2) return varchar2;
 end HRAL59E;
 
-
-
 /

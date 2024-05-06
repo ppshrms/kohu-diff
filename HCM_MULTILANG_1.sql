@@ -69,7 +69,7 @@
       obj_desc_label3.put(to_char(v_rcnt), nvl(v_descod3,v_descode));
       obj_desc_label4.put(to_char(v_rcnt), nvl(v_descod4,v_descode));
       obj_desc_label5.put(to_char(v_rcnt), nvl(v_descod5,v_descode));
-      
+
       v_rcnt := v_rcnt + 1;
     end loop;
     -- set obj_desc_label to obj_lang

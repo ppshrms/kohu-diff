@@ -9,8 +9,8 @@
 	global_v_numlvlsalst	    number;
 	global_v_numlvlsalen	    number;
 	global_v_zupdsal		      varchar2(4 char);
-  
-  
+
+
 procedure  start_process (p_dteyreap   number,
                           p_numtime    number,
                           p_codcomp    varchar2,

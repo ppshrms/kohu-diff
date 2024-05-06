@@ -19,7 +19,7 @@
     p_year        tyrtrpln.dteyear%type;
     p_codcompy    tyrtrpln.codcompy%type;
     p_codcours    tyrtrpln.codcours%type;
-    
+
     p_codappr       tyrtrpln.codappr%type;
     p_dteappr       tyrtrpln.dteappr%type;
 

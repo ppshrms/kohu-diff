@@ -30,5 +30,4 @@
   procedure gen_detail (json_str_output out clob);
 END HRRC5AX;
 
-
 /

@@ -85,14 +85,13 @@
         begin
           delete_directory_file(v_atmpathto);
           delete_directory_file(v_atmpatherr);
-
           p_coduser_auto := 'AT_'||r1.typmatch||'_'||to_char(sysdate,'hh24mi');
           if lower(v_sysplat) <> 'aws' then
             get_dir_list(r1.pathfrom,p_coduser_auto,p_codapp);
+insert_temp2('3TB','3TB','98','r1.pathfrom = '||r1.pathfrom,'p_coduser_auto ='||p_coduser_auto,'p_codapp ='||p_codapp);
           else
             get_dir_list_aws(get_tsetup_value('AL3TB_S3_BUCKET'),r1.pathfrom,v_atmpathfrom,p_coduser_auto,p_codapp,v_dteupd);
           end if;
-
           v_file_exists := false;
           for i_file in c_files loop
             if lower(i_file.filename) like '%'||v_ext then
@@ -100,10 +99,13 @@
               v_file := i_file.filename;
               p_path_file := v_atmpathfrom;
               begin
+insert_temp2('3TB','3TB','1.1','v_file ='||v_file,'v_error =',v_error,'r1.typmatch =',r1.typmatch);
                 import_text(v_file,v_error,r1.typmatch);
+insert_temp2('3TB','3TB','1.2','v_file ='||v_file,'v_error =',v_error,'r1.typmatch =',r1.typmatch);
                 commit;
               exception when others then
                 v_error := 'ErrIm';
+insert_temp2('3TB','3TB','1.3','v_error');
                 goto error_point;
               end;
               v_path_move := v_atmpathto;
@@ -224,11 +226,16 @@
          return;
       end;
 
+
+
       v_filename := p_filename;
+insert_temp2('3TB','3TB','200','p_filename ='||p_filename,'p_error ='||p_error,'p_typmatch ='||p_typmatch);
       in_file    := utl_file.fopen(p_path_file,v_filename,'R',32767);
+insert_temp2('3TB','3TB','300','v_filename ='||v_filename);
       loop
        utl_file.get_line(in_file,linebuf,32767);
        v_text := linebuf; -- user22 : 09/02/2016 : STA3590210 || v_text := ltrim(rtrim(linebuf));
+insert_temp2('3TB','3TB','2.1','v_text ='||v_text);
        begin
         if v_text is not null then
           v_codbadge := upper(rtrim(substr(v_text,v_codest,((v_codeen - v_codest) + 1))));
@@ -266,7 +273,7 @@
           v_time		 := v_hour||v_min;
           v_dtetime  := to_date(to_char(v_date,'dd/mm/yyyy')||v_time,'dd/mm/yyyyhh24mi');
           v_codempid := substr(v_codbadge,1,10);
-
+insert_temp2('3TB','3TB','1.1','v_codempid =',v_codempid,'v_dtetime ='||v_dtetime);
           for r_tempcard in c_tempcard loop
             if (v_date between r_tempcard.dtestrt and nvl(r_tempcard.dtereturn,r_tempcard.dteend)) or
                (v_date >= r_tempcard.dtestrt and nvl(r_tempcard.dtereturn,r_tempcard.dteend) is null) then

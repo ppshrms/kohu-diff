@@ -57,11 +57,11 @@
                   into v_count1
                   from temploy1
                  where codjob = v_codjob;
-            
+
             exception when others then
                 v_count1 := 0;
             end;
-            
+
             begin
                 select count(*)
                   into v_count2
@@ -70,7 +70,7 @@
             exception when others then
                 v_count2 :=0;
             end;
-            
+
             if v_count1 + v_count2 > 0 then
                 param_msg_error := get_error_msg_php('HR1450',global_v_lang);
                 exit;
@@ -249,7 +249,7 @@
         obj_result.put('tab3',get_tab_tjobresp);
         obj_result.put('tab4',get_tab_tjobeduc);
         obj_rows.put('0',obj_result);
-        
+
         json_str_output := obj_rows.to_clob;
     exception when others then
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
@@ -364,7 +364,7 @@
         v_namjob4     := hcm_util.get_string_t(details,'namjob4');
         v_namjob5     := hcm_util.get_string_t(details,'namjob5');
         v_flgedit     := hcm_util.get_string_t(param_json,'flgedit');
-        
+
         tab1          := hcm_util.get_json_t(param_json,'tab1');
         v_desjob      := hcm_util.get_string_t(tab1,'desjob');
         v_amtcolla    := to_number(hcm_util.get_string_t(tab1,'amtcolla'));
@@ -614,7 +614,7 @@
                         max_numseq :=0 ;
                     end if;
                 end;
-    
+
                 p_numseq := max_numseq+1;
 
                 if(global_v_lang='101') then
@@ -662,7 +662,7 @@
                         max_numseq :=0 ;
                     end if;
                 end;
-    
+
                 p_numseq := max_numseq+1;
                 insert into ttemprpt (codempid,codapp,numseq,item1,item2,item3,item4,item5)
                 values (global_v_codempid,p_codapp,p_numseq,'TABLE1',v_codjob,rtab2.itemno,rtab2.namitem,rtab2.descrip);
@@ -695,9 +695,9 @@
                         max_numseq :=0 ;
                     end if;
                 end;
-    
+
                 p_numseq := max_numseq+1;
-    
+
                 insert into ttemprpt (codempid,codapp,numseq,item1,item2,item3,item4,item5)
                 values (global_v_codempid,p_codapp,p_numseq,'TABLE2',v_codjob,rtab3.itemno,rtab3.namitem,rtab3.descrip);
              end loop;

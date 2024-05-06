@@ -18,14 +18,14 @@
   global_v_zwrklvl          number;
   global_v_numlvlsalst      number;
   global_v_numlvlsalen      number;
-  
+
   global_v_batch_codapp     varchar2(100 char)  := 'HRAL34B';
   global_v_batch_codalw     varchar2(100 char)  := 'HRAL34B';
   global_v_batch_dtestrt    date;
   global_v_batch_flgproc    varchar2(1 char)    := 'N';
   global_v_batch_qtyproc    number              := 0;
   global_v_batch_qtyerror   number              := 0;
-  
+
   v_zupdsal                 varchar2(4 char);
 
   p_codcomp                 varchar2(4000 char);

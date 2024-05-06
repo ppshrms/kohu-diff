@@ -32,5 +32,4 @@
   function get_percent_ot(json_str_input clob) return clob;
 end;
 
-
 /

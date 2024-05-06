@@ -48,13 +48,13 @@
     v_length        number;
   begin
     obj_row := json_object_t();
-    
+
     v_where := ' where nvl(flgact,''1'') = ''1'' ';
     if p_where is not null then
       v_where := v_where || ' and(' || p_where || ')';
     end if;
 
-    v_stmt := 'select codcodec,descode,descodt,descod3,descod4,descod5,flgact 
+    v_stmt := 'select codcodec,descode,descodt,descod3,descod4,descod5,flgact
                  from '||p_table||v_where||
                ' order by codcodec';
     begin
@@ -166,7 +166,7 @@
 --    return json_str_output;
 --  end;
 
-   --LOV for List of Emp Movement 
+   --LOV for List of Emp Movement
   function get_emp_movement(json_str_input in clob) return clob is
     obj_row         json_object_t;
     obj_data        json_object_t;
@@ -1034,7 +1034,7 @@
                  from temploy1
                 where staemp like ''%'' '||v_where||
                'order by codempid';
-               
+
     begin
         select  char_length
           into  v_length
@@ -2092,7 +2092,7 @@
       v_where := ' where ' || param_where;
     end if;
 
-    v_stmt := ' select codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+    v_stmt := ' select codcodec, descode, descodt, descod3, descod4, descod5, flgact
                 from tcompgrp '||v_where||
               ' order by codcodec';
 
@@ -2287,7 +2287,7 @@
       v_where := ' where ' || param_where;
     end if;
 
-    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcodmist '||v_where||
                 ' order by codcodec';
     begin
@@ -2527,7 +2527,7 @@
   begin
     initial_value(json_str_input);
     obj_row := json_object_t();
-    
+
     v_where := 'where codtable not like ''BIN%''';
     if param_where is not null then
       v_where := v_where||' and ('||param_where||')';
@@ -2696,7 +2696,7 @@
       v_where := ' where ' || param_where;
     end if;
 
-    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcodslip '||v_where||
                 ' order by codcodec';
     begin
@@ -3104,7 +3104,7 @@
     exception when others then
         v_length := 0;
     end;
-    
+
     v_cursor  := dbms_sql.open_cursor;
     dbms_sql.parse(v_cursor,v_stmt,dbms_sql.native);
     dbms_sql.define_column(v_cursor,1,v_data1,1000);
@@ -3145,7 +3145,7 @@
     json_str_output := obj_data.to_clob;
     return json_str_output;
   end;
-  
+
   -- LOV for List of Type of Competency--
   function get_type_competency(json_str_input in clob) return clob is
     obj_row         json_object_t;
@@ -3245,7 +3245,7 @@
     end if;
 
     v_stmt := ' select table_name, comments
-                  from user_tab_comments 
+                  from user_tab_comments
                   where (table_type = ''TABLE''
                   or table_type = ''VIEW'')
                   and table_name like ''T%'' '
@@ -3315,7 +3315,7 @@
       v_where := ' where ' || param_where;
     end if;
 
-    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcodunit '||v_where||
                 ' order by codcodec';
     begin
@@ -3397,7 +3397,7 @@
       v_where := ' where ' || param_where;
     end if;
 
-    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcodsize '||v_where||
                 ' order by codcodec';
     begin
@@ -3478,8 +3478,8 @@
     if param_where is not null then
       v_where := ' where ' || param_where;
     end if;
-    
-    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+
+    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcodexp '||v_where||
                 ' order by codcodec';
     begin
@@ -3561,7 +3561,7 @@
       v_where := ' where ' || param_where;
     end if;
 
-    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact 
+    v_stmt := ' select  codcodec, descode, descodt, descod3, descod4, descod5, flgact
                   from tcodslip '||v_where||
                 ' order by codcodec';
     begin
@@ -3627,7 +3627,7 @@
     v_stmt			    varchar2(5000 char);
     v_data1			    varchar2(5000 char);
     v_length        number;
-    
+
   begin
     initial_value(json_str_input);
     obj_row := json_object_t();
@@ -3687,7 +3687,7 @@
     json_str_output := obj_data.to_clob;
     return json_str_output;
   end;
-   --LOV for List of Code Skill 
+   --LOV for List of Code Skill
   function get_skill_code(json_str_input in clob) return clob is
     obj_row         json_object_t;
     obj_data        json_object_t;

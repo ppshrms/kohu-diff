@@ -42,6 +42,4 @@
 
 END HRRC1FX;
 
-
-
 /

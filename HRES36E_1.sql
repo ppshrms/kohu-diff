@@ -103,7 +103,7 @@
     v_staappr          trefreq.staappr%type;
     v_travel_period    trefreq.travel_period%type;
     v_country          trefreq.country%type;
-    
+
   begin
     begin
       select desnote,
@@ -256,7 +256,7 @@
                flgagency     = null,
                codform       = p_codform,--User37 NXP-HR2101 #6370 ST11 28/07/2021 null,
                routeno       = p_routeno,
-               
+
                flgsend       = null,
                dtecancel     = p_dtecancel,
                dteinput      = sysdate,
@@ -336,8 +336,8 @@
                  staappr   = 'A',
                  remark    = v_desc,
                  coduser   = global_v_coduser
-                 
-                 
+
+
            where codempid  = global_v_codempid
              and dtereq    = p_dtereq2save
              and typreq    = v_codapp

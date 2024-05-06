@@ -57,5 +57,4 @@
       function  get_item_property (p_table in varchar2,p_field  in varchar2) return varchar2;
 end hrtr24x;
 
-
 /

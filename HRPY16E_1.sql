@@ -234,9 +234,9 @@
         v_codcompy  := hcm_util.get_string_t(json_obj,'codcompy');
         v_codbrlc   := hcm_util.get_string_t(json_obj,'codbrlc');
         validate_get_detail(v_codcompy,v_codbrlc);
-        
+
         if param_msg_error is null then
-        
+
             begin
                 select 'X' into v_temp
                 from tcodsoc
@@ -266,7 +266,7 @@
                         v_numfax
                     from tcompny
                     where codcompy = v_codcompy;
-                    
+
                     if global_v_lang = '101' then
                         v_adrcome1 := v_cadrcome;
                     elsif global_v_lang = '102' then
@@ -311,7 +311,7 @@
                 exception when others then null;
                 end;
             end if;
-            
+
             obj_data := json_object_t();
             obj_data.put('codcompy',v_codcompy);
             obj_data.put('codbrlc',v_codbrlc);

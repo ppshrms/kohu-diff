@@ -33,7 +33,7 @@
 
         param_detail        := hcm_util.get_json_t(json_obj,'indexData');
         param_table         := hcm_util.get_json_t(hcm_util.get_json_t(json_obj,'table'),'rows');
-        
+
         isAdd               := hcm_util.get_boolean_t(param_detail,'isAdd');
         isEdit              := hcm_util.get_boolean_t(param_detail,'isEdit');
         p_codcompy          := upper(hcm_util.get_string_t(param_detail,'codcompy'));
@@ -41,7 +41,7 @@
         p_flgresign         := upper(hcm_util.get_string_t(param_detail,'flgresign'));
         p_qtyremth          := to_number(hcm_util.get_string_t(param_detail,'qtyremth'));
     end initial_save;
-    
+
     procedure check_index as
         v_temp varchar2(1 char);
         v_secur boolean;
@@ -82,7 +82,7 @@
         v_canedit           boolean := true;
         v_found             varchar2(1 char) := 'N';
         obj_syncond         json_object_t;
-        
+
         cursor c1 is
             select codcompy,dteeffec,flgresign,qtyremth
               from tpfhinf
@@ -115,7 +115,7 @@
         obj_result  := json_object_t();
         obj_data    := json_object_t();
         obj_detail  := json_object_t();
-    
+
         obj_detail.put('coderror',200);
         obj_detail.put('codcompy',p_codcompy);
         obj_detail.put('dteeffec',to_char(p_dteeffec,'dd/mm/yyyy'));
@@ -134,7 +134,7 @@
             obj_detail.put('flgresign','Y');
             obj_detail.put('qtyremth','');        
         end if;
-        
+
         v_row := 0;
         obj_table := json_object_t();
         for r2 in c2 loop
@@ -187,7 +187,7 @@
 
             obj_table.put(to_char(v_row - 1),obj_data);
         end loop;
-        
+
         if v_row = 0 then
             v_row := v_row + 1;
             obj_data := json_object_t();
@@ -196,7 +196,7 @@
 
             obj_rows := json_object_t();
             obj_data.put('tpfcinf',obj_rows);
-            
+
             obj_data.put('numseq',1); -- ลำดับที่เงื่อนไขพนักงาน
             obj_syncond := json_object_t();
             obj_syncond.put('code',''); -- เงื่อนไขพนักงานที่อยู่ในกลุ่ม
@@ -471,29 +471,29 @@
         obj_json            json_object_t;
         obj_syscond         json_object_t;
         v_flg_have_delete   boolean := false;
-        
-        
+
+
         obj_tpfdinf             json_object_t;
         obj_tpfcinf             json_object_t;
-        
+
         v_tpfdinf_flgAdd        boolean;
         v_tpfdinf_flgEdit       boolean;
         v_tpfdinf_flgDelete     boolean;
-        
+
         v_tpfcinf_flgAdd        boolean;
         v_tpfcinf_flgEdit       boolean;
         v_tpfcinf_flgDelete     boolean;
-        
+
         v_numseq_new            number;
         v_count_tpfeinf         number;
-        
+
         cursor c1 is
             select *
               from tpfeinf
              where codcompy = p_codcompy
                and trunc(dteeffec) = p_dteeffec
           order by numseq;
-       
+
     begin
         -- ตาราง TPFHINF สาหรับเก็บ รหัสบริษัท วันที่มีผลบังคับใช้,สถานะสมัครสมาชิกใหม่เมื่อลาออก, จานวนเดือนที่สมัครครั้งที่ 2
         if isAdd or isEdit then
@@ -520,7 +520,7 @@
             v_flgconret         := hcm_util.get_string_t(obj_cond,'flgconret');
             v_flgconded         := hcm_util.get_string_t(obj_cond,'flgconded');
             v_cond_flgDelete    := nvl(hcm_util.get_boolean_t(obj_cond,'flgDelete'),false);
-            
+
             -- ตาราง TPFEINF สาหรับเก็บเงื่อนไขของกองทุน
             if v_cond_flgDelete then
                 v_flg_have_delete := true;
@@ -539,7 +539,7 @@
                  where codcompy = p_codcompy
                    and trunc(dteeffec) = p_dteeffec
                    and numseq = v_numseq;
-                
+
                 -- skip to next loop
                 continue;
             else
@@ -600,7 +600,7 @@
                        and qtywkst = v_qtywkst;
                 end if;
             end loop;
-            
+
             -- tab 2 tpfcinf
             obj_tpfcinf    := hcm_util.get_json_t(hcm_util.get_json_t(obj_cond,'tpfcinf'),'rows');
             for t2 in 0..obj_tpfcinf.get_size-1 loop
@@ -639,7 +639,7 @@
                 end if;
             end loop;
         end loop;
-        
+
         v_numseq_new := 0;
         for r1 in c1 loop
             v_numseq_new := v_numseq_new + 1;
@@ -649,13 +649,13 @@
                  where codcompy = p_codcompy
                    and trunc(dteeffec) = p_dteeffec
                    and numseq = r1.numseq;
-                   
+
                 update tpfdinf
                    set numseq = v_numseq_new
                  where codcompy = p_codcompy
                    and trunc(dteeffec) = p_dteeffec
                    and numseq = r1.numseq;
-                   
+
                 update tpfcinf
                    set numseq = v_numseq_new
                  where codcompy = p_codcompy
@@ -663,13 +663,13 @@
                    and numseq = r1.numseq;
             end if;    
         end loop;
-        
+
         if v_numseq_new = 0 then
             delete from tpfhinf
              where codcompy = p_codcompy
                and trunc(dteeffec) = p_dteeffec;        
         end if;
-        
+
         if param_msg_error is null then
             --<<user37 #2349 Final Test Phase 1 V11 02/03/2021 
             if not v_flg_have_delete then
@@ -794,7 +794,7 @@
       end if;
       p_dteeffecquery := p_dteeffec;
     end if;
-      
+
     if p_dteeffecquery < p_dteeffec then
         isAdd           := true; 
         isEdit          := false;

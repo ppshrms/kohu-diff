@@ -385,7 +385,7 @@
         exception when others then
           v_count5 := 0;
         end;   
-        
+
         if (v_count1 + v_count2 + v_count3 + v_count4 + v_count5 > 0) then
             param_msg_error := get_error_msg_php('HR1450',global_v_lang);
             rollback;
@@ -448,7 +448,7 @@
         exception when others then
           v_count5 := 0;
         end;   
-        
+
         if (v_count1 + v_count2 + v_count3 + v_count4 + v_count5 > 0) then
             param_msg_error := get_error_msg_php('HR1450',global_v_lang);
             rollback;

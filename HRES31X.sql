@@ -60,7 +60,7 @@
   detail18_desother   arr;
   detail18_desvalue   arr;
   detail18_datatype   arr;
-  
+
   function set_data(p_data varchar2) return varchar2;
   function get_col_comments (p_column   user_col_comments.column_name%type,
                            p_table    user_col_comments.table_name%type)

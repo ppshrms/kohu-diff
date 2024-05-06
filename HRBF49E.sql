@@ -22,7 +22,7 @@
 
     procedure get_copylist(json_str_input in clob, json_str_output out clob);
     procedure gen_copylist(json_str_output out clob);
-    
+
     procedure save_index(json_str_input in clob, json_str_output out clob);
 
 END HRBF49E;

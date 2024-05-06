@@ -25,7 +25,7 @@
   p_dtereq            varchar2(100);
   p_numseq            varchar2(100);
   p_dtereqr           varchar2(100);
-  
+
   p_codkpi            tkpireq2.codkpi%type;
 
   -- sendApprove

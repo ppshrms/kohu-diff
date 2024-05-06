@@ -13,11 +13,11 @@
         global_v_lang     := hcm_util.get_string(json_obj,'p_lang');
 
         hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
-        
+
         p_codcomp         := upper(hcm_util.get_string(json_obj,'p_codcomp'));
         p_numseq          := to_number(hcm_util.get_string(json_obj,'p_numseq'));
         p_dtestart        := to_date( hcm_util.get_string(json_obj,'p_dtestart'),'dd/mm/yyyy');
-        
+
     end initial_value;
 
     procedure check_codcomp as
@@ -35,7 +35,7 @@
             end if;
         end if;
     end check_codcomp;
-    
+
     procedure gen_index(json_str_output out clob) as
         obj_rows        json;
         obj_data        json;
@@ -224,12 +224,12 @@
         obj_head.put('codcomp',p_codcomp);
         obj_head.put('dtestart',to_char(p_dtestart,'dd/mm/yyyy'));
         obj_head.put('numseq',p_numseq);
-  
+
         for i in c1detail loop
             obj_syncond.put('code',i.syncond);
             obj_syncond.put('statement',i.statement);
             obj_syncond.put('description',get_logical_desc(i.statement));
-            
+
             --<<wanlapa #8820 31/01/2023
             obj_head.put('rowid',i.rowid);
             -->>wanlapa #8820 31/01/2023
@@ -387,22 +387,22 @@
         v_dteend        TOBFCFP.dteend%type;
         v_syncond       TOBFCFP.syncond%type;
         v_count_dup     number;
-        
+
         --<<wanlapa #8820 31/01/2023  
         v_codcomp       TOBFCFP.CODCOMP%type;
         v_rowid         varchar2(100 char);
         -->>wanlapa #8820 31/01/2023
-        
+
         tobfcfp_dteend  tobfcfp.dteend%type;
     begin
         obj_syncond := hcm_util.get_json(detail_obj,'syncond');
         v_syncond   := hcm_util.get_string(obj_syncond,'code');
         v_dteend    := to_date(hcm_util.get_string(detail_obj,'dteend'),'dd/mm/yyyy');
-        
+
         --<<wanlapa #8820 31/01/2023
         v_rowid   := hcm_util.get_string(detail_obj,'rowid');   
         -->>wanlapa #8820 31/01/2023
-        
+
         if v_syncond is null then
             param_msg_error := get_error_msg_php('HR2045',global_v_lang);
             return;
@@ -437,14 +437,14 @@
         exception when no_data_found then
           tobfcfp_dteend := null;
         end;
-        
+
         --> Peerasak || Issue#8746 || 30/11/2022
-        
+
 --        if tobfcfp_dteend is null or p_dtestart < tobfcfp_dteend then
 --            param_msg_error := get_error_msg_php('HR2507',global_v_lang);
 --            return;
 --        end if;
-            
+
       --<<wanlapa #8820 31/01/2023      
         begin
             select count(codcomp) into v_codcomp
@@ -453,7 +453,7 @@
             exception when no_data_found then
               v_codcomp := null;  
         end;
-        
+
         if v_rowid is null then
             if v_codcomp > 0 and tobfcfp_dteend is null or p_dtestart < tobfcfp_dteend then
                 param_msg_error := get_error_msg_php('HR2507',global_v_lang);
@@ -461,7 +461,7 @@
             end if;
         end if;
         -->>wanlapa #8820 31/01/2023
-        
+
     end check_param_detail;
 
     procedure check_child(children json) as

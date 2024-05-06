@@ -45,7 +45,7 @@
   --function get_dtestrt_prdcomp(p_codcomp varchar2, p_dtestrot date) return date;
 
   function get_qtyminwk(v_codempid varchar2, v_dtestrtwk date, v_dteendwk date) return number;
-
+  
   -- << KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887
   -- function get_max_numseq(global_v_codempid varchar2) return number;  -- bk
   function get_max_numseq(global_v_codempid varchar2, p_codempid varchar2) return number; -- add
@@ -95,6 +95,5 @@
   function get_qtyminotOth_notTmp (p_codempid varchar2 ,p_dtestrtwk date, p_dteendwk date, p_codapp varchar2, global_v_codempid varchar2) return number;  
 
 end;
-
 
 /

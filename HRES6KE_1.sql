@@ -287,7 +287,7 @@
       end if;
       -->> user18 ST11 31/08/2021 change std detail
       obj_detail.put('typalert',v_typalert);
-      
+
       if v_typalert <> 'N' then
         std_ot.get_week_ot(i.codempid, i.numotreq,i.dtereq,i.numseq,i.dtestrt,i.dteend,
                            i.qtyminb, i.timbend, i.timbstr,
@@ -310,7 +310,7 @@
       end if;
       --<< user18 ST11 03/08/2021 change std detail
     end loop; -- end for
-    
+
     obj_main.put('coderror',200);
     obj_main.put('detail',obj_detail);
     obj_main.put('table',obj_row);
@@ -319,16 +319,16 @@
     param_msg_error     := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output     := get_response_message('400',param_msg_error,global_v_lang);
   end get_detail;
-  
+
   procedure ess_save_ttotreq(json_str in clob, resp_json_str out clob) is
     obj_data        json_object_t;
     json_obj        json_object_t;
   begin
     json_obj            := json_object_t(json_str);
     initial_value(json_str);
-    
+
     p_obj_cumulative := hcm_util.get_json_t(hcm_util.get_json_t(json_obj,'table'),'rows');
-    
+
     check_index;
     if param_msg_error is null then
       insert_next_step;
@@ -753,7 +753,7 @@
     -->> user18 ST11 03/08/2021 change std
     v_dtestrtwk     := get_dtestrt_period (b_index_codempid ,ttotreq_dtestrt);
     v_dtestrtwk2    := get_dtestrt_period (b_index_codempid ,ttotreq_dteend);
-        
+
     begin
         select nvl(qtymxotwk,0),nvl(qtymxallwk,0),nvl(typalert,'N')
           into v_qtymxotwk,v_qtymxallwk,v_typalert
@@ -768,11 +768,11 @@
         v_qtymxallwk    := 0;
         v_typalert      := 'N';
     end;
-    
+
     if v_typalert <> 'N' then
         v_msgerror          := null;
         ttotreq_staovrot    := 'N';
-        
+
         for i in 0..(p_obj_cumulative.get_size-1) loop
             obj_row         := hcm_util.get_json_t(p_obj_cumulative,to_char(i));
             p_qtyot_total   := hcm_util.convert_hour_to_minute(hcm_util.get_string_t(obj_row,'qtyot_total'));
@@ -790,7 +790,7 @@
                 end if;
                 return;
             end if;
-    
+
             if (p_qtytotal > v_qtymxallwk) then
                 ttotreq_staovrot    := 'Y';
                 if nvl(p_flgconfirm,'N') = 'N' then
@@ -805,7 +805,7 @@
                 return;
             end if;
         end loop;
-            
+
        /* if (p_qtyot_total > v_qtymxotwk) then
             if nvl(p_flgconfirm,'N') = 'N' then
                 if v_typalert = '1' then
@@ -819,7 +819,7 @@
             end if;
             return;
         end if;*/
-    
+
         /*if (p_qtytotal > v_qtymxallwk) then
             if nvl(p_flgconfirm,'N') = 'N' then
                 if v_typalert = '1' then
@@ -1173,7 +1173,7 @@
     obj_data.put('tcontrot_flgchglv',tcontrot_flgchglv);
     obj_data.put('flgchglv', 'N');
     obj_data.put('typalert', v_typalert);
-    
+
     obj_main.put('coderror',200);
     obj_main.put('detail',obj_data);
     obj_main.put('table',obj_row);
@@ -1497,7 +1497,7 @@
             p_codcomp     := null;
         end;
     end if;
-    
+
     begin
         select nvl(qtymxotwk,0), nvl(qtymxallwk,0),nvl(typalert,'N')
           into v_qtymxotwk, v_qtymxallwk, v_typalert
@@ -1520,7 +1520,7 @@
                            global_v_codempid,
                            a_dtestweek,a_dteenweek,
                            a_sumwork,a_sumotreqoth,a_sumotreq,a_sumot,a_totwork,v_qtyperiod);
-  
+
         for n in 1..v_qtyperiod loop
             obj_data        := json_object_t();
             obj_data.put('dtestrtwk',to_char(a_dtestweek(n),'dd/mm/yyyy'));
@@ -1531,11 +1531,11 @@
             obj_data.put('qtyot_total',hcm_util.convert_minute_to_hour(a_sumot(n)));
             obj_data.put('qtytotal',hcm_util.convert_minute_to_hour(a_totwork(n)));
             obj_row.put(to_char(n - 1),obj_data);
-            
+
             if v_msg_error is null then
                 v_qtyot_total   := a_sumot(n);
                 v_qtytotal      := a_totwork(n);
-    
+
                 if (v_qtyot_total > v_qtymxotwk) then
                     v_msg_error := replace(get_error_msg_php('ES0075',global_v_lang),'@#$%400');
                 elsif (v_qtytotal > v_qtymxallwk) then

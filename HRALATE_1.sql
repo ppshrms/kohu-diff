@@ -169,7 +169,7 @@
       param_msg_error := get_error_msg_php('HR2045', global_v_lang, 'codcompy');
       return;
     end if;  
-  
+
     if p_mailalno is null then
       param_msg_error := get_error_msg_php('HR2045', global_v_lang, 'mailalno');
       return;

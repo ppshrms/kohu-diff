@@ -232,5 +232,4 @@ end insert_data_parallel;
 
 end HRAP3EX;
 
-
 /

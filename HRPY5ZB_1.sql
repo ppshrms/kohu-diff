@@ -132,7 +132,7 @@
         v_dteyrepay := hcm_util.get_year_buddhist_era(p_dteyrepay);
         v_dtepaymt  := hcm_util.get_date_buddhist_era(p_dtepaymt);
     end if;
-
+    
     if data_file like ('%<param-03>%') then
 --        data_file  := replace(data_file  ,'<param-03>',hcm_util.get_year_buddhist_era(p_dteyrepay));
         data_file  := replace(data_file  ,'<param-03>',v_dteyrepay);
@@ -408,7 +408,7 @@
     -- << Apisit || 08/03/2024 || fix issue #1746 || https://hrmsd.peopleplus.co.th:4449/redmine/issues/1746
     v_maillang            varchar2(100);
     -- >>
-
+    
   begin
     initial_value(json_str_input);
     param_json        := json_object_t(hcm_util.get_clob_t(json_object_t(json_str_input),'json_input_str'));
@@ -419,7 +419,7 @@
         v_filename     := hcm_util.get_string_t(param_json_row,'filename');
         v_password     := hcm_util.get_string_t(param_json_row,'password');
         v_pwdformat    := hcm_util.get_string_t(param_json_row,'pwdformat');
-
+        
         global_v_lang  := chk_flowmail.get_emp_mail_lang(v_codempid, '102'); -- KOHU-SS2301 | 000537-Boy-Apisit-Dev | 28/03/2024 | Fix issue 4449#1746
 
         v_password := utl_raw.cast_to_varchar2(utl_encode.base64_decode(utl_raw.cast_to_raw(v_password)));
@@ -499,7 +499,7 @@
     end ;
     -->>user8:Nirantee 01/12/2014 13:18 Assign By P'Teep and P'Somchai
     v_email   :=  get_tsetup_value('MAILEMAIL');
-
+    
     --<< KOHU | 000311-J-Jaturong-Dev | 28/03/2024 | check year depends on lang
     v_lang_codempid  := chk_flowmail.get_emp_mail_lang(p_codempid, '102');
     v_dteyrepay := p_dteyrepay;
@@ -511,10 +511,10 @@
 --    v_subject := get_label_name('HRPY5ZBC3',global_v_lang,260)||' '||p_numperiod||' '||get_label_name('HRPY5ZBC3',global_v_lang,30)||' '||get_tlistval_name('DTEMTHPAY',p_dtemthpay,global_v_lang)||' '||get_label_name('HRPY5ZBC3',global_v_lang,40)||' '||v_dteyrepay;
     v_subject := get_label_name('HRPY5ZBC3',global_v_lang,260)||''||get_label_name('HRPY5ZBC3',global_v_lang,30)||get_tlistval_name('DTEMTHPAY',p_dtemthpay,global_v_lang)||' '||v_dteyrepay;
     -- >> End Delete p_numperiod
-
+    
     -->> KOHU | 000311-J-Jaturong-Dev | 28/03/2024 | check year depends on lang
-
-
+    
+     
     --<<user8:Nirantee 01/12/2014 13:18 Assign By P'Teep and P'Somchai
     v_err := '0000';
 

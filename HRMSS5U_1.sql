@@ -20,7 +20,7 @@
     p_staappr           := hcm_util.get_string_t(json_obj,'p_staappr');
     p_codempid          := hcm_util.get_string_t(json_obj,'p_codempid_query');
     p_numseq            := hcm_util.get_string_t(json_obj,'p_numseq');
-    
+
     p_dtereq           := to_date(trim(hcm_util.get_string_t(json_obj,'p_dtereq')),'dd/mm/yyyy');
     -- submit approve
     p_remark_appr       := hcm_util.get_string_t(json_obj, 'p_remark_appr');
@@ -74,9 +74,9 @@
                                     and typreq  = 'HRESS4E'
                                     and dteappr between nvl(v_dtest,dteappr) and nvl(v_dteen,dteappr) )
       order by  codempid,dtereq,numseq;
-   
+
   begin
-    
+
     v_codappr  := pdk.check_codempid(global_v_coduser);
     v_dtest    := to_date(replace(p_dtest,'/',null),'ddmmyyyy');
     v_dteen    := to_date(replace(p_dteen,'/',null),'ddmmyyyy');
@@ -84,15 +84,15 @@
     obj_row := json_object_t();
     v_row   := 0;
       -- get data
-      
+
    if p_staappr = 'P' then
       for r1 in c_HRMSS5U_c1 loop
-      
+
       v_appno  := nvl(r1.appno,0) + 1;
           IF nvl(r1.appno,0)+1 = r1.qtyapp THEN
              v_chk := 'E' ;
           end if;
-          
+
           begin
             select codpos into v_codpos
              from temploy1
@@ -162,11 +162,11 @@
             v_row := v_row+1;                              
         end loop;
       end if;  
-       
+
     json_str_output := obj_row.to_clob;   
- 
+
   end;
-  
+
   procedure get_index (json_str_input in clob,json_str_output out clob) is
     begin
         initial_value(json_str_input);
@@ -179,7 +179,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   PROCEDURE Approve(p_coduser         in varchar2,
                     p_lang            in varchar2,
                     p_total           in varchar2,
@@ -236,7 +236,7 @@ begin
         exception when others then
          v_tircreq :=       null ;
     end ;
-  
+
     begin
         select approvno into v_max_approv
           from   twkflowh
@@ -260,7 +260,7 @@ begin
         END IF;
     end if;
     -- End Check Data    
-    
+
     begin
       select count(*) into v_count
         from tapempch
@@ -354,7 +354,7 @@ begin
              exit ;
            end if;
          end loop ;
-           
+
          update tircreq
             set   staappr   = v_staappr,
                   codappr   = v_codeappr,
@@ -463,7 +463,7 @@ begin
           and dtereq   = rq_dtereq
           and numseq   = rq_seqno;
         commit ;
-        
+
     -- Step 5 => Send Mail
         begin
          select rowid
@@ -475,7 +475,7 @@ begin
         exception when others then
          v_tircreq :=       null ;
         end ;
-        
+
       --sendmail
       begin 
         chk_workflow.sendmail_to_approve( p_codapp        => 'HRESS4E',
@@ -494,7 +494,7 @@ begin
       exception when others then
         param_msg_error_mail := get_error_msg_php('HR2403',global_v_lang);
       end;
-  
+
     end if;--if v_tircreq.staappr <> 'Y' then
   exception when others then
     rollback;
@@ -525,12 +525,12 @@ begin
       v_seqno     := to_number(hcm_util.get_string_t(json_obj2, 'p_numseq'));
       v_codempid  := hcm_util.get_string_t(json_obj2, 'p_codempid');
       v_dtereq    := hcm_util.get_string_t(json_obj2, 'p_dtereq');
-      
+
       v_staappr := nvl(v_staappr, 'A');
       approve(global_v_coduser,global_v_lang,to_char(v_rowcount),v_staappr,p_remark_appr,p_remark_not_appr,to_char(sysdate,'dd/mm/yyyy'),v_appseq,v_chk,v_codempid,v_seqno,v_dtereq);
       exit when param_msg_error is not null;
     end loop;
-    
+
     if param_msg_error is not null then
       rollback;
       json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -546,7 +546,7 @@ begin
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end process_approve;
-  
+
   procedure gen_detail(json_str_output out clob) is
     obj_data        json_object_t;
     obj_row         json_object_t;
@@ -562,11 +562,11 @@ begin
     v_codpos        treqest2.codpos%type;
     v_codjob        treqest2.codjob%type;
     v_numreqst      treqest2.numreqst%type;
-    
+
     v_codcomp       tircreq.codcomp%type;
     v_remarks       tircreq.remarks%type;
     v_dtestart      tircreq.dtestart%type;
-    
+
     cursor c1 is
       select b.numreqst,b.codpos,b.codcomp,b.codjob,b.dteopen,b.qtyreq,b.codbrlc,
              b.dteclose,b.desnote,syncond,statement,flgcond,flgjob,a.desnote remarks
@@ -574,7 +574,7 @@ begin
         where b.numreqst = v_numreqst
           and b.codpos = v_codpos
           and b.numreqst = a.numreqst;
-          
+
     cursor c2 is
       select decode(global_v_lang,'101', namjobe ,
                                  '102', namjobt,
@@ -584,31 +584,31 @@ begin
                                  qtyguar,syncond,statement
         from  tjobcode
         where codjob = v_codjob;
-        
+
      cursor c3 is
       select itemno,namitem,descrip
         from  tjobdet
         where codjob = v_codjob
         order by itemno;
-        
+
      cursor c4 is
       select itemno,namitem,descrip
         from  tjobresp
         where codjob = v_codjob
        order by itemno;
-        
+
     cursor c5 is
       select codedlv,codmajsb,numgpa
         from  tjobeduc
         where codjob = v_codjob
       order by seqno;
-      
-    
+
+
   begin
-  
+
    obj_tab := json_object_t();
    obj_tab1 := json_object_t();
-   
+
    begin
     select codcomp,codpos,codjob,remarks,dtestart,numreqst
       into v_codcomp,v_codpos,v_codjob,v_remarks,v_dtestart,v_numreqst
@@ -631,14 +631,14 @@ begin
    obj_tab1.put('desc_codjob', get_tjobcode_name(v_codjob,global_v_lang));
    obj_tab1.put('remarks', v_remarks);
    obj_tab1.put('dtestart', to_char(v_dtestart,'dd/mm/yyyy'));
-   
-    
+
+
     obj_result := json_object_t();
     obj_result.put('coderror', 200);
     obj_data := json_object_t();
-    
+
     for r1 in c1 loop
-    
+
     begin 
       select statement ,decode(global_v_lang,'101', namjobe ,
                                  '102', namjobt,
@@ -651,15 +651,15 @@ begin
     exception when no_data_found then
       v_job_remark := null;
     end;
-    
+
     if r1.flgjob = 'Y' then
       v_syncond := get_logical_desc(v_job_remark);
     end if;
-    
+
     if r1.flgcond = 'Y' then
       v_syncond := get_logical_desc(r1.statement);
     end if;
-    
+
      obj_data.put('coderror', 200);
       obj_data.put('numreqst', r1.numreqst);
       obj_data.put('codpos', r1.codpos);
@@ -672,7 +672,7 @@ begin
       obj_data.put('syncond',v_syncond); 
     end loop;
     obj_result.put('treqest2', obj_data);
-    
+
     obj_data := json_object_t();
     for r2 in c2 loop
       obj_data.put('coderror', 200);
@@ -683,7 +683,7 @@ begin
       obj_data.put('syncond',get_logical_desc(r2.statement)); 
     end loop;
     obj_result.put('tjobcode', obj_data);
-    
+
     obj_row  := json_object_t();
     obj_data := json_object_t();
     obj_temp := json_object_t();
@@ -698,7 +698,7 @@ begin
     end loop;
     obj_temp.put('rows', obj_row);
     obj_result.put('tjobdet', obj_temp);
-    
+
     obj_row  := json_object_t();
     obj_data := json_object_t();
     obj_temp := json_object_t();
@@ -713,7 +713,7 @@ begin
     end loop;
     obj_temp.put('rows', obj_row);
     obj_result.put('tjobresp', obj_temp);
-    
+
     obj_row  := json_object_t();
     obj_data := json_object_t();
     obj_temp := json_object_t();
@@ -730,16 +730,16 @@ begin
     end loop;
     obj_temp.put('rows', obj_row);
     obj_result.put('tjobeduc', obj_temp);
-    
-    
+
+
     obj_tab.put('coderror', 200);
     obj_tab.put('tab1', obj_tab1);
     obj_tab.put('tab2', obj_result);
-    
-    
+
+
     json_str_output := obj_tab.to_clob;
   end;
-  
+
   procedure get_detail (json_str_input in clob,json_str_output out clob) is
     begin
         initial_value(json_str_input);

@@ -37,6 +37,4 @@
   procedure gen_detail2(json_str_output out clob);
 END; -- Package spec
 
-
-
 /

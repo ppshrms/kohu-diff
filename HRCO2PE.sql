@@ -52,10 +52,10 @@
   --detail table
   procedure get_detail (json_str_input in clob, json_str_output out clob);
   procedure gen_detail (json_str_output out clob);
-  
+
   procedure get_detail2 (json_str_input in clob, json_str_output out clob);
   procedure gen_detail2 (json_str_output out clob);
-  
+
   procedure get_detail_table(json_str_input in clob, json_str_output out clob);
   procedure gen_detail_table(json_str_output out clob) ;
 

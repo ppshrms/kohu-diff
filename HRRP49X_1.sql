@@ -26,15 +26,15 @@
     p_year              := to_number(hcm_util.get_string_t(json_obj,'p_year'));
     p_codlinef          := hcm_util.get_string_t(json_obj,'p_codlinef');
     p_othdetail          := hcm_util.get_string_t(json_obj,'p_othdetail');
-    
+
     p_flgCount          := hcm_util.get_string_t(json_obj,'p_flgCount');
-    
+
     if p_flgCount is not null then
         searchIndex         := json_object_t(hcm_util.get_string_t(json_obj,'searchIndex'));
 --    searchIndex         := hcm_util.get_json_t(json_obj,'searchIndex');
     end if;
 
-    
+
   end;
 
   procedure check_index is
@@ -367,7 +367,7 @@ end gen_index;
   begin
       obj_row := json_object_t();
       v_pre_codlinef := '';
-      
+
       for r1 in c1 loop
         obj_data := json_object_t();
         obj_data.put('coderror','200');
@@ -713,7 +713,7 @@ end gen_index;
         p_codcomp_query     := hcm_util.get_string_t(searchIndex,'codcomp');
         p_codpos_query      := hcm_util.get_string_t(searchIndex,'codpos');
     end if;
-    
+
     delete ttemprpt where codapp = 'HRRP49X' and codempid = global_v_codempid;
     v_numseq    := 0;
 
@@ -725,7 +725,7 @@ end gen_index;
            where codempid = global_v_codempid 
              and codapp = 'HRRP49X' 
              and item1 = r1.numpath;
-            
+
           if v_count  = 0 then
             v_numseq := v_numseq + 1;
             if r1.numpath = p_numpath then
@@ -736,7 +736,7 @@ end gen_index;
           end if;
       end loop;
     end if;
-    
+
     if p_flgCount = -1 then
         begin
             select item1, to_date(item2,'dd/mm/yyyy')
@@ -766,7 +766,7 @@ end gen_index;
             return;
         end;
     end if;
-    
+
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end gen_numpath;

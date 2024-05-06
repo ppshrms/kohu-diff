@@ -42,12 +42,12 @@
     obj_child           json_object_t;
     obj_main            json_object_t;
     obj_detail          json_object_t;
-    
+
     v_rcnt              number;
     v_rcnt_child        number;
     v_data_found        varchar2(1 char) := 'N';
     v_dteeffec          date;
-    
+
     v_thelp             thelp%rowtype;
     v_descmodule        thelp.descmodulee%type;
     v_qtydoc            number;
@@ -78,7 +78,7 @@
     exception when no_data_found then
         v_thelp := null;
     end;
-    
+
     if global_v_lang = '101' then
         v_descmodule := v_thelp.descmodulee;
     elsif global_v_lang = '102' then
@@ -90,7 +90,7 @@
     elsif global_v_lang = '105' then
         v_descmodule := v_thelp.descmodule5;
     end if;
-    
+
     obj_detail              := json_object_t();
     obj_detail.put('codmodule', p_codmodule);
     obj_detail.put('descmodule', v_descmodule);
@@ -101,19 +101,19 @@
     obj_detail.put('descmodule5', v_thelp.descmodule5);
     obj_detail.put('filedoc', v_thelp.filedoc);
     obj_detail.put('filemedia', v_thelp.filemedia);
-    
+
     obj_row                 := json_object_t();
     v_rcnt                  := 0;
     for r1 in c_thelpd loop
       v_rcnt_child          := 0;
       obj_data              := json_object_t();
-      
+
       select count (subtopic)
         into v_qtydoc
         from thelpt
        where codmodule = p_codmodule
          and numtopic = r1.numtopic;
-      
+
       obj_data.put('coderror', '200');
       obj_data.put('numtopic', r1.numtopic);
       obj_data.put('namtopic', r1.namtopic);
@@ -123,7 +123,7 @@
       obj_row.put(to_char(v_rcnt), obj_data);
       v_rcnt              := v_rcnt + 1;
     end loop;
-    
+
     obj_main              := json_object_t();
     obj_main.put('coderror', '200');
     obj_main.put('detail', obj_detail);
@@ -152,11 +152,11 @@
     obj_child           json_object_t;
     obj_main            json_object_t;
     obj_detail          json_object_t;
-    
+
     v_rcnt              number;
     v_rcnt_child        number;
     v_data_found        varchar2(1 char) := 'N';
-    
+
     v_thelpd            thelpd%rowtype;
     v_namtopic          thelpd.namtopice%type;
     v_desctopic         thelpd.desctopice%type;
@@ -189,7 +189,7 @@
     exception when no_data_found then
         v_thelpd := null;
     end;
-    
+
     if global_v_lang = '101' then
         v_namtopic  := v_thelpd.namtopice;
         v_desctopic := v_thelpd.desctopice;
@@ -206,7 +206,7 @@
         v_namtopic := v_thelpd.namtopic5;
         v_desctopic := v_thelpd.desctopic5;
     end if;
-    
+
     obj_detail              := json_object_t();
     obj_detail.put('codmodule', p_codmodule);
     obj_detail.put('numtopic', p_numtopic);
@@ -222,7 +222,7 @@
     obj_detail.put('desctopic3', v_thelpd.desctopic3);
     obj_detail.put('desctopic4', v_thelpd.desctopic4);
     obj_detail.put('desctopic5', v_thelpd.desctopic5); 
-    
+
     obj_row                 := json_object_t();
     v_rcnt                  := 0;
     for r1 in c_thelpt loop
@@ -248,7 +248,7 @@
       obj_row.put(to_char(v_rcnt), obj_data);
       v_rcnt              := v_rcnt + 1;
     end loop;
-    
+
     obj_main              := json_object_t();
     obj_main.put('coderror', '200');
     obj_main.put('detail', obj_detail);
@@ -259,21 +259,21 @@
   procedure post_save_subtopic (json_str_input in clob, json_str_output out clob) is
     json_obj            json_object_t;
     v_json              json_object_t;
-    
+
     obj_topic           json_object_t;
     topic_detail        json_object_t;
     topic_table         json_object_t;
     obj_subtopic        json_object_t;
     subtopic_detail     json_object_t;
     subtopic_table      json_object_t;
-    
+
     v_codmodule         thelp.codmodule%type;
     v_descmodulee       thelp.descmodulee%type;
     v_descmodulet       thelp.descmodulet%type;
     v_descmodule3       thelp.descmodule3%type;
     v_descmodule4       thelp.descmodule4%type;
     v_descmodule5       thelp.descmodule5%type;
-    
+
     v_numtopic          thelpd.numtopic%type;
     v_desctopice        thelpd.desctopice%type;
     v_desctopict        thelpd.desctopict%type;
@@ -293,13 +293,13 @@
     v_namsup3           thelpt.namsup3%type;
     v_namsup4           thelpt.namsup4%type;
     v_namsup5           thelpt.namsup5%type;
-    
+
   begin
     initial_value(json_str_input);
     json_obj            := json_object_t(json_str_input);
     obj_topic           := hcm_util.get_json_t(json_obj, 'param_topic');
     obj_subtopic        := hcm_util.get_json_t(json_obj, 'param_subtopic');
-    
+
     topic_detail        := hcm_util.get_json_t(obj_topic, 'detail');
     topic_table         := hcm_util.get_json_t(obj_topic, 'table');
     v_codmodule         := hcm_util.get_string_t(topic_detail,'codmodule');
@@ -311,7 +311,7 @@
     v_descmodule5       := hcm_util.get_string_t(topic_detail,'descmodule5');
     p_filedoc           := hcm_util.get_string_t(topic_detail,'filedoc');
     p_filemedia         := hcm_util.get_string_t(topic_detail,'filemedia');
-    
+
     subtopic_detail     := hcm_util.get_json_t(obj_subtopic, 'detail');
     subtopic_table      := hcm_util.get_json_t(obj_subtopic, 'table');
     v_numtopic          := hcm_util.get_string_t(subtopic_detail,'numtopic');
@@ -374,7 +374,7 @@
              where codmodule = v_codmodule
                and numtopic = v_numtopic;
         end;
-        
+
         for i in 0..(subtopic_table.get_size - 1) loop
             param_json_row      := hcm_util.get_json_t(subtopic_table,to_char(i));
             v_flg               := hcm_util.get_string_t(param_json_row,'flg');
@@ -443,22 +443,22 @@
   procedure post_save_topic (json_str_input in clob, json_str_output out clob) is
     json_obj            json_object_t;
     v_json              json_object_t;
-    
+
     obj_topic           json_object_t;
     topic_detail        json_object_t;
     topic_table         json_object_t;
-    
+
     v_codmodule         thelp.codmodule%type;
     v_descmodulee       thelp.descmodulee%type;
     v_descmodulet       thelp.descmodulet%type;
     v_descmodule3       thelp.descmodule3%type;
     v_descmodule4       thelp.descmodule4%type;
     v_descmodule5       thelp.descmodule5%type;
-    
+
     v_numtopic          thelpd.numtopic%type;
     param_json_row      json_object_t;
     v_flgDelete         boolean;
-    
+
   begin
     initial_value(json_str_input);
     json_obj            := json_object_t(json_str_input);
@@ -507,7 +507,7 @@
                 delete thelpt
                  where codmodule = v_codmodule
                    and numtopic = v_numtopic;
-                   
+
             end if;
         end loop;
         param_msg_error := get_error_msg_php('HR2401',global_v_lang);
@@ -519,7 +519,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message(403,param_msg_error,global_v_lang);
   end post_save_topic;
-  
+
   procedure check_save_subtopic is
   begin
     if p_descmodule is null then

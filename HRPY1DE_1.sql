@@ -1018,7 +1018,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
     end get_default_period;
-    
+
     procedure get_flggen(json_str_input in clob, json_str_output out clob) as
         obj_data    json_object_t;
         v_chk       varchar2(1 char) := 'N';
@@ -1056,7 +1056,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
     end get_flggen;
-    
+
     procedure get_qtynumpay(json_str_input in clob, json_str_output out clob) as
         obj_data    json_object_t;
         v_chk       varchar2(1 char);
@@ -1070,7 +1070,7 @@
                 exit;
             end if;
         end loop;
-        
+
         if nvl(v_chk,'N') = 'Y' then
           begin
             select max(qtynumpay)/12
@@ -1094,7 +1094,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
     end get_qtynumpay;
-    
+
     procedure get_copy_flggen(json_str_input in clob, json_str_output out clob) as
         obj_data    json_object_t;
         v_chk       varchar2(1 char);
@@ -1108,7 +1108,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
     end get_copy_flggen;
-    
+
     procedure get_copy_qtynumpay(json_str_input in clob, json_str_output out clob) as
         obj_data    json_object_t;
         v_chk       varchar2(1 char);

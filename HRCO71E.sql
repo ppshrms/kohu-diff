@@ -18,13 +18,13 @@
   global_v_numlvlsalst      number;
   global_v_numlvlsalen      number;
   v_zupdsal                 varchar2(4 char);
-  
+
   p_codmodule               thelp.codmodule%type;
   p_numtopic                thelpd.numtopic%type;
-  
+
   param_detail              json_object_t;
   param_json                json_object_t;
-  
+
   obj_detail                json_object_t;
 
   v_flg                     varchar2(100 char);
@@ -33,10 +33,10 @@
   p_descmodule              thelp.descmodulee%type;
 
   procedure initial_value (json_str in clob);
-  
+
   procedure get_topic (json_str_input in clob, json_str_output out clob);
   procedure gen_topic (json_str_output out clob);
-  
+
   procedure get_subtopic (json_str_input in clob, json_str_output out clob);
   procedure gen_subtopic (json_str_output out clob);
 --

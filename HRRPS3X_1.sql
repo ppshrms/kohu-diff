@@ -21,7 +21,7 @@
     b_index_codwork     := hcm_util.get_string_t(json_obj,'p_codwork');
     b_index_splitrow    := hcm_util.get_string_t(json_obj,'p_splitrow');
     b_index_splitcol    := hcm_util.get_string_t(json_obj,'p_splitcol');
-    
+
     p_logic1       := hcm_util.get_string_t(json_obj,'p_syncond1');
     p_logic2       := hcm_util.get_string_t(json_obj,'p_syncond2');
     p_logic3       := hcm_util.get_string_t(json_obj,'p_syncond3');
@@ -55,14 +55,14 @@
     obj_data_parent_col        json_object_t;
     obj_data_child_col         json_object_t;
     obj_data                   json_object_t;
-    
+
     obj_row_parent_col         json_object_t;
     obj_row_child_col          json_object_t;
     obj_row                    json_object_t;
     obj_row_data               json_object_t;
-    
+
     obj_rowmain                json_object_t;
-    
+
     v_rcnt          number := 0;
     v_rcnt2         number := 0;
     v_rcnt3         number := 0;
@@ -78,7 +78,7 @@
     v_description3  varchar2(3000);  
     v_sub_col       varchar2(1) := 'N';
     v_num           number(10) := 0;
-    
+
     v_statment      varchar2(4000); 
     v_where         varchar2(4000);
     v_cursor        number;
@@ -93,11 +93,11 @@
     v_cursor3       number;
     v_cntsub        number;
     v_row           number;
-    
+
     type a_text is table of varchar2(1000) index by binary_integer;
     	a_splitcol			a_text;
         a_code              a_text;
-       
+
   begin
     v_code1         :=  p_logic1;
     v_code2         :=  p_logic2;
@@ -108,7 +108,7 @@
     for i in 1..3 loop
         a_code(i) := null;
     end loop;
-    
+
 	if v_code1 is not null then
         v_where := ' and ( '||v_code1;
         a_code(1) := v_code1;
@@ -158,7 +158,7 @@
     dbms_sql.parse(v_cursor,v_statment,dbms_sql.native);
     dbms_sql.define_column(v_cursor,1,v_codempid,100);
     dbms_sql.define_column(v_cursor,2,v_codcomp,100);
-    
+
     v_dummy := dbms_sql.execute(v_cursor);
 
     while dbms_sql.fetch_rows(v_cursor) > 0 loop
@@ -170,9 +170,9 @@
             v_flgsecu := 'Y';
         end if;
     end loop;
-    
+
     dbms_sql.close_cursor(v_cursor);
-    
+
     if v_flgdata = 'Y' and v_flgsecu = 'Y' then
 
         --child
@@ -202,7 +202,7 @@
                 v_cntsub:= 3;
             end if;
         end loop;
-        
+
         if b_index_codcompy is not null and b_index_codwork is not null then
             v_statment := 'select '||b_index_splitcol||' splitcol'||
                           '  from v_hrrps3x where codcomp in ('||
@@ -253,7 +253,7 @@
         v_cursor2 := dbms_sql.open_cursor;
         while dbms_sql.fetch_rows(v_cursor) > 0 loop
             dbms_sql.column_value(v_cursor,1,v_splitcol);
-            
+
             --description fundesc from treport2
             begin
               select funcdesc
@@ -264,8 +264,8 @@
             exception when no_data_found then
               v_fundesc := null;
             end;
-            
-            
+
+
             v_fundesc := replace(v_fundesc,'P_CODE',''''||v_splitcol||'''');
             v_fundesc := replace(v_fundesc,'P_LANG',''''||global_v_lang||'''');
             if v_fundesc is not null then
@@ -279,7 +279,7 @@
             while dbms_sql.fetch_rows(v_cursor2) > 0 loop
                 dbms_sql.column_value(v_cursor2,1,v_desc);
             end loop;
-            
+
             -- parent
             v_rcnt := v_rcnt+1;
             a_splitcol(v_rcnt) := v_splitcol;
@@ -287,7 +287,7 @@
             obj_data_parent_col.put('col'||v_rcnt,v_desc);
             obj_row_parent_col.put(to_char(v_rcnt-1),obj_data_parent_col);
         end loop;
-        
+
         --mockDetailRows
         if b_index_codcompy is not null and b_index_codwork is not null then
             v_statment := 'select '||b_index_splitrow||' splitrow'||
@@ -329,7 +329,7 @@
                           ' group by '||b_index_splitrow||
                           ' order by '||b_index_splitrow ;
         end if;
-        
+
         v_cursor3 := dbms_sql.open_cursor;
         dbms_sql.parse(v_cursor3,v_statment,dbms_sql.native);
         dbms_sql.define_column(v_cursor3,1,v_splitcol,100);
@@ -341,7 +341,7 @@
             dbms_sql.column_value(v_cursor3,1,v_splitrow);
             obj_data := json_object_t();
             obj_data.put('coderror', '200');
-            
+
             --description fundesc from treport2
             begin
               select funcdesc
@@ -365,7 +365,7 @@
             while dbms_sql.fetch_rows(v_cursor2) > 0 loop
                 dbms_sql.column_value(v_cursor2,1,v_desc);
             end loop;
-            
+
             obj_data.put('description', v_desc);
             v_row := 0;
             if nvl(v_cntsub,0) > 0 then 
@@ -393,25 +393,25 @@
             obj_row.put(to_char(v_rcnt3-1),obj_data);
             obj_rowmain := json_object_t();
         end loop;
-        
+
         dbms_sql.close_cursor(v_cursor);
         dbms_sql.close_cursor(v_cursor2);
         dbms_sql.close_cursor(v_cursor3);
-        
+
         obj_row_data := json_object_t();
         obj_row_data.put('rows',obj_row);
-        
+
         obj_rowmain.put('coderror', '200');
         obj_rowmain.put('indexHeadParentCol',obj_row_parent_col);
         obj_rowmain.put('indexHeadChildCol',obj_row_child_col);
         obj_rowmain.put('totalParent',obj_row_parent_col.get_size);
         obj_rowmain.put('totalChild',obj_row_child_col.get_size);
         obj_rowmain.put('table',obj_row_data);
-        
-    end if;--if v_flgdata = 'Y' and v_flgsecu = 'Y' then
-    
 
-    
+    end if;--if v_flgdata = 'Y' and v_flgsecu = 'Y' then
+
+
+
     if v_flgdata = 'N' then
       param_msg_error := get_error_msg_php('HR2055', global_v_lang, 'ttmovemt');
       json_str_output := get_response_message(null, param_msg_error, global_v_lang);
@@ -426,14 +426,14 @@
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end;
   --
-  
+
   procedure check_index is
     v_codcomp   tcenter.codcomp%type;
     v_staemp    temploy1.staemp%type;
     v_flgSecur  boolean;
     v_data      varchar2(1) := 'N';
     v_chkSecur  varchar2(1) := 'N';
-    
+
     cursor c1 is 
       select b.codcompp
         from thisorg a, thisorg2 b
@@ -469,7 +469,7 @@
             return;
         end if;
     end if;
-    
+
   end;
 end;
 

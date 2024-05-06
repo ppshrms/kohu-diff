@@ -66,14 +66,14 @@
     obj_row           json_object_t;
     obj_data          json_object_t;
     v_rcnt            number := 0;
-    
+
     v_actstudy        tapplinf.actstudy%type;
     v_specabi         tapplinf.specabi%type;
     v_compabi         tapplinf.compabi%type;
     v_addinfo         tapplinf.addinfo%type;
     v_typthai         tapplinf.typthai%type;
     v_typeng          tapplinf.typeng%type;
-    
+
     cursor c_cmptncy is
       select codlang,flglist,flgspeak,flgread,flgwrite
         from tlangabi
@@ -96,7 +96,7 @@
     obj_data.put('addinfo',v_addinfo);
     obj_data.put('typthai',v_typthai);
     obj_data.put('typeng',v_typeng);
-    
+
     obj_row    := json_object_t();
     for i in c_cmptncy loop
       obj_table   := json_object_t();
@@ -134,7 +134,7 @@
     v_addinfo       tapplinf.addinfo%type;
     v_typthai       tapplinf.typthai%type;
     v_typeng        tapplinf.typeng%type;
-    
+
     t_tlangabi        tlangabi%rowtype;
     v_flg_oth_talent  varchar2(100);
   begin
@@ -184,9 +184,9 @@
          where numappl      = b_index_numappl
            and codlang      = t_tlangabi.codlang;
       end if;
-      
+
     end loop;
-     
+
   end;
   --
   procedure save_skill(p_codtency   tcmptncy.codtency%type,
@@ -204,7 +204,7 @@
       else
         v_numseq    := p_numseq;
       end if;
-      
+
       begin       
         insert into tcmptncy2(numappl,numseq,codempid,descskil,grade,codcreate,coduser)
         values (b_index_numappl,v_numseq,b_index_numappl,p_descskil,p_grade,global_v_lang,global_v_lang);
@@ -237,13 +237,13 @@
     param_json_oth_skill    json_object_t;
     param_json_table        json_object_t;
     t_tapplfm               tapplfm%rowtype;
-    
+
     v_codtency              tcmptncy.codtency%type;
     v_descskil              tcmptncy2.descskil%type;
     v_grade                 tcmptncy2.grade%type;
     v_numseq                tcmptncy2.numseq%type;
     v_flg                   varchar2(100);
-    
+
   begin
     initial_value(json_str_input);
     param_json              := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
@@ -265,13 +265,13 @@
           delete from tcmptncy
            where numappl    = b_index_numappl
              and codtency   = v_codtency;
-             
+
           delete from tcmptncy2
            where numappl    = b_index_numappl
              and numseq     = v_numseq;   
         end if;
       end loop;
-      
+
       save_oth_skill(param_json_oth_skill,param_json_table);
       param_msg_error := get_error_msg_php('HR2401',global_v_lang);
       commit;

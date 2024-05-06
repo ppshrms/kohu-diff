@@ -341,7 +341,7 @@ begin
         ----------------------------------------------------------
         delete ttemprpt where codempid = global_v_coduser and codapp = v_codapp;
         v_numseq := 0 ;
-        
+
         begin
             select decode(v_mail_lang,101,descode,102,descodt,103,descod3,104,descod4,105,descod5,descode)
               into v_subject
@@ -350,7 +350,7 @@ begin
         exception when no_data_found then
             v_subject := get_label_name('HRTR66XEXC',v_mail_lang,1000);
         end;
-        
+
         chk_flowmail.get_message_result('HRTR66X1', v_mail_lang, v_msg_to, v_template_to);
         -------------------------------------------------
         for r_thistrnn in c_thistrnn (r_thistrnn_superv.superv_codempid) loop

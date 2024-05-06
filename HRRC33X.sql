@@ -39,7 +39,7 @@
   procedure gen_index_popup(json_str_output out clob);
   procedure post_import_process(json_str_input in clob, json_str_output out clob);
   procedure format_text_json(json_str_input in clob, v_rec_tran out number, v_rec_error out number);
-  
+
 end hrrc33x;
 
 /

@@ -81,5 +81,4 @@
   function get_format_hhmm(p_qtyhour    number) return varchar2;
 END; -- Package spec
 
-
 /

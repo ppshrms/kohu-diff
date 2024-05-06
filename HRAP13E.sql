@@ -15,7 +15,7 @@
   v_zupdsal                 varchar2(4000 char);
   global_v_codpswd          varchar2(100 char);
   global_v_lang             varchar2(10 char) := '102';
-  
+
   p_codcompy                tgradekpi.codcompy%type;
   p_codcompyQuery           tgradekpi.codcompy%type;
   p_dteyreap                tgradekpi.dteyreap%type;

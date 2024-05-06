@@ -257,7 +257,7 @@
       obj_data.put('deslinef5',v_data7);
       obj_data.put('dteeffec',v_data8);
       obj_data.put('flggroup',v_data9);
-      
+
       obj_data.put('max',to_char(v_length));
       obj_row.put(to_char(v_row-1),obj_data);
     end loop; -- end while

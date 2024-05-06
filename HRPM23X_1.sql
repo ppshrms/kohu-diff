@@ -47,7 +47,7 @@
     v_DTEEFFEC         thismove.DTEEFFEC%type;
     v_data             varchar(1);
     v_zupdsal          varchar(1 char);
-  
+
     cursor datarows is
       select a.codcomp, a.codempid, a.dtereemp, a.codnewid ,a.numreqst ,
              a.staupd,numlvl,a.flgmove,a.rowid,a.codpos,a.FLGREEMP,a.codexemp,a.typpayroll,a.codcurr
@@ -57,7 +57,7 @@
          and ((a.staupd = p_codmovdetail and p_codmovdetail <> 'A') or (p_codmovdetail = 'A'))
          and (a.dtereemp between p_dtestr and p_dteend  or p_dtestr  is null )
       order by a.dtereemp,a.codcomp, a.codempid;
-  
+
     begin
     select count(*) into v_codcomp
     from tcenter
@@ -82,10 +82,10 @@
       json_str_output := get_response_message('403',param_msg_error,global_v_lang);
       return ;
     end if ;
-    
+
     obj_row := json_object_t();
     v_rcnt := 0;
-    
+
     for i in datarows loop
       v_flgpass := secur_main.secur3(i.codcomp,i.codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal);
       if(v_flgpass) then
@@ -110,7 +110,7 @@
            where b.codempid = i.codempid
              and b.dteeffec < i.dtereemp;
         end;
-    
+
         begin
           select a.codcomp,a.codpos into get_codcomp,get_codpos
             from thismove a
@@ -127,7 +127,7 @@
         obj_data.put('codcomp_old',get_tcenter_name(get_codcomp ,global_v_lang));
         obj_data.put('codcos_old',get_tpostn_name(get_codpos , global_v_lang));
         obj_data.put('coderror','200');
-        
+
         obj_row.put(to_char(v_rcnt), obj_data);
       end if;
     end loop;
@@ -139,12 +139,12 @@
   BEGIN
     Initial_value(json_str_input);
     json_obj := json_object_t(json_str_input);
-    
+
     p_detail_codempid := hcm_util.get_string_t(json_obj, 'p_codempid');
     p_dtereemp        := to_date(hcm_util.get_string_t(json_obj,'p_dtereemp'), 'dd/mm/yyyy');
-  
+
     Gen_detail(json_str_output);
-    
+
   END get_detail;
   PROCEDURE Gen_detail (json_str_output OUT CLOB) IS
     v_rcnt            NUMBER;
@@ -188,7 +188,7 @@
       WHERE  codempid = p_detail_codempid
         and dtereemp = p_dtereemp;
   BEGIN
-    
+
     begin
       SELECT numoffid
       INTO   v_numoffid
@@ -197,7 +197,7 @@
     exception when no_data_found then
       v_numoffid := null;
     end;
-    
+
     begin
       SELECT Count(*)
       INTO   v_findemp
@@ -449,7 +449,7 @@
     delete from ttemprpt
     where codapp = 'HRPM23X'
     and codempid = global_v_codempid;
-    
+
     for v_indexrow in 0..p_datarows.get_size - 1 loop
       v_objdetail := hcm_util.get_json_t(p_datarows,v_indexrow);
       v_codempid := hcm_util.get_string_t(v_objdetail, 'codempid');
@@ -459,16 +459,16 @@
       v_in_str_objdetail  := v_in_str_objdetail||'"p_coduser":'||'"'||global_v_coduser||'"'||',';
       v_in_str_objdetail  := v_in_str_objdetail||'"p_lang":'||'"'||global_v_lang||'"';
       v_in_str_objdetail := v_in_str_objdetail|| '}';
-  
+
       get_detail (v_in_str_objdetail, v_out_str_objdetail);
-      
-  
+
+
       v_out_objrow_tab := json_object_t(v_out_str_objdetail);
-  
-  
+
+
       v_objdetail_tab1 := hcm_util.get_json_t(v_out_objrow_tab,'t1');
       v_objdetail_tab2 := hcm_util.get_json_t(v_out_objrow_tab,'t2');
-  
+
       v_desc_typrehire := get_tlistval(
                                       global_v_lang,
                                       hcm_util.get_string_t(v_objdetail_tab1,'flgmov'),
@@ -477,17 +477,17 @@
                                       global_v_lang,
                                       hcm_util.get_string_t(v_objdetail_tab1,'namrhir'),
                                       'NAMREHIR');
-  
+
       v_desc_flgstaemp := get_tlistval(
                                       global_v_lang,
                                       hcm_util.get_string_t(v_objdetail_tab1,'flgtaemp'),
                                       'FLGSTAEMP');
-  
+
       v_desc_flgatten := get_tlistval(
                                       global_v_lang,
                                       hcm_util.get_string_t(v_objdetail_tab1,'savetime'),
                                       'NAMSTAMP');
-  
+
        begin
                 select codpos,codcomp into v_codpos,v_codcomp
                 from temploy1
@@ -497,7 +497,7 @@
                v_codpos := '';
                v_codcomp := '';
        end;
-       
+
        begin
           select namimage
            into v_imageh
@@ -532,7 +532,7 @@
        v_item28 := hcm_util.get_string_t(v_out_objrow_tab,'v_amtday_income');
        v_item29 := hcm_util.get_string_t(v_out_objrow_tab,'v_sumincom_income');
        v_gl_code := concat(concat (hcm_util.get_string_t(v_objdetail_tab1,'glcode'),' - '), get_tcodec_name('tcodjobg',hcm_util.get_string_t(v_objdetail_tab1,'glcode'),global_v_lang));
-        
+
        insert into ttemprpt (
        CODEMPID,CODAPP,NUMSEQ,
        ITEM1,ITEM2,ITEM3,
@@ -582,18 +582,18 @@
       v_gl_code
       );
       v_running_seqreport := v_running_seqreport + 1;
-  
+
       for v_indexrowtab2 in 1..v_objdetail_tab2.get_size
       loop
-  
+
           v_objrow_tab2 := hcm_util.get_json_t(v_objdetail_tab2,v_indexrowtab2);
-  
+
            v_item6 := hcm_util.get_string_t(v_objrow_tab2,'codincom');
            v_item7 := hcm_util.get_string_t(v_objrow_tab2,'desincom');
            v_item8 := hcm_util.get_string_t(v_objrow_tab2,'desunit');
 --           v_item9 := hcm_util.get_string_t(v_objrow_tab2,'amtmax');
            v_item9 := nvl(to_char(hcm_util.get_string_t(v_objrow_tab2, 'amtmax'), 'fm999,999,990.00'), ' ');
-                 
+
            insert into ttemprpt (
                   codempid,codapp,numseq,
                   item1,item2,item3,
@@ -608,9 +608,9 @@
            v_item8,
            v_item9,
            v_codempid);
-  
+
            v_running_seqreport := v_running_seqreport + 1;
-  
+
       end loop;
 
     end loop;

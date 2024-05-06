@@ -143,7 +143,7 @@
     exception when others then
         v_dteyreap := null;
     end;
-        
+
     if v_dteyreap is null or p_dteyreap >= v_dteyreap then
         obj_data.put('flgDisabled', false);
         obj_data.put('msgerror', '');
@@ -157,7 +157,7 @@
         obj_data.put('flg', '');
         obj_data.put('msgerror', replace(get_error_msg_php('HR1501',global_v_lang),'@#$%400',null));
     end if;
-    
+
     obj_data.put('coderror', '200');
     obj_data.put('description', get_label_name('HRAP62E', global_v_lang, 230));
     obj_data.put('fieldname', 'PCTKPIEM');

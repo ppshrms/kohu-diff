@@ -277,7 +277,7 @@
             v_message_display   := r1.message;
 			obj_data.put('coderror', '200');
 			flg_data        := true;
-            
+
             obj_data.put('codcompy', r1.codcompy);
 			obj_data.put('mailalno', r1.mailalno);
 			obj_data.put('dteeffec', to_char(r1.dteeffec,'dd/mm/yyyy'));
@@ -518,7 +518,7 @@
 
 	begin
 		obj_row := json_object_t();
-        
+
 		obj_row.put('0','Please select');
 		obj_row.put('coderror', '200');
         if p_typsubj = '1' then
@@ -586,7 +586,7 @@
 	begin
 		json_obj   := json_object_t(json_str_input);
 		p_codtable := hcm_util.get_string_t(json_obj, 'p_codtable');
-        
+
 		if p_codtable is not null then
 			gen_list_detail_table(json_str_output);
 		else
@@ -760,7 +760,7 @@
 		arr_params          := hcm_util.get_json_t(json_obj,'params');
 		arr_assign          := hcm_util.get_json_t(json_obj,'assign');
 		arr_report          := hcm_util.get_json_t(json_obj,'report');
-        
+
         for i in 0..arr_params.get_size-1 loop
 			obj_row             := json_object_t();
 			obj_row             := json_object_t(arr_params.get(to_char(i)));
@@ -813,7 +813,7 @@
                 end;
             end if;
 		end loop;
-        
+
         begin
             select 'x' 
               into v_tmp
@@ -826,14 +826,14 @@
         exception when no_data_found then
             v_tmp   := null;
         end;
-        
+
         if v_tmp is not null then
             param_msg_error := get_error_msg_php('HR1503',global_v_lang,get_label_name('HRTRATE1',global_v_lang,'120'));
             json_str_output := get_response_message(null,param_msg_error,global_v_lang);
             rollback;
             return;
         end if;
-        
+
         merge into tbfparam upd
             using (
               select rowid, row_number() over (order by numseq) rnum 
@@ -974,9 +974,9 @@
 					end;
 				end if;
 			end loop;
-            
+
             v_tmp   := null;
-            
+
             begin
                 select 'x' 
                   into v_tmp
@@ -989,14 +989,14 @@
             exception when no_data_found then
                 v_tmp   := null;
             end;
-            
+
             if v_tmp is not null then
                 param_msg_error := get_error_msg_php('HR1503',global_v_lang,get_label_name('HRTRATE1',global_v_lang,'80'));
                 json_str_output := get_response_message(null,param_msg_error,global_v_lang);
                 rollback;
                 return;
             end if;
-            
+
             merge into tmailrbf upd
                 using (
                   select rowid, row_number() over (order by numseq) rnum 
@@ -1025,7 +1025,7 @@
         initial_value(json_str_input);
         json_obj            := json_object_t(json_str_input);
 		p_typemail      := hcm_util.get_string_t(json_obj, 'p_typemail');
-        
+
         begin
           select count(*)
             into v_number_mail

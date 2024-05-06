@@ -123,7 +123,7 @@
     v_rcnt  := 0;
     obj_row := json_object_t();
 --    v_staappr := 'P'; --#7131 || User39 || 06/11/2021
-    
+
     for r1 in c1 loop
       v_flgdata     := 'Y';
       v_codcomp     := r1.codcomp;
@@ -249,7 +249,7 @@
         end if;
       end loop;
     end loop;
-    
+
     if v_staappr = 'P' then
         if p_condition = '1' then
           for r3 in c3 loop
@@ -725,7 +725,7 @@
                 end if;
 
                 if v_flg in ('add','edit') then
-                    
+
                     begin 
                       select rowid
                       into v_rowid
@@ -738,7 +738,7 @@
                     exception when no_data_found then -- #7130 || User39 || 06/11/2021;
                        v_rowid := null; -- #7130 || User39 || 06/11/2021;
                     end;
-                     
+
                     begin
                         v_error := chk_flowmail.send_mail_for_approve('HRRP33E', v_codempid, global_v_codempid, global_v_coduser, null, 'HRRP33E1', 230, 'E', 'P', 1, null, null,'TPROMOTED',v_rowid, '1', null);
                        EXCEPTION WHEN OTHERS THEN

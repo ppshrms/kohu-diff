@@ -77,7 +77,7 @@
   procedure get_dropdowns(json_str_input in clob, json_str_output out clob);
   procedure gen_dropdowns(json_str_output out clob);
   procedure save_formlevel (json_str_input in clob, json_str_output out clob);
-  
+
   function get_codcomp_parent (p_codcomp varchar2,p_comlevel number) return varchar2;
 
 end HRCO04E;

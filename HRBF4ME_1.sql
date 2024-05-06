@@ -184,7 +184,7 @@
     begin
         obj_head    := json();
         obj_head.put('coderror',200);
-        
+
         for i in c1detail loop
             obj_head.put('codempid',i.codempid);
             obj_head.put('numtravrq',i.numtravrq);
@@ -251,7 +251,7 @@
         obj_head    := json();
         obj_data    := json();
         v_row_child := 0;
-        
+
         obj_head.put('coderror',200);
         obj_head.put('codempid',p_codempid_query);
         obj_head.put('numtravrq','');
@@ -259,7 +259,7 @@
         obj_head.put('typepay','2');
         obj_head.put('codappr',global_v_codempid); -- user56
         obj_head.put('dteappr',to_char(sysdate,'dd/mm/yyyy'));-- user56
-        
+
 --        obj_head.put('attach',obj_data);
 
         begin
@@ -498,7 +498,7 @@
                 end if;
             end loop;
 --            obj_head.put('amtreq','0');
-            
+
             if v_flg = true then
                 exit;
             end if;
@@ -597,7 +597,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
     end get_codcnty;
-    
+
     procedure check_param_detail(param_json json) as
         v_typetrav      ttravinf.typetrav%type;
         v_location      ttravinf.location%type;
@@ -832,7 +832,7 @@
             v_codcomp   := '';
             v_codcompy  := '';
         end;
-        
+
         begin
             select max(numtravrq) 
               into v_max_numtravrq
@@ -984,7 +984,7 @@
         exception when others then
             max_numseq := 0;
         end;
-        
+
         v_numseq    := nvl(max_numseq,0) + 1;
         v_filename  := hcm_util.get_string(detail_obj, 'filename');
         v_descattch := hcm_util.get_string(detail_obj, 'descattch');
@@ -1258,7 +1258,7 @@
         obj_detail          := hcm_util.get_json(tab1, 'detail');
         obj_attach          := hcm_util.get_json(tab1, 'table');
         tab2                := hcm_util.get_json(json_obj, 'tab2');
-        
+
         p_dtereq            := nvl(to_date(hcm_util.get_string(obj_detail,'dtereq'),'dd/mm/yyyy'),trunc(sysdate));
         p_codempid_query    := upper(hcm_util.get_string(obj_detail,'codempid'));
         p_numtravrq         := hcm_util.get_string(obj_detail,'numtravrq');
@@ -1287,7 +1287,7 @@
         if param_msg_error is null then
             do_detail_expense(child_expense);
         end if;
-        
+
         begin
             select sum(nvl(amtreq,0))
               into v_amtreq
@@ -1296,7 +1296,7 @@
         exception when others then
             v_amtreq := 0;
         end;
-        
+
         begin
             update ttravinf
                set amtreq = v_amtreq
@@ -1340,7 +1340,7 @@
             param_msg_error := replace(get_error_msg_php('HR1510',global_v_lang),'@#$%400');  --> Peerasak || Issue#8708 || 30/11/2022
             return;
         end;
-        
+
         delete ttravattch
          where numtravrq = v_numtravrq;
         delete ttravinfd

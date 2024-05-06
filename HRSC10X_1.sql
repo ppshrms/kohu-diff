@@ -98,7 +98,7 @@
     param_msg_error     := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
     json_str_output     := get_response_message('400', param_msg_error, global_v_lang);
   end gen_index;
-  
+
   FUNCTION get_description ( p_table IN VARCHAR2, p_field IN VARCHAR2, p_code IN VARCHAR2 ) RETURN VARCHAR2 IS
         v_desc        VARCHAR2(500) := p_code;
         v_stament     VARCHAR2(500);

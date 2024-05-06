@@ -49,29 +49,29 @@
 	p_message_display	        TFMREFR.MESSAGEDSP%TYPE;
 	p_message_display2	      TFMREFR2.MESSAGEDSP%TYPE;
 	p_message_display3	      TFMREFR3.MESSAGEDSP%TYPE;
-  
+
 	procedure initial_value(json_str in clob);
 	procedure get_index(json_str_input in clob, json_str_output out clob);
 	procedure delete_index(json_str_input in clob,json_str_output out clob);
 
 	procedure get_index_form(json_str_input in clob, json_str_output out clob);
 	procedure get_detail(json_str_output out clob);
-  
+
 	procedure get_index_header_form(json_str_input in clob, json_str_output out clob);
 	procedure get_header_detail(json_str_output out clob);
-  
+
 	procedure get_index_body_form(json_str_input in clob, json_str_output out clob);
 	procedure get_body_detail(json_str_output out clob);
-  
+
 	procedure get_index_footer_form(json_str_input in clob, json_str_output out clob);
 	procedure get_footer_detail(json_str_output out clob);
-  
+
 	procedure get_index_message(json_str_input in clob, json_str_output out clob);
 	procedure get_message_detail(json_str_output out clob);
-  
+
     procedure check_save;
     procedure save_data(json_str_input in clob,json_str_output out clob);
-  
+
 	procedure copy_codform(json_str_input in clob,json_str_output out clob);
 	procedure list_codform(json_str_input in clob,json_str_output out clob);
 	procedure list_codtable_typfm(json_str_input in clob,json_str_output out clob);
@@ -82,7 +82,7 @@
     function get_clob(str_json in clob, key_json in varchar2) RETURN CLOB ;
     function esc_json(message in clob)return clob;
     procedure get_error_labels(json_str_input in clob,json_str_output out clob);
-  
+
     procedure get_popup_detail(json_str_input in clob,json_str_output out clob);
     procedure get_list_typfm(json_str_input in clob, json_str_output out clob);
 end HRPMB9E;

@@ -492,7 +492,7 @@
       return;
     end if;
     -->> softberry || 14/02/2023 || #9091        
-    
+
     if param_msg_error is null then
       v_dtegucon          := to_date(hcm_util.get_string_t(json_params, 'dtegucon'), 'DD/MM/YYYY');
       v_amtguarntr        := hcm_util.get_string_t(json_params, 'amtguarntr');

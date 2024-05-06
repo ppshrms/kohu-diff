@@ -30,5 +30,4 @@
   procedure gen_tobfinf (json_str_output out clob);
 END HRBF42X;
 
-
 /

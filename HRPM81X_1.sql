@@ -249,12 +249,12 @@
     for i in 0..p_params.get_size-1 loop
         obj_row       := json_object_t();
         obj_row       := hcm_util.get_json_t(p_params,to_char(i));
-    
+
         p_codinf    := hcm_util.get_string_t(obj_row, 'codinf');
         p_qtymax    := hcm_util.get_string_t(obj_row, 'qtymax');
         p_keyID     := hcm_util.get_boolean_t(obj_row,'keyID');
         p_flgEdit   := hcm_util.get_boolean_t(obj_row,'flgEdit');
-    
+
         if p_flgEdit  then
             if p_keyid  then
                 p_flguse := 'Y'; --TRUE

@@ -47,5 +47,4 @@ p_ranksalmax number;
   procedure gen_data2(json_str in clob, json_str_output out clob);
 END; -- Package spec
 
-
 /

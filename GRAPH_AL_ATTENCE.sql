@@ -31,5 +31,4 @@
   function get_percent_actual_work_day(json_str_input clob) return clob;
 end;
 
-
 /

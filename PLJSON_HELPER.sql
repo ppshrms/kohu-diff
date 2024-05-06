@@ -38,7 +38,7 @@
   function equals(p_v1 pljson_value, p_v2 pljson_list, exact boolean default true) return boolean;
   function equals(p_v1 pljson_value, p_v2 number) return boolean;
   /* E.I.Sarmas (github.com/dsnz)   2016-12-01   support for binary_double numbers */
-  function equals(p_v1 pljson_value, p_v2 binary_double) return boolean;
+  function equals(p_v1 pljson_value, p_v2 binary_double) return boolean;  
   function equals(p_v1 pljson_value, p_v2 varchar2) return boolean;
   function equals(p_v1 pljson_value, p_v2 boolean) return boolean;
   function equals(p_v1 pljson_value, p_v2 clob) return boolean;

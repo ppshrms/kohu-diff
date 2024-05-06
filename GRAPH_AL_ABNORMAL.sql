@@ -32,5 +32,4 @@
   function get_percent_abnormal(json_str_input clob) return clob;
 end;
 
-
 /

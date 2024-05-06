@@ -78,7 +78,7 @@
         obj_data.put('qtywork', trunc(r1.qtywork / 12,0)||':'||mod(r1.qtywork,12));
         obj_data.put('score', r1.qtyscore);
         obj_data.put('grade', r1.grade);
-        
+
 --<< user25 14/08/2021 #4331
         v_percent := nvl(nvl(r1.pctadjsal, r1.pctcalsal),0);
         obj_data.put('percent', to_char(v_percent,'fm990.00'));

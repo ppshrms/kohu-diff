@@ -44,15 +44,15 @@
     p_flag2                 varchar(20 char);
 
   procedure get_index(json_str_input in clob, json_str_output out clob);
-  
+
   procedure get_detail_tab1(json_str_input in clob, json_str_output out clob);
-  
+
   procedure get_detail_tab2(json_str_input in clob, json_str_output out clob);
-  
+
   procedure save_index(json_str_input in clob, json_str_output out clob);
-  
+
   procedure save_detail(json_str_input in clob, json_str_output out clob);--User37 ST11 Recode 25/06/2021
-  
+
   procedure delete_index(json_str_input in clob, json_str_output out clob);--User37 ST11 Recode 25/06/2021
 
 END HRBF41E;

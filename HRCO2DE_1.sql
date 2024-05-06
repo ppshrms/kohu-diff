@@ -146,7 +146,7 @@
       end loop;
       json_str_output := obj_rows.to_clob;
     end gen_data;
-    
+
     procedure get_index(json_str_input in clob, json_str_output out clob) as
     begin
       initial_value(json_str_input);

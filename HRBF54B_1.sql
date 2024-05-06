@@ -231,7 +231,7 @@
                 v_qtyproc  := 0;
                 v_qtyerr   := 0;
               end;
-      
+
               v_numrec  := nvl(v_numrec,0) + nvl(v_qtyproc,0);
               v_numerr  := nvl(v_numerr,0) + nvl(v_qtyerr,0);
 		end loop;

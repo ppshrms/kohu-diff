@@ -77,7 +77,7 @@
 
   procedure gen_index(json_str_output out clob)as
     obj_row         json_object_t;
-    
+
     v_check          varchar2(1);
     r_codempid      ttexempt.codempid%type;
     r_dteeffec      ttexempt.dteeffec%type;

@@ -38,12 +38,12 @@
             return;
         END IF;
     END check_year;
-    
+
     function get_problem return clob is
       obj_rows  json_object_t;
       obj_data  json_object_t;
       v_row3    number := 0;
-      
+
       cursor c3problem is
         select codcomp, numseq, desprob, descoures
           from ttrneedp
@@ -361,7 +361,7 @@
         END LOOP;
 
         obj_head.put('competency', obj_rows2);
-        
+
         v_problem_clob := get_problem;
         obj_rows := json_object_t(v_problem_clob);
 
@@ -2074,7 +2074,7 @@
         initial_value(json_str_input);
         check_codcomp;
         check_year;
-        
+
         if param_msg_error is not null then
             json_str_output := get_response_message('400', param_msg_error, global_v_lang);
             return;

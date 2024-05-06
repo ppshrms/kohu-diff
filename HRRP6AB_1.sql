@@ -13,7 +13,7 @@
     global_v_codpswd    := hcm_util.get_string_t(json_obj,'p_codpswd');
     global_v_lang       := hcm_util.get_string_t(json_obj,'p_lang');
     global_v_codempid   := hcm_util.get_string_t(json_obj,'p_codempid');
-    
+
     p_year              := to_number(hcm_util.get_string_t(json_obj,'p_year'));
     p_codcomp           := hcm_util.get_string_t(json_obj,'p_codcomp');   
     p_codcompy          := hcm_util.get_string_t(json_obj,'p_codcompy');   
@@ -45,7 +45,7 @@
         return;
       end if;
     end if;
-    
+
     if p_codselect is not null then
       begin
         select staemp into v_staemp
@@ -70,13 +70,13 @@
       end if;
     end if;
   end;
-  
+
   procedure gen_index(json_str_output out clob)as
     obj_data        json_object_t;
     obj_row         json_object_t;
     v_rcnt          number := 0;
     v_flgsecu       boolean;
-    
+
     v_dteempmt      temploy1.dteempmt%type;
     v_dteempdb      temploy1.dteempdb%type;
     v_year          number;
@@ -122,7 +122,7 @@
       obj_data.put('amount', v_amount);
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
-    
+
     if param_msg_error is null then
       if v_rcnt > 0 then
         json_str_output := obj_row.to_clob;
@@ -137,7 +137,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob) as
    obj_row json_object_t;
   begin
@@ -152,17 +152,17 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure gen_detail1(json_str_output out clob)as
     obj_data        json_object_t;
     obj_row         json_object_t;
     v_rcnt          number := 0;
     v_flgsecu       boolean;
-    
+
     v_dteempmt      temploy1.dteempmt%type;
     v_codcomp       temploy1.codcomp%type;
     v_codpos        temploy1.codpos%type;
-    
+
     v_year          number;
     v_month         number;
     v_day           number;
@@ -171,7 +171,7 @@
     v_namgroupt     tninebox.namgroupt%type;
     v_descgroup     tninebox.descgroup%type;
     v_jobgrade      temploy1.jobgrade%type;
-    
+
     cursor c1 is
       select codempid,agework,codgroup,codcomp,codpos
         from tnineboxe 
@@ -208,7 +208,7 @@
         obj_data.put('namgroupt', v_namgroupt);
         obj_data.put('descgroup', v_descgroup);
         obj_data.put('desc_forgroup', v_descgroup);
-        
+
         begin
           select jobgrade into v_jobgrade
           from temploy1 
@@ -265,7 +265,7 @@
   procedure post_process(json_str_input in clob, json_str_output out clob) as
     json_obj      json_object_t;
     obj_data      json_object_t;
-    
+
     v_dteappr     date;
     v_approvno    number;
     v_codempid    temploy1.codempid%type;
@@ -276,7 +276,7 @@
     v_notapprove  ttalente.remarkap%type;
     v_remark      ttalente.remarkap%type;
     v_dteselect   date;
-    
+
     v_staappr     ttalente.staappr%type;
     v_flgAppr     boolean;
     p_check       varchar2(10 char);
@@ -298,7 +298,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error,global_v_lang);
   end;
-  
+
   procedure gen_emp9box(p_codcomp varchar, p_dteyear number, p_dteappr date, p_codappr varchar) is
     v_codcompy      tninebox.codcompy%type := hcm_util.get_codcomp_level(p_codcomp,1);
     v_cursor_main   number;
@@ -309,7 +309,7 @@
     v_codcomp       temploy1.codcomp%type;
     v_codpos        temploy1.codpos%type;
     qtyempmt        number(10);
-    
+
     cursor c_tninebox is
       select codcompy,codgroup,syncond
         from tninebox a
@@ -325,7 +325,7 @@
      where dteyear   = p_dteyear
        and codcompy  = v_codcompy
        and staappr = 'P';
-    
+
     for r1 in c_tninebox loop  
       v_stmt := '   select codempid,agework '||
                 '     from v_rp_emp '||
@@ -338,13 +338,13 @@
                 '                         and b.codempid = v_rp_emp.codempid) '||
                 '      and '||r1.syncond ||
 	              ' order by codempid';
-                
+
       v_cursor_main   := dbms_sql.open_cursor;
       dbms_sql.parse(v_cursor_main,v_stmt,dbms_sql.native);
       dbms_sql.define_column(v_cursor_main,1,v_codempid,100);
       dbms_sql.define_column(v_cursor_main,2,qtyempmt);
       v_dummy := dbms_sql.execute(v_cursor_main);
-      
+
       while (dbms_sql.fetch_rows(v_cursor_main) > 0) loop
         dbms_sql.column_value(v_cursor_main,1,v_codempid);
         dbms_sql.column_value(v_cursor_main,2,qtyempmt);
@@ -371,13 +371,13 @@
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end;
-  
+
   procedure gen_after_process(json_str_output out clob)as
     obj_data        json_object_t;
     obj_row         json_object_t;
     v_rcnt          number := 0;
     v_flgsecu       boolean;
-    
+
     v_dteempmt      temploy1.dteempmt%type;
     v_dteempdb      temploy1.dteempdb%type;
     v_year          number;
@@ -421,7 +421,7 @@
       obj_data.put('amount', v_amount);
       obj_row.put(to_char(v_rcnt-1),obj_data);
     end loop;
- 
+
   json_str_output := obj_row.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;

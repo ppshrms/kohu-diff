@@ -80,7 +80,7 @@
     if v_syncond is not null then
       v_flgfound        := false;
       v_dteeffec        := '31/12/' || p_dteyre;
-      
+
       begin
         select staemp, codcomp, codpos, numlvl, codjob, codempmt, typemp, typpayroll, codbrlc, codcalen, jobgrade, codgrpgl
           into v_staemp, v_codcomp, v_codpos, v_numlvl, v_codjob, v_codempmt, v_typemp, v_typpayroll, v_codbrlc, v_codcalen, v_jobgrade, v_codgrpgl
@@ -191,10 +191,10 @@
     v_amtvalue          tobfcftd.amtvalue%type;
     v_remain            varchar2(100 char);
     v_data_found        boolean := false;
-    
+
     v_total_qtywidrw    number := 0;
     v_total_qtytwidrw   number := 0;
-    
+
     v_sum_qtywidrw      number := 0;
     v_sum_qtytwidrw     number := 0;
 
@@ -209,12 +209,12 @@
         and a.dtemth   <> 13
         and a.codobf = p_codobf
       order by codobf;
-      
+
   begin
     obj_rows    := json_object_t();
-    
+
     find_tobfcft(v_dtestart, v_amtalwyr);
-    
+
     for i in c1 loop
       if param_msg_error is null then
         v_data_found      := false;
@@ -222,14 +222,14 @@
         v_qtytalw         := i.qtytalw;
         v_flglimit        := 0;
         v_amtvalue        := 0;
-        
+
         -- check data start
         if v_dtestart is not null then
           if check_statement(i.syncond, 'V_HRBF41') then
             find_tobfcftd(v_dtestart, i.codobf, v_data_found, v_qtyalw, v_qtytalw, v_flglimit, v_amtvalue);
           end if;
         end if;
-        
+
         if not v_data_found then
           if trunc(i.dtestart) <= to_date('31/12/' || p_dteyre, 'DD/MM/YYYY') then
           ----if trunc(i.dtestart) >= to_date('01/01/' || p_dteyre, 'DD/MM/YYYY') and trunc(i.dteend) <= to_date('31/12/' || p_dteyre, 'DD/MM/YYYY') then
@@ -241,17 +241,17 @@
           end if;
         end if;
         -- check data end
-        
+
         v_rcnt        := v_rcnt + 1;
         obj_data      := json_object_t();
         v_remain      := to_char(v_qtyalw - i.qtywidrw);
         v_desc_qtyalw := to_char(v_qtyalw);
-        
+
         if i.typepay = 'C' then
           v_desc_qtyalw := to_char(v_qtyalw, 'fm99,999,990.90');
           v_remain      := to_char(v_remain, 'fm99,999,990.90');
         end if;
-        
+
         obj_data.put('coderror', '200');
         obj_data.put('codempid', p_codempid_query);
         obj_data.put('dteyre', p_dteyre);
@@ -261,7 +261,7 @@
         obj_data.put('inputType', i.typepay);
         obj_data.put('dtemth', i.dtemth);
         obj_data.put('desc_dtemth', get_nammthful(i.dtemth, global_v_lang));
-        
+
         obj_data.put('desc_flglimit', get_tlistval_name('TYPELIMIT', i.flglimit, global_v_lang));
         obj_data.put('qtyalw', v_qtyalw);
         obj_data.put('desc_qtyalw', v_desc_qtyalw);
@@ -271,12 +271,12 @@
         obj_data.put('qtytwidrw', i.qtytwidrw);
         obj_data.put('amtvalue', v_amtvalue);              
         obj_rows.put(to_char(v_rcnt - 1), obj_data);
-        
+
         v_total_qtywidrw := v_total_qtywidrw + i.qtywidrw;
         v_total_qtytwidrw := v_total_qtytwidrw + i.qtytwidrw;
       end if;
     end loop;
-    
+
     --> Summary Selected Years
     v_rcnt := v_rcnt + 1;
     obj_data      := json_object_t();
@@ -286,7 +286,7 @@
     obj_data.put('qtytwidrw', to_char(v_total_qtytwidrw));
     obj_data.put('inputType', 'S');
     obj_rows.put(to_char(v_rcnt - 1), obj_data);
-    
+
     --> Summary All Years
     begin
       select sum(qtywidrw), sum(qtytwidrw)
@@ -296,7 +296,7 @@
           and a.dtemth   = 13
           and a.codobf   = p_codobf;
     end;
-    
+
     v_rcnt := v_rcnt + 1;
     obj_data      := json_object_t();
     obj_data.put('desc_flglimit', '');
@@ -305,7 +305,7 @@
     obj_data.put('qtytwidrw', to_char(v_sum_qtytwidrw));
     obj_data.put('inputType', 'S');
     obj_rows.put(to_char(v_rcnt - 1), obj_data);
-    
+
     if param_msg_error is null then
       if v_rcnt > 0 then
         json_str_output := obj_rows.to_clob;
@@ -352,9 +352,9 @@
   begin
     v_codcomp           := hcm_util.get_temploy_field(p_codempid_query, 'codcomp');
     v_codcompy          := hcm_util.get_codcomp_level(v_codcomp, 1);
-    
+
     find_tobfcft(v_dtestart, v_amtalwyr);
-    
+
     if v_amtalwyr is null then
       for i in c1 loop
         if check_statement(i.syncond, 'V_HRBF41') then
@@ -363,7 +363,7 @@
         end if;
       end loop;
     end if;
-    
+
     begin
      select sum(amtwidrw)
        into v_amtwidrw
@@ -375,7 +375,7 @@
     exception when no_data_found then
       null;
     end;
-    
+
     obj_data    := json_object_t();
     obj_data.put('coderror', '200');
     obj_data.put('codempid', p_codempid_query);
@@ -387,7 +387,7 @@
 
   procedure save_tobflog (v_fldedit varchar2, v_dtemth varchar2, v_desold varchar2, v_desnew varchar2) AS
   begin
-    
+
     begin
       insert into tobflog
              (codempid, dteyre, dtemth, codobf, fldedit, desold, desnew, dtecreate, coduser)
@@ -494,7 +494,7 @@
 --      end;
 --    end if;
 --  end save_tobfsum;    
-  
+
   procedure save_tobfsum_per_month AS
   begin
     if p_typepay = 'T' then
@@ -502,9 +502,9 @@
     elsif p_typepay = 'C' then
       p_amtwidrw    := p_qtywidrw;
     end if;
-    
-    
-    
+
+
+
     if param_msg_error is null then
       begin
         insert into tobfsum
@@ -526,25 +526,25 @@
       end;
     end if;
   end save_tobfsum_per_month;
-  
+
   procedure save_tobfsum_per_year AS
     v_sum_qtywidrw      number := 0;
     v_sum_qtytwidrw     number := 0;
     v_sum_amtwidrw      number := 0;
     v_sum_qtyalw        number := 0;
     v_sum_qtytalw       number := 0;
-    
+
   begin
     if p_typepay = 'T' then
       p_amtwidrw    := p_amtvalue * p_qtywidrw;
     elsif p_typepay = 'C' then
       p_amtwidrw    := p_qtywidrw;
     end if;
-    
+
     if p_qtywidrw <> p_qtywidrwOld then
         save_tobflog ('qtywidrw', p_dtemth, p_qtywidrwOld, p_qtywidrw);
       end if;
-      
+
       if p_qtytwidrw <> p_qtytwidrwOld then
         save_tobflog ('qtytwidrw', p_dtemth, p_qtytwidrwOld, p_qtytwidrw);
       end if;          
@@ -565,9 +565,9 @@
       v_sum_qtyalw := 0;
       v_sum_qtytalw := 0;
     end;
-    
+
 --    check_save_log;
-    
+
     if param_msg_error is null then
       begin
         update tobfsum
@@ -610,16 +610,16 @@
   procedure save_index (json_str_input in clob, json_str_output out clob) AS
     obj_data            json_object_t;
     obj_tmp             json_object_t;
-    
+
     v_sum_qtywidrw_old     number := 0;
     v_sum_qtytwidrw_old    number := 0;
-    
+
     v_sum_qtywidrw_new      number := 0;
     v_sum_qtytwidrw_new     number := 0;
-    
+
   begin
     initial_value(json_str_input);
-    
+
     --> Select Sum For Old Data
     begin
       select sum(qtywidrw), sum(qtytwidrw)
@@ -634,15 +634,15 @@
       v_sum_qtytwidrw_old := 0;
     end;
     --> Select Sum For Old Data
-    
+
     for i in 0 .. json_params.get_size - 1 loop
       obj_data        := hcm_util.get_json_t(json_params, to_char(i));
-      
+
       if param_msg_error is null then
         p_codobf          := hcm_util.get_string_t(obj_data, 'codobf');
         p_qtytwidrw       := to_number(hcm_util.get_number_t(obj_data, 'qtytwidrw'));
         p_qtytwidrwOld    := to_number(hcm_util.get_number_t(obj_data, 'qtytwidrwOld'));
-        
+
         p_qtywidrw        := to_number(hcm_util.get_number_t(obj_data, 'qtywidrw'));
         p_qtywidrwOld     := to_number(hcm_util.get_number_t(obj_data, 'qtywidrwOld'));
         p_amtvalue        := nvl(to_number(hcm_util.get_number_t(obj_data, 'amtvalue')), 0);
@@ -650,19 +650,19 @@
         p_qtyalw          := to_number(hcm_util.get_number_t(obj_data, 'qtyalw'));
         p_qtytalw         := to_number(hcm_util.get_number_t(obj_data, 'qtytalw'));
         p_dtemth          := to_number(hcm_util.get_number_t(obj_data, 'dtemth'));
-        
+
         --> Check Save TOBFLOG
         if p_qtywidrw <> p_qtywidrwOld then
           save_tobflog ('qtywidrw', p_dtemth, p_qtywidrwOld, p_qtywidrw);
         end if;
-        
+
         if p_qtytwidrw <> p_qtytwidrwOld then
           save_tobflog ('qtytwidrw', p_dtemth, p_qtytwidrwOld, p_qtytwidrw);
         end if;          
         --> Check Save TOBFLOG
-        
+
         check_save;
-        
+
         if p_warning is null then
           if param_msg_error is null then
             if p_qtywidrw > p_qtyalw then
@@ -670,7 +670,7 @@
               p_warning       := 'W';
             end if;
           end if;
-          
+
           if param_msg_error is null then
             if p_qtytwidrw > p_qtytalw then
               param_msg_error := get_error_msg_php('BF0054', global_v_lang);
@@ -678,21 +678,21 @@
             end if;
           end if;
         end if;
-        
+
         if param_msg_error is null then
           save_tobfsum_per_month;
         end if;
-        
+
 --        if param_msg_error is null then
 --          save_tobfsum;
 --        end if;
       end if;
     end loop;
-    
+
     if param_msg_error is null then
       save_tobfsum_per_year;
     end if;
-    
+
     --> Select Sum For New Data
     begin
       select sum(qtywidrw), sum(qtytwidrw)
@@ -706,18 +706,18 @@
       v_sum_qtywidrw_new := 0;
       v_sum_qtytwidrw_new := 0;
     end;
-    
+
     --> Select Sum For New Data
     --> Check Save TOBFLOG
       if v_sum_qtywidrw_old <> v_sum_qtywidrw_new then
         save_tobflog ('qtywidrw', '13', v_sum_qtywidrw_old, v_sum_qtywidrw_new);
       end if;
-      
+
       if v_sum_qtytwidrw_old <> v_sum_qtytwidrw_new then
         save_tobflog ('qtytwidrw', '13', v_sum_qtytwidrw_old, v_sum_qtytwidrw_new);
       end if;          
       --> Check Save TOBFLOG
-        
+
     if param_msg_error is null then
         commit;
         param_msg_error := get_error_msg_php('HR2401', global_v_lang);

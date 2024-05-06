@@ -89,7 +89,7 @@
     v_flgfinish       varchar2(1) := 'N';
     v_dtetest_pre     date;
     v_dtetest_post    date;
-    
+
   begin
     begin
       select codcours,
@@ -141,7 +141,7 @@
       v_dtetrst   := null;
       v_dtetren   := null;
     end;
-    
+
     begin
       select nvl(codexampr,v_codexampr) as codexampr,nvl(codexampo,v_codexampo) as codexampo,stapreteset,
              staposttest,qtyprescr,qtyposscr,stalearn
@@ -509,7 +509,7 @@
     exception when no_data_found then
       v_pre_test := 'N';
     end;
-    
+
     if nvl(v_flgpretest,'N') <> 'Y' then
       v_pre_test      := 'Y';
     end if;

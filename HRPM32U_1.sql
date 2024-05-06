@@ -570,7 +570,7 @@
                                       stdenc(sal_amtincom(8), p_codempid_query, global_v_chken),
                                       stdenc(sal_amtincom(9), p_codempid_query, global_v_chken),
                                       stdenc(sal_amtincom(10), p_codempid_query, global_v_chken),
-                                      
+
                                       stdenc(sal_amtincadj(1), p_codempid_query, global_v_chken),
                                       stdenc(sal_amtincadj(2), p_codempid_query, global_v_chken),
                                       stdenc(sal_amtincadj(3), p_codempid_query, global_v_chken),
@@ -581,7 +581,7 @@
                                       stdenc(sal_amtincadj(8), p_codempid_query, global_v_chken),
                                       stdenc(sal_amtincadj(9), p_codempid_query, global_v_chken),
                                       stdenc(sal_amtincadj(10), p_codempid_query, global_v_chken),
-                                      
+
                                       sal_codincom(1),sal_codincom(2),sal_codincom(3),sal_codincom(4),sal_codincom(5),
                                       sal_codincom(6),sal_codincom(7),sal_codincom(8),sal_codincom(9),sal_codincom(10),
                                       sysdate,global_v_coduser,sysdate,global_v_coduser);

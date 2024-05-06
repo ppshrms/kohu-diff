@@ -253,14 +253,14 @@
         else
           v_keycolumn := upper('DEFAULT_'||r1.keycolumn);
         end if;
-        
+
         obj_row := json_object_t();
         obj_row.put('coderror', '200');
         obj_row.put('codapp', r1.codapp);
         obj_row.put('keycolumn', v_keycolumn);
         obj_row.put('style_column', 'text-align: center; vertical-align: middle;'||r1.style_column);
         obj_row.put('style_data', r1.style_data);
-  
+
         obj_data.put(to_char(v_rcnt), obj_row);
         v_rcnt := v_rcnt + 1;
       end loop;
@@ -269,7 +269,7 @@
     -- for field in adjust 
     for r_tadjrep_table in c_tadjrep_table loop
       v_keycolumn := upper(r_tadjrep_table.tbname||'_'||r_tadjrep_table.keycolumn);
-      
+
       obj_row := json_object_t();
       obj_row.put('coderror', '200');
       obj_row.put('codapp', r_tadjrep_table.codapp);
@@ -972,7 +972,7 @@
     param_msg_error   := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400',param_msg_error, global_v_lang);
   end gen_flag_default;
-  
+
   function explode(p_delimiter varchar2, p_string long, p_limit number default 1000) return arr_1d as
     v_str1        varchar2(4000 char);
     v_comma_pos   number := 0;
@@ -1013,7 +1013,7 @@
         select get_tsetup_value('MAILEMAIL')
           into v_mailfrom
           from dual;
-          
+
         a_mailto := explode(',',p_mailto);
         for i in 1..a_mailto.count loop
           v_error := sendmail_attachfile(

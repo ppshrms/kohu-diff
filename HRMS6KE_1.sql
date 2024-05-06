@@ -917,8 +917,8 @@
                 insert into ttemprpt (codempid,codapp,numseq,
                                       item1,item2,item3,item4,item5,
                                       item6,item7,item8,item10,temp31)
-                -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
-                values(global_v_codempid, 'CALOT36'||r_tattence.codempid,v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
+                -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)                                 
+                values(global_v_codempid, 'CALOT36'||r_tattence.codempid,v_numseq_tmp, -- KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add) 
                        r_tattence.codempid, to_char(r_tattence.dtework,'dd/mm/yyyy'), 'B', '',
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timbstr,
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timbend,
@@ -1033,7 +1033,7 @@
                 insert into ttemprpt (codempid,codapp,numseq,
                                       item1,item2,item3,item4,item5,
                                       item6,item7,item8,item10,temp31)
-                -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)
+                -- values(global_v_codempid, 'CALOT36',v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (bk)                      
                 values(global_v_codempid, 'CALOT36'||r_tattence.codempid,v_numseq_tmp, --  KOHU-HR2301 | 000504-Tae-Surachai-Dev | 17/04/2024 | 4449#1887 (add)
                        r_tattence.codempid, to_char(r_tattence.dtework,'dd/mm/yyyy'), 'A', '',
                        to_char(r_tattence.dtework,'dd/mm/yyyy'), ttotreqst_timastr,
@@ -2747,7 +2747,7 @@
 
       v_ttemprpt.numseq  := hcm_util.get_string_t(obj_data,'seqno'); --seqno
       v_numseq           := hcm_util.get_string_t(obj_data,'seqno');
-    if v_typalert <> 'N' then
+    if v_typalert <> 'N' then    
       v_dtestrtwk   := std_ot.get_dtestrt_period (v_codempid, v_dtestrt);
       v_dteendwk    := v_dtestrtwk + 6;
       std_ot.get_week_ot(v_codempid, v_numotreq,ttotreq_dtereq,ttotreq_numseq,v_dtestrtwk,v_dteendwk,
@@ -2806,8 +2806,8 @@
           obj_data.put('qtyot_total','');
           obj_data.put('qtytotal','');
           v_qtyot_total := null;
-          v_qtytotal    := null;
-    end if;
+          v_qtytotal    := null;    
+    end if;  
       begin
           select max(numseq)
             into v_report_numseq

@@ -1078,7 +1078,7 @@
         end if;
       end if;
     end if;
-    
+
     obj_data    := json_object_t();
     obj_data.put('coderror', '200');
     obj_data.put('amtnpfin', v_amtnpfin);

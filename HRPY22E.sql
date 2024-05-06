@@ -49,7 +49,7 @@
   procedure delete_totsumd (v_codempid in varchar2, v_numperiod in varchar2, v_month in varchar2, v_year in varchar2, v_rtesmot in varchar2, v_codcompw in varchar2);
   procedure delete_totsum (v_codempid in varchar2, v_numperiod in varchar2, v_month in varchar2, v_year in varchar2);
   procedure update_totsum;
-  
+
    procedure get_codcompw (json_str_input in clob, json_str_output out clob);
 
 end hrpy22e;

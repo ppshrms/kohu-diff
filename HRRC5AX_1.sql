@@ -269,5 +269,4 @@
   end gen_detail;
 end HRRC5AX;
 
-
 /

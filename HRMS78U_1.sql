@@ -629,7 +629,7 @@
     v_dteappr     := hcm_util.get_string_t(json_obj, 'p_dteappr');
     p_remark_appr    := hcm_util.get_string_t(json_obj, 'p_remarkap');
     p_remark_not_appr    := hcm_util.get_string_t(json_obj, 'p_remarkap');
-    
+
     v_staappr := nvl(v_staappr, 'A');
     param_msg_error :=  check_numcont(v_numcont);
       begin

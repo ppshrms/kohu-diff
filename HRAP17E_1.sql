@@ -665,7 +665,7 @@
         end if;
     end if;
   end;
-  
+
   procedure chack_grade_dup(json_input in json_object_t, chkDup out boolean ) as
     json_obj    json_object_t;
     v_chk       boolean := true;
@@ -684,19 +684,19 @@
     v_qtymin     := to_number(hcm_util.get_string_t(v_row,'qtymin'));
     v_qtymax     := to_number(hcm_util.get_string_t(v_row,'qtymax'));
     vc_row       := i;
-    
+
     if v_qtymin > v_qtymax then
       chkDup := false;
       exit;
     end if;
-    
+
       for x in 0..json_obj.get_size-1 loop
        if vc_row <> x then
         v_row2        := json_object_t();
         v_row2        := hcm_util.get_json_t(json_obj,to_char(x));
         v_qtymin2     := to_number(hcm_util.get_string_t(v_row2,'qtymin'));
         v_qtymax2     := to_number(hcm_util.get_string_t(v_row2,'qtymax'));
-        
+
         if v_qtymin2 > v_qtymax2 then
           chkDup := false;
           exit;
@@ -711,7 +711,7 @@
         end if;
       end loop;
   end loop;
-  
+
   end;
 
   procedure save_index(json_str_input in clob, json_str_output out clob) as
@@ -797,15 +797,15 @@
                 v_flgEdit       := hcm_util.get_boolean_t(v_grplv_row,'flgEdit');
                 v_table1_json   := hcm_util.get_json_t(hcm_util.get_json_t(v_grplv_row,'table1'),'rows');
                 v_table2_json   := hcm_util.get_json_t(hcm_util.get_json_t(v_grplv_row,'table2'),'rows');
-                
+
                 chack_grade_dup(v_table2_json, chkDup);
-                
+
                 if not chkDup then
                    param_msg_error := get_error_msg_php('HR2880',global_v_lang);
                    json_str_output := get_response_message('400',param_msg_error,global_v_lang);
                    return;
                 end if;
-                
+
                 if v_flgleave = '1' then
                     v_flgunit   := '1';
                     v_flgabsc   := 'N';

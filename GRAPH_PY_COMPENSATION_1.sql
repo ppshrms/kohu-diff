@@ -29,7 +29,7 @@
     -- configuration
     conf_display_codcomp  := false;
     conf_defalut_complvl  := '2';
-    
+
   end initial_value;
   --
   function get_compensation_summary(json_str_input clob) return clob is
@@ -62,7 +62,7 @@
 
     obj_row := json_object_t();
     obj_row.put('coderror','200');
-    
+
     arr_typ := json_array_t();
     for r_tsincexp in c_tsincexp loop
       obj_typ := json_object_t();
@@ -71,7 +71,7 @@
       arr_typ.append(obj_typ);
       v_sum := v_sum + r_tsincexp.sum_amtincom1;
     end loop;
-    
+
     obj_row.put('total',to_char(v_sum,'fm999,999,999,999,999,999,999,999,999,990.90'));
     obj_row.put('typpayroll',arr_typ);
     return obj_row.to_clob;
@@ -171,7 +171,7 @@
       arr_labels.append(v_desc_codcomp||get_tcenter_name(r_tsincexp.codcomp,global_v_lang));
       arr_datasets.append(to_char(r_tsincexp.sum_amtnet,'fm999999999990.90'));
     end loop;
-    
+
     arr_data := json_array_t();
     arr_data.append(arr_datasets);
 
@@ -210,14 +210,14 @@
     obj_row := json_object_t();
     arr_labels := json_array_t();
     arr_datasets := json_array_t();
-    
+
     for i in 1..12 loop
       v_month := lpad(i,2,'0');
       v_sum_amtpay := 0;
       for r_tsincexp in c_tsincexp loop
         v_sum_amtpay := r_tsincexp.sum_amtnet;
       end loop;
-      
+
       arr_labels.append(get_tlistval_name('DTEMTHPAY',to_char(i),global_v_lang));
       arr_datasets.append(to_char(v_sum_amtpay,'fm999999999990.90'));
     end loop;

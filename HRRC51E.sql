@@ -26,7 +26,7 @@
   json_params               json_object_t;
   p_warning                 varchar(10 char);--<<#7684
   param_flgwarn             varchar2(100 char) := ''; -- softberry || 24/02/2023 || #8764
-  
+
   procedure get_index (json_str_input in clob, json_str_output out clob);
   procedure gen_index (json_str_output out clob);
   procedure get_detail (json_str_input in clob, json_str_output out clob);

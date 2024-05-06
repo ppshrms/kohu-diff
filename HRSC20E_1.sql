@@ -89,7 +89,7 @@
     v_rcnt          number := 0;
     v_flg_data      number := 0;
     v_flgcreate     varchar2(1 char); 
-    
+
     cursor c_temploy1 is
         select b.typeuser,b.coduser, a.codempid
           from temploy1 a,tusrprof b
@@ -193,10 +193,10 @@
     param_assign_widget       json_object_t;
     param_assign_widget_row   json_object_t;
     param_assign_row          json_object_t;
-    
+
     param_employee            json_object_t;
     param_employee_row        json_object_t;
-    
+
     v_codwg                   twidgetusr.codwg%type;
     v_emp_coduser             twidgetusr.coduser%type;
     v_positionmetric          twidget.positionmetric%type;
@@ -207,15 +207,15 @@
     param_json_intput         := json_object_t(json_str_input);
 
     param_employee            := hcm_util.get_json_t(param_json_intput,'p_employee');
-    
+
     param_assign_widget       := hcm_util.get_json_t(param_json_intput,'p_assignWidget');
     param_assign_widget_row   := hcm_util.get_json_t(param_assign_widget,'rows');
-    
+
     for i in 0..param_employee.get_size - 1 loop
       param_employee_row      := hcm_util.get_json_t(param_employee, to_char(i));
       v_emp_coduser           := hcm_util.get_string_t(param_employee_row,'emp_coduser');
       delete  twidgetusr where coduser = v_emp_coduser;
-      
+
       for j in 0..param_assign_widget_row.get_size - 1 loop
         param_assign_row    := hcm_util.get_json_t(param_assign_widget_row, to_char(j));
         v_codwg             := hcm_util.get_string_t(param_assign_row,'codwg');
@@ -268,7 +268,7 @@
     json_str_output   := get_response_message('400', param_msg_error, global_v_lang);
   end reset_widget;
 ---
-  
+
   procedure get_twidgetusr (json_str_input in clob, json_str_output out clob) is
     obj_row         json_object_t;
     obj_data        json_object_t;
@@ -282,13 +282,13 @@
     param_employee            json_object_t;
     param_employee_row        json_object_t;
     v_codwg         twidgetcom.codwg%type;
- 
+
     cursor c_twidgetcom is
         select codwg,flgdefault
           from twidgetcom 
          where codcompy    =  hcm_util.get_codcomp_level(p_codcomp,1) 
            and  nvl(flgdefault,'N') = 'Y';
-         
+
     cursor c_twidgetusr is
         select  pdk.check_codempid(coduser) codempid, coduser,codwg ,   flgused flgdefault
           from  twidgetusr 
@@ -303,7 +303,7 @@
             v_rcnt          := v_rcnt + 1;
             v_flg_data      := v_flg_data+1;
             obj_data        := json_object_t();
-            
+
             obj_data.put('coderror', '200');
             obj_data.put('codwg', r1.codwg);
             obj_data.put('wgname',get_twidget_name(r1.codwg,global_v_lang));   

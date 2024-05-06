@@ -93,7 +93,7 @@ procedure initial_value(json_str_input in clob) as
             return ;
         end if;
     end if;
-    
+
     v_secur1 := secur_main.secur7(p_codcomp , global_v_coduser);
 
     if (v_secur1 = false ) then
@@ -138,7 +138,7 @@ procedure initial_value(json_str_input in clob) as
     v_total         number :=0;
     type tmp is table of integer;
     type arr is table of varchar(100);
-    
+
     tmp_codcodec    varchar2(10 char);
     graph_val       varchar2(10 char);
     idx             number := 0;
@@ -147,7 +147,7 @@ procedure initial_value(json_str_input in clob) as
     v_qtyall        number := 0;
     v_qtyoth        number := 0;
     v_cntpunish      number := 0;
-    
+
     cursor c1 is
       select hcm_util.get_codcomp_level(t2.codcomp,p_typreport) codcomp
         from thismist t2,thispun a 
@@ -160,7 +160,7 @@ procedure initial_value(json_str_input in clob) as
         and t2.numlvl between global_v_zminlvl and global_v_zwrklvl
         group by hcm_util.get_codcomp_level(t2.codcomp,p_typreport)
         order by hcm_util.get_codcomp_level(t2.codcomp,p_typreport);
-  
+
   begin
     obj_row := json_object_t();
 

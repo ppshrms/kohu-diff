@@ -425,7 +425,7 @@
     tworkreq_coduser  := global_v_coduser;
     tworkreq_codinput := global_v_codempid;
     tworkreq_dteinput := sysdate;
-    
+
     if get_payroll_active('HRES6DE', p_codempid_query, tworkreq_dtework, tworkreq_dtework) = 'Y' then
       param_msg_error := get_error_msg_php('ES0057', global_v_lang);
       return;

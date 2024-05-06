@@ -138,7 +138,7 @@
     v_dteyreap      := hcm_util.get_string_t(param_json,'dteyreap');
     v_codcomp       := hcm_util.get_string_t(param_json,'codcomp');
     v_numtime       := hcm_util.get_string_t(param_json,'numtime');
-    
+
     v_stmt := ' select b.codkpino, a.kpides 
                  from tkpicmph a  ,tkpicmpdp b 
                 where a.dteyreap   = b.dteyreap
@@ -566,7 +566,7 @@
       dbms_sql.column_value(v_cursor,4,v_data4);
       dbms_sql.column_value(v_cursor,5,v_data5);
       dbms_sql.column_value(v_cursor,6,v_data6);
-      
+
       begin
         select decode(global_v_lang, '101', namgrade,
                                      '102', namgradt,
@@ -587,7 +587,7 @@
         v_measur    := v_measur||v_br||i.measur;
         v_br        := '<br>';
       end loop;
-      
+
       v_row := v_row+1;
       obj_data := json_object_t();
       obj_data.put('jobscore',v_data1);

@@ -232,7 +232,7 @@ begin
 
   begin
     v_year      := hcm_appsettings.get_additional_year;
-  
+
     begin
         select  count(distinct dteyreap)
           into  v_seq_yre
@@ -386,7 +386,7 @@ begin
 
   begin
     v_year      := hcm_appsettings.get_additional_year;
-  
+
     begin
         select  count(distinct dteyreap)
           into  v_seq_yre

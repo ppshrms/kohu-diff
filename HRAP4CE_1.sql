@@ -287,7 +287,7 @@
         v_dteapend := null;
       end;
       --param_msg_error := get_error_msg_php('HR2045',global_v_lang,v_dteapend); return;--User37 #4323 01/10/2021
-      
+
 /* --#7249 || USER39 || 23/11/2021    
       if p_dteeva > v_dteapend then
         param_msg_error := get_error_msg_php('AP0059',global_v_lang);

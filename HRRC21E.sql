@@ -33,7 +33,7 @@
   ---p others---
   p_o_staemp		    varchar2(4000 char);
   b_index_numappl   varchar2(4000 char);
-  
+
   procedure get_blacklist_data(json_str_input in clob, json_str_output out clob);
   procedure gen_blacklist_data(json_str_input in clob, json_str_output out clob);
 
@@ -44,7 +44,7 @@
   procedure get_document(json_str_input in clob, json_str_output out clob);
 
   procedure check_tab_document(json_str_input in clob, json_str_output out clob);
-  
+
   procedure save_applinf(json_str_input in clob, json_str_output out clob);
   procedure delete_applinf(json_str_input in clob, json_str_output out clob);
   procedure update_filedoc( p_codempid  varchar2,

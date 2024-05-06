@@ -44,5 +44,4 @@
   procedure insert_ttemprpt_thealinf1 (json_str_input clob);
 END HRBFB3X;
 
-
 /

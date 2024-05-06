@@ -2499,7 +2499,7 @@
         v_descod3   := replace(v_descod3,'''','''''');
         v_descod4   := replace(v_descod4,'''','''''');
         v_descod5   := replace(v_descod5,'''','''''');
-        
+
         v_flg       := hcm_util.get_string_t(param_json_row,'flg');
         v_stmt2     := '';
         v_stmt3     := '';

@@ -133,7 +133,7 @@
 
       -- get license
       v_license := get_license(hcm_util.get_temploy_field(global_v_codempid, 'codcomp'),v_module);
-
+--insert into a(a) values(v_module||' + '||v_license); commit;
       if v_codproc in ('9.ES', 'A.MS') then
         std_sc.get_license_Info(p_type_license, p_license, p_license_Emp);
         if nvl(p_type_license,'1') = '2' then

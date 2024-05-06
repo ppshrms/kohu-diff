@@ -156,12 +156,12 @@
             --> Peerasak || Issue#8700 || 25/11/2022
             obj_data.put('dtepayment',to_char(i.dtecash,'dd/mm/yyyy'));
             obj_data.put('numreq',i.numvcher);
-            
+
             --> Peerasak || --- || 16/03/2023
             obj_data.put('amount', i.amtalw);
             -- obj_data.put('amount', i.amtemp);
             --> Peerasak || --- || 16/03/2023
-            
+
             obj_data.put('codappr', get_temploy_name(i.codappr,global_v_lang));
             obj_data.put('dteappr', to_char(i.dteappr ,'dd/mm/yyyy'));
             obj_data.put('codcomp',i.codcomp);
@@ -615,7 +615,7 @@
 		initial_value(json_str_input);
 		initial_report(json_str_input);
     v_codapp := 'HRBF1OX';      
-    
+
 		if param_msg_error is null then
 			clear_ttemprpt;
 			for i in 0..p_datarows.get_size-1 loop
@@ -788,15 +788,15 @@
         from ttravinf a
        where a.rowid = v_rowid_query
          and b_index_typbf1ox = '3';
-           
+
     cursor c2 is
       select get_tcodec_name('TCODEXP', codexp, 102) as codexp, amtreq
         from ttravinfd
        where numtravrq = v_numtravrq;
-  
+
 	BEGIN
 		obj_row := json_object_t();
-    
+
 		for i in C1 loop
       begin
           select costcent into v_costcent
@@ -810,7 +810,7 @@
 --      v_namtypay          := get_label_name('HRBF1OX',global_v_lang,910) ;  --cash
       v_labelbf           := get_tlistval_name('TYPBF1OX',i.typpay, global_v_lang);
       v_labeltot          := get_label_name('HRBF1OX',global_v_lang,920) ;  --total
-      
+
       v_numseq    := v_numseq + 1;
       insert into ttemprpt (codempid,codapp,numseq,
           --key
@@ -830,14 +830,14 @@
       --detail
       null,  null, null);            
 
-      
+
       if i.typpay = 3 then        
         v_numtravrq := i.numvcher;
 
         for r1 in c2 loop
           v_item22 := r1.codexp;
           v_item23 := to_char(r1.amtreq,'fm999,999,990.00');
-          
+
           v_numseq := v_numseq + 1;
           v_numseq_numtravrq := v_numseq_numtravrq + 1;
           insert into ttemprpt (codempid,codapp,numseq,
@@ -858,14 +858,14 @@
                 --detail
                 null,  v_item22, v_item23);          
         end loop;
-        
+
         -- Summay Row
         v_numseq := v_numseq + 1;
         v_numseq_numtravrq := v_numseq_numtravrq + 1;
-        
+
         v_item22    := v_labeltot;
         v_item23    := to_char(i.amtpay,'fm999,999,990.00');
-          
+
         insert into ttemprpt (codempid,codapp,numseq,
               --key
               item1,    item2,   item3, item4,
@@ -893,9 +893,9 @@
             v_item22    := v_labeltot;
 --            v_item23    := to_char(i.amtpay,'fm999,999,990.00');
           end if;
-          
+
           v_item23    := to_char(i.amtpay,'fm999,999,990.00');
-  
+
           v_numseq := v_numseq + 1;
           insert into ttemprpt (codempid,codapp,numseq,
                 --key

@@ -110,7 +110,7 @@
     v_item1 := get_label_name('HRRC92XC1',global_v_lang,'40');
     v_item5 := get_nammthabb(v_month, global_v_lang);
     v_item7 := 2;
-    
+
     insert into ttemprpt
         (
             codempid, codapp, numseq, item1, item4, item5,
@@ -165,7 +165,7 @@
         obj_data.put('totalrem', v_amtsalavg);
         obj_data.put('numpeple', v_qtyact);
         obj_rows.put(to_char(v_row-1),obj_data);
-      
+
     end loop;
 
     if v_count = 0 then

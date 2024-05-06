@@ -21,9 +21,9 @@ procedure initial_value(json_str in clob) is
     p_flgtype               := hcm_util.get_string_t(json_obj,'p_type');
     p_comlevel              := hcm_util.get_string_t(json_obj,'p_comlevel');
     p_parent_comlevel       := (hcm_util.get_string_t(json_obj,'p_parent_comlevel'));
-    
+
     p_flgact                := nvl(hcm_util.get_string_t(json_obj,'p_flgact'),'A');
-    
+
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
   end initial_value;
 
@@ -234,7 +234,7 @@ procedure initial_value(json_str in clob) is
           else
             v_flgChkDisable := 'N';
           end if ;   
-          
+
         obj_data.put('flgChkDisable', v_flgChkDisable);
         obj_row.put(to_char(v_rcnt - 1), obj_data);
     end loop;
@@ -680,7 +680,7 @@ procedure save_detail_tcenter (json_str_input in clob, json_str_output out clob)
 --      p_dteeffec    := sysdate;
 --      p_comlevel    := 0;
 --      p_codcompy    := 'TJS';
-      
+
       p_codcomp := get_compful (p_codcomp);
       v_flgdisable := false;
       -------------------------------------------------
@@ -905,9 +905,9 @@ procedure save_detail_tcenter (json_str_input in clob, json_str_output out clob)
                     v_comlevel := 2;
                 end if;    
             end if;
-            
+
             v_comparent := get_codcomp_parent (p_codcomp,v_comlevel);
-            
+
             begin
                 select count(*)
                   into v_count_parent
@@ -916,13 +916,13 @@ procedure save_detail_tcenter (json_str_input in clob, json_str_output out clob)
             exception when others then
                 v_count_parent := 0;
             end;
-            
+
             if v_count_parent = 0 then
                 param_msg_error := get_error_msg_php('HR2010',global_v_lang,'TCENTER');
                 json_str_output := get_response_message('400',param_msg_error,global_v_lang);
                 return;
             end if;
-            
+
             begin
                 select compgrp
                   into v_compgrp
@@ -931,7 +931,7 @@ procedure save_detail_tcenter (json_str_input in clob, json_str_output out clob)
             exception when others then
                 v_compgrp := null;
             end;
-            
+
             begin
                 select decode(global_v_lang,  '101', namcompe,
                                               '102', namcompt,
@@ -1603,8 +1603,8 @@ procedure save_detail_tcenter (json_str_input in clob, json_str_output out clob)
                 obj_data.put('namcent3',v_namcent3);
                 obj_data.put('namcent4',v_namcent4);
                 obj_data.put('namcent5',v_namcent5);
-                
-                
+
+
                 select (select count('x') from temploy1 st1 where st1.codcomp = get_compful(hcm_util.get_codcomp_level (v_codcomp1||r_tcompnyd.codcomp,p_comlevel))) ,
                      (select count('x') from ttmovemt st2 where st2.codcomp = get_compful(hcm_util.get_codcomp_level (v_codcomp1||r_tcompnyd.codcomp,p_comlevel)))
                 into v_temp_cnt_1 , v_temp_cnt_2
@@ -2780,7 +2780,7 @@ procedure save_formlevel (json_str_input in clob, json_str_output out clob) is
     param_msg_error   :=  dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output   := get_response_message('400', param_msg_error, global_v_lang);
   end save_formlevel;
-  
+
     function get_codcomp_parent (p_codcomp varchar2,p_comlevel number) return varchar2 is
         v_codcompy varchar2(10 char);
         v_codcom1           tcenter.codcom1%type;
@@ -2805,61 +2805,61 @@ procedure save_formlevel (json_str_input in clob, json_str_output out clob) is
         v_codcom8   := get_comp_split (p_codcomp,8);
         v_codcom9   := get_comp_split (p_codcomp,9);
         v_codcom10  := get_comp_split (p_codcomp,10);
-        
+
         if p_comlevel = 10 then
             if lpad(nvl(v_codcom9,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 9));
             end if;
         end if;
-        
+
         if p_comlevel >= 9 then
             if lpad(nvl(v_codcom8,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 8));
             end if;
         end if;
-        
+
         if p_comlevel >= 8 then
             if lpad(nvl(v_codcom7,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 7));
             end if;
         end if;
-        
+
         if p_comlevel >= 7 then
             if lpad(nvl(v_codcom6,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 6));
             end if;
         end if;
-        
+
         if p_comlevel >= 6 then
             if lpad(nvl(v_codcom5,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 5));
             end if;
         end if;
-        
+
         if p_comlevel >= 5 then
             if lpad(nvl(v_codcom4,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 4));
             end if;
         end if;
-        
+
         if p_comlevel >= 4 then
             if lpad(nvl(v_codcom3,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 3));
             end if;
         end if;
-        
+
         if p_comlevel >= 3 then
             if lpad(nvl(v_codcom2,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 2));
             end if;
         end if;
-        
+
         if p_comlevel >= 2 then
             if lpad(nvl(v_codcom1,'0'),4,'0') != '0000' then
                 return get_compful(hcm_util.get_codcomp_level(p_codcomp, 1));
             end if;
         end if;
-        
+
         return get_compful(hcm_util.get_codcomp_level(p_codcomp, 1));
     end;  
 end HRCO04E;

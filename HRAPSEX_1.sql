@@ -137,7 +137,7 @@
                 if b_index_dteyear1 is not null then
                   v_cs := v_cs+1;
                   get_data_sumary(b_index_dteyear1, i.grade, i.numcond, v_desc, v_qty_policy, v_qty_actual);
-                             
+
                   obj_data.put('desc_grade',v_desc);
                   obj_data.put('paypolicy'||v_cs,v_qty_policy);
                   obj_data.put('payactual'||v_cs,v_qty_actual);
@@ -160,7 +160,7 @@
                 end if;
                 obj_row.put(to_char(v_rcnt-1),obj_data);
                 -- ***
-                
+
 --                v_cs1 := 0;
 --                for j in c_dteyreap loop
 --                  v_cs1 := v_cs1+1; 
@@ -242,8 +242,8 @@
             end if;-- if flgpass
         end loop;-- i
     end if;--v_flgdata = 'Y'
-   
-   
+
+
     if nvl(v_flgdata,'N') = 'N' then
       param_msg_error := get_error_msg_php('HR2055', global_v_lang, 'TBONUS');
       json_str_output := get_response_message(null, param_msg_error, global_v_lang);

@@ -11,7 +11,7 @@
   procedure batchauto;
   procedure gen_typemail1(p_codcompy varchar2, flg_log in varchar2,p_mailalno varchar2,p_dteeffec date,p_auto varchar2);
   procedure gen_typemail2(p_codcompy varchar2, flg_log in varchar2,p_mailalno varchar2,p_dteeffec date,p_auto varchar2);
-  
+
   procedure gen_file (p_codcompy in varchar2,
                              p_mailalno in varchar2,
                              p_dteeffec in date,
@@ -48,7 +48,7 @@
                                p_typemail   in varchar2,
                                p_file       in varchar2,
                                p_typesend   in varchar2);
-                               
+
   procedure auto_execute_mail_group (p_codcompy   in varchar2,
                                p_mailalno   in varchar2,
                                p_dteeffec   in date,
@@ -58,7 +58,7 @@
                                p_file       in varchar2,
                                p_typesend   in varchar2,
                                p_seqno      in number);
-                               
+
   procedure insert_talertlog (p_codcompy  in varchar2,
                               p_mailalno  in varchar2,
                               p_dteeffec  in date,
@@ -70,7 +70,7 @@
                               p_fieldd1   in date,
                               p_fieldd2   in date,
                               p_fieldd3   in date);
-                              
+
   procedure find_approve_name(p_codempid    in varchar2,
                               p_seqno       in number,
                               p_flgappr     in varchar2,

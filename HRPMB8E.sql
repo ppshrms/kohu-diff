@@ -17,15 +17,15 @@
 	procedure get_detail (json_str_input in clob, json_str_output out clob);
 
 	procedure gen_detail (json_str_output out clob);
-  
+
   function set_index_obj_data(tcontpms_rec tcontpms%rowtype) return json_object_t;
-  
+
   procedure save_detail (json_str_input in clob, json_str_output out clob);
 
 	procedure saveData (json_str_input in clob, json_str_output out clob);
-  
+
 	function check_codincom(p_codincom varchar2) return boolean;
-  
+
   function check_codretro(p_codretro varchar2) return boolean;
 
 end HRPMB8E ;

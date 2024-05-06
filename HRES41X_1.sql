@@ -114,7 +114,7 @@
         obj_head.put('calendar',obj_rows2);
         obj_head.put('detail',obj_detail);
         json_str_output := obj_head.to_clob;           
-        
+
         if v_row2 = 0 then
             param_msg_error := get_error_msg_php('HR2055',global_v_lang,'TYRTRSCH');
             return;
@@ -176,7 +176,7 @@
     begin
         obj_result := json_object_t();
         obj_result.put('coderror','200');
-        
+
         for r1 in c1 loop
             obj_result.put('codempid', global_v_codempid);
             obj_result.put('desc_codempid', get_temploy_name(global_v_codempid,global_v_lang));
@@ -291,7 +291,7 @@
                  where codapp = 'HRPMC2E1';
                  v_image := get_tsetup_value('PATHDOC')||v_folder ||'/'||v_image;
             end if;
-            
+
             insert into ttemprpt (codempid,codapp,numseq,item1,item2,item3,
                                   item4,item5,item6,item7,
                                   item8,item9,

@@ -49,7 +49,7 @@
 		v_qty_out		number;
 		count_row		number;
 		numseq			number;
-    
+
 		cursor c_codcomp is
 		select codcomp,codpos,count(*) qtyemp
 		from   temploy1
@@ -99,7 +99,7 @@
 		AND CODEMPID = global_v_codempid;
     v_dtestr := to_date('01/01/'||pa_year,'dd/mm/yyyy');
     v_dteend := to_date('31/12/'||pa_year,'dd/mm/yyyy');
-      
+
 		for itemCursor in c_codcomp loop
 			obj_row := json_object_t();
 

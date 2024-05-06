@@ -32,7 +32,7 @@
   procedure gen_detail_min(json_str_output out clob);
   procedure get_detail_max(json_str_input in clob, json_str_output out clob);
   procedure gen_detail_max(json_str_output out clob);
-  
+
 --  procedure get_index_graph(json_str_input in clob, json_str_output out clob);
   procedure gen_index_graph;
 END; -- Package spec

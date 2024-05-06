@@ -56,7 +56,7 @@ is
            v_table := v_table||','||maild.tname;
          end if;
        end loop;
-       
+
        if mail.syncond is not null then
         v_where := ' where '||mail.syncond;
        end if;
@@ -522,7 +522,7 @@ END check_proc;
           commit;
 --              v_filename := lower(p_codapp||'_'||p_coduser||'.xls');
           v_filename := p_coduser||'_'||to_char(sysdate,'yyyymmddhh24mi');
-          
+
         --- Gen Excel file ---------
           if v_trpt like '%item48,item49,item50' then
              v_trpt := substr(v_trpt,1,instr(v_trpt,',item48,item49,item50') - 1);

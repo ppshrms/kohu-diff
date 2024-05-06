@@ -31,7 +31,7 @@
   p_numreqen                treqest1.numreqst%type;
   p_data_import             json_object_t;
   p_data_sheet              json_object_t;
-  
+
   p_addinfo                 json_object_t; --ข้อมูลเพิ่มเติม
   p_doc                     json_object_t; --ข้อมูลเอกสารส่วนตัว
   p_edu                     json_object_t; --ข้อมูลประวัติการศึกษา
@@ -57,7 +57,7 @@
   procedure initial_value (json_str in clob);
   procedure check_index;
   procedure process_data (json_str_input in clob, json_str_output out clob);
-  
+
   procedure insert_tapplinf(obj_response in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number);
   procedure insert_teducatn(obj_response in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number);
   procedure insert_tapplwex(obj_response in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number);
@@ -69,7 +69,7 @@
   procedure insert_tlangabi(obj_response in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number);
   procedure insert_addinfo(obj_response in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number);
   procedure insert_tappldoc(obj_response in out json_object_t, v_num_complete_all in out number, v_num_error_all in out number);
-  
+
   procedure check_error(p_item in varchar2, p_line in number, p_numseq in out number,p_num_error_row in out number , p_table in varchar2, p_column in varchar2, p_type in varchar2, obj_response in out json_object_t);
 
 end HRRC2PB;

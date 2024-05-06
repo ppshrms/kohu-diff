@@ -28,13 +28,13 @@
 
         param_detail        := hcm_util.get_json_t(json_obj,'indexData');
         param_table         := hcm_util.get_json_t(json_obj,'table');
-        
+
         isAdd               := hcm_util.get_boolean_t(param_detail,'isAdd');
         isEdit              := hcm_util.get_boolean_t(param_detail,'isEdit');
         p_codcompy          := upper(hcm_util.get_string_t(param_detail,'codcompy'));
         p_codlon            := hcm_util.get_string_t(param_detail,'codlon');
         p_dteeffec          := to_date(hcm_util.get_string_t(param_detail,'dteeffec'),'dd/mm/yyyy');
-        
+
         p_codpayc           := hcm_util.get_string_t(param_detail,'codpayc');
         p_codpayd           := hcm_util.get_string_t(param_detail,'codpayd');
         p_codpaye           := hcm_util.get_string_t(param_detail,'codpaye');
@@ -160,7 +160,7 @@
     end;
 
     obj_data := json_object_t();
-    
+
     obj_data.put('coderror',200);
     obj_data.put('isAdd',isAdd);
     obj_data.put('isEdit',isEdit);
@@ -180,7 +180,7 @@
     if v_flgDisabled then
         obj_data.put('msgerror',replace(get_error_msg_php('HR1501',global_v_lang),'@#$%400',null));
     end if;
-    
+
 
     dbms_lob.createtemporary(json_str_output, true);
     obj_data.to_clob(json_str_output);
@@ -339,7 +339,7 @@
         param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end save_index;
-    
+
   procedure get_flg_status (json_str_input in clob, json_str_output out clob) is
     obj_data            json_object_t;
     v_response          varchar2(1000 char);
@@ -424,7 +424,7 @@
       end if;
       p_dteeffecquery := p_dteeffec;
     end if;
-      
+
     if p_dteeffecquery < p_dteeffec then
         isAdd           := true; 
         isEdit          := false;

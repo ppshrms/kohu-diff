@@ -360,7 +360,7 @@
     v_zminlvl               number;
     v_zwrklvl               number;
     v_zupdsal               varchar2(1 char);
-    
+
     v_amtinsufhr	        number := 0;
     v_amtinsufsp	        number := 0;
     v_amtinsumhr	        number := 0;
@@ -368,10 +368,10 @@
     v_numcotax              varchar2(13 char);
     v_amtrelas  	        number := 0;
     v_amttaxrel             number := 0;
-    
+
     v_amtgpf	            number := 0;
     v_amtteacher            number := 0;
-    
+
     v_amte65under           number := 0;
     v_amte65above           number := 0;
     v_amts65under           number := 0;
@@ -379,12 +379,12 @@
     v_amtcompens	        number := 0;
     v_amtoths               number;
     v_chktaxrel             number := 0;
-    
+
     p_coddeduct             varchar2(1000 char) := null;
     v_com                   varchar2(1 char) := null;
     v_pcttax	            number;
     v_taxa				    number;
-    
+
     v_house				    number;
     v_dteyrrelf		        number;
     v_dteyrrelt		        number;
@@ -999,11 +999,11 @@
                                     end if;
                                     exit;
                                 end if;
-                            
+
                             if get_deduct(v_check) = 'D' then
                               v_amtoths := nvl(v_amtoths,0) + (v_amtedo + v_amtedosp);
                             end if;
-                            
+
                             end loop;
 
 --                            if instr(p_coddeduct,v_check) = 0 and get_deduct(v_check) = 'D' then
@@ -1101,7 +1101,7 @@
     end if;
     --------------------------------------------------------------
     -- >> Error : STD9580130 || User39 || 25/11/2015
-    
+
     --<<User37 29/04/2016
     v_dteyrrelf	:= null;
     v_dteyrrelt	:= null;
@@ -1149,13 +1149,13 @@
         v_amtrelas	:= 0;
       end if;
     end if;
-    
+
     if nvl(v_amtfml(13),0) > v_amttaxrel then
       v_amtfml(15) := nvl(v_amtfml(13),0) - v_amttaxrel;
     else
       v_amtfml(15) := 0;
     end if;
-    
+
     v_amtfml(16) := v_amtfml(15) - v_amtfml(14);
     if v_amtfml(16) > 0 then
       v_payincrease := 'Y';
@@ -1163,7 +1163,7 @@
       v_payover := 'Y';
     end if;
     v_amtfml(16) := abs(v_amtfml(16));
-    
+
     begin
       select nvl(amtdemax,0)
         into v_amtdemax008
@@ -1192,7 +1192,7 @@
     v_amtcute   := 0;
     v_amtcuts   := 0;
     v_numseq    := v_numseq + 1;
-    
+
     insert into ttemprpt (codempid,codapp,numseq,
                           item1,item2,item3,item4,item5,item6,
                           item7,item8,item9,item10,item11,item12,
@@ -1215,12 +1215,12 @@
                           temp55,-- money 15000
                           item33,-- amt 17000
                           temp56,-- money 17000
-    
+
                           item34,temp57,
                           item35,temp58,
                           item36,temp59,
                           item37,temp60,
-    
+
                           item38,
                           item39,
                           item40,
@@ -1229,18 +1229,18 @@
                           -- X1
                           temp62,
                           temp63,temp64,temp65,temp66, temp67,
-    
+
                           item50,temp68,
                           temp69, --NO.12 change to NO.13 Travel
                           temp70,
                           temp71,temp72,
-    
+
                           item71,item72,item73, -- >> Error : STD9580130 || User39 || 25/11/2015
                           item74,item75,item76,  -- >> Error : STD9580130 || User39 || 25/11/2015
                           item77,
                           item81,item82,item83,
                           item84,item85,
-    
+
                           temp77,temp78,temp79,-->>User37 29/04/2016
                           temp81, temp82,
                           item78, item79
@@ -1250,7 +1250,7 @@
                           temp85,temp86,temp87,
                           temp88,temp89,temp90,
                           temp91,temp92,temp93
-    
+
                           ,item100 --for test time
                           -->>
                         )
@@ -1287,7 +1287,7 @@
             v_amtchedu , ----v_amtchned , --temp55,
             v_num_child_edu, --item33,[childrn born since 2561]
             v_amtchned , ----v_amtchedu ,--temp56
-    
+
             ------------------------
             --- item34,temp57,
             decode(v_amtfathr,0,null,v_numofidf),	v_amtfathr,
@@ -1331,7 +1331,7 @@
             0,0,nvl(v_amttrav,0),
             0,nvl(v_amtpreg,0),0,
             nvl(v_amtwheel,0),nvl(v_amtbook,0),nvl(v_amtotop,0)
-    
+
             ,to_char(sysdate,'dd/mm/yyyy hh24:mi:ss')
             -->>
         );
@@ -1513,7 +1513,7 @@
                             and dteyreff <= indx_dteyrepay - para_zyear)
          and v_amt between amtsalst and amtsalen;
   BEGIN
-  
+
     p_amttax := 0;
     if p_amtnet > 0 then
       for r1 in c_ttaxinf loop
@@ -1538,7 +1538,7 @@
       end loop;
     end if;
   END;
-  
+
     FUNCTION gtempded (v_empid 			varchar2,
                        v_codeduct 	varchar2,
                        v_type 			varchar2,
@@ -1625,7 +1625,7 @@
             end;
         end if;      
     end if;  --end if  v_amtdeduct = 0
-    
+
     if v_amtdeduct > 0 then
       begin
         select amtdemax, pctdemax, formula
@@ -1658,13 +1658,13 @@
           v_amtdeduct := least(v_amtdeduct,v_amtdemax);
         end if;
       end if;
-     
+
       ------ Check amt %
       if v_pctdemax > 0 then
         v_pctamt := p_amtsalyr * (v_pctdemax / 100);
         v_amtdeduct := least(v_amtdeduct,v_pctamt);
       end if;
-      
+
       ------ Check formula ------
       if v_formula is not null then
         if instr(v_formula,'[') > 1 then
@@ -1698,7 +1698,7 @@
             else
               v_formula := replace(v_formula,'{['||v_check||']}',nvl(ovalue_code(substr(v_check,2)),0));
             end if;
-           
+
           end loop;
           v_amtdeduct := least(v_amtdeduct,execute_sql('select '||v_formula||' from dual'));        
         end if;
@@ -1726,7 +1726,7 @@
 --          v_amtreturn := ovalue_code(substr(v_codeduct,2));
         end if;
     end if;
-     
+
     return 	----v_amtreturn; 
     nvl(v_amtdeduct,0);
   end;

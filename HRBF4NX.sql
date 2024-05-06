@@ -27,5 +27,4 @@
   procedure gen_index (json_str_output out clob);
 END HRBF4NX;
 
-
 /

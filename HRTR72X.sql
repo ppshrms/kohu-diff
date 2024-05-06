@@ -56,5 +56,4 @@
   procedure insert_ttemprpt_thistrnp(obj_data in json_object_t);
 END HRTR72X;
 
-
 /

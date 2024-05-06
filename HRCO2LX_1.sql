@@ -299,13 +299,13 @@
     obj_data.put('seqno', p_seqno);
     obj_data.put('dtetotal', hcm_util.convert_minute_to_hour(v_dtetotal));
     obj_data.put('hrtotal', hcm_util.convert_minute_to_hour(v_hrtotal));
-    
+
     json_str_output := obj_data.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end get_workflow;
-  
+
   procedure get_workflow_tab1(json_str_input in clob, json_str_output out clob) as
     obj_data    json_object_t;
     v_row       number := 0;
@@ -350,7 +350,7 @@
       obj_data.put('typreplyn', v_typreplyn);
       obj_data.put('typreplyar', v_typreplyar);
       obj_data.put('typreplynr', v_typreplynr);
-      
+
       json_str_output := obj_data.to_clob;
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;

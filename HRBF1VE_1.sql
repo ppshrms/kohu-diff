@@ -198,7 +198,7 @@
     end if;
 --    p_dtestrpm  := to_char(p_dtestrpmy) ||'/'|| lpad(to_char(p_dtestrpmm), 2, '0') ||'/'|| to_char(p_dtestrpmp);
     p_dtestrpm  := to_char(p_dtestrpmy) || lpad(to_char(p_dtestrpmm), 2, '0') || to_char(p_dtestrpmp);
-    
+
 --    p_dtelstpay := to_char(p_dtelstpayy) ||'/'|| lpad(to_char(p_dtelstpaym), 2, '0') ||'/'|| to_char(p_dtelstpayp);
     p_dtelstpay := to_char(p_dtelstpayy) || lpad(to_char(p_dtelstpaym), 2, '0') || to_char(p_dtelstpayp);
   end initial_save_value;

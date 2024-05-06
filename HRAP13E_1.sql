@@ -38,7 +38,7 @@
        where codcompy = p_codcompy
          and dteyreap = v_dteyreap
        order by score desc ;
-       
+
 
   begin
     if p_codcompyQuery is not null and p_dteyreapQuery is not null then
@@ -55,7 +55,7 @@
         exception when others then
             v_dteyreap := null;
         end;
-        
+
         if v_dteyreap is null or p_dteyreap >= v_dteyreap then
             v_flgDisabled   := false;
             if p_dteyreap > v_dteyreap or v_dteyreap is null then
@@ -66,7 +66,7 @@
         else
             v_flgDisabled   := true;
         end if;
-        
+
 --        begin
 --            select max(dteyreap)
 --              into v_dteyreap
@@ -283,14 +283,14 @@
         end;
       end if;
     end loop;
-    
-    
+
+
     select count(grade)
       into v_count
       from tgradekpi
      where codcompy = p_codcompy 
        and dteyreap = p_dteyreap;
-       
+
     if v_count > 5 then
         param_msg_error := get_error_msg_php('AP0054',global_v_lang);
     end if;

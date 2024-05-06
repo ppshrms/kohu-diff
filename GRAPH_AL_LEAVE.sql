@@ -32,5 +32,4 @@
   function get_percent_leave(json_str_input clob) return clob;
 end;
 
-
 /

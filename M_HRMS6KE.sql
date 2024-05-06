@@ -274,5 +274,4 @@ TYPE data_error IS TABLE OF VARCHAR2(4000) INDEX BY BINARY_INTEGER;
   procedure list_of_app(json_str_input in clob, json_srt_output out clob); -- mo surachai 09/12/2023
 end; -- Package spec
 
-
 /

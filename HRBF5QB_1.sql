@@ -296,5 +296,4 @@
   end check_index_batchtask;
 end HRBF5QB;
 
-
 /

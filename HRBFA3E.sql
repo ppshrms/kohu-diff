@@ -49,7 +49,7 @@
     procedure get_detail_table(json_str_input in clob, json_str_output out clob);
 
     procedure save_index(json_str_input in clob, json_str_output out clob);
-    
+
     procedure save_detail(json_str_input in clob, json_str_output out clob);
 
     procedure get_codheal(json_str_input in clob, json_str_output out clob);

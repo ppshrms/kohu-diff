@@ -17,7 +17,7 @@
 	global_v_numlvlsalen	number;
 	global_v_zupdsal		  varchar2(4 char);
   numYearReport             number;
-  
+
 	obj_data		          json_object_t;
 	obj_row			          json_object_t;
 	p_codempid_list		    json_object_t;
@@ -33,13 +33,13 @@
 	p_namtpro		      varchar2(10 char);
 	p_nameval		      varchar2(10 char);
 	p_url		          varchar2(1000 char);
-  
+
 	p_dteduepr_str		date;
 	p_dteduepr_end		date;
-  
+
 	p_codform		      tfmrefr.codform%type;
   p_dteprint		    varchar2(100 char);
-  
+
 	p_numlettr		    varchar2(100 char);
 	p_codpos		      varchar2(100 char);
 	p_fileseq		      varchar2(100 char);
@@ -56,14 +56,14 @@
 	p_dateprint_str		        varchar2(10 char);
 	p_dateprint_date	        date;
   type arr_1d is table of varchar2(4000 char) index by binary_integer;
-  
+
 	procedure initial_value(json_str in clob);
 	procedure check_get_index;
 	procedure get_index(json_str_input in clob, json_str_output out clob);
 	procedure get_probation_form(json_str_input in clob, json_str_output out clob);
   procedure get_html_message(json_str_input in clob, json_str_output out clob);
   procedure get_data_initial(json_str_input in clob, json_str_output out clob);
-  
+
 --	procedure send_mail(p_numlettr out varchar2);
 --	procedure print_document;
 --	procedure gen_word(p_codapp in varchar2,p_coduser in varchar2,p_message in long);
@@ -81,7 +81,7 @@
   function std_get_value_replace (v_in_statmt in	long, p_in_itemson in json_object_t, v_codtable in varchar2) return long ;
   function name_in (objItem in json_object_t , bykey varchar2) return varchar2 ; 
   function get_item_property (p_table in varchar2,p_field in varchar2) return varchar2 ;
-  
+
   procedure gen_file_send_mail ( json_str_input in clob,json_str_output out clob);
   procedure send_mail ( json_str_input in clob,json_str_output out clob);
 end HRPM33R;

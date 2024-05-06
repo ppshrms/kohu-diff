@@ -579,7 +579,7 @@
         v_rateot5 := v_other;
         end if;
     end if;
-    
+
     -- add surachai | 17/02/2023  (กรณีที่ไม่ใช้ระบบ AL)
     if v_check_rat is null then
         obj_data.put('otrate1','1');

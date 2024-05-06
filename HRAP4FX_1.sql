@@ -153,7 +153,7 @@ cursor c1 is
     and   a.codcompy      = b.codcompy
     and   a.codkpi        = b.codkpi
     order by a.balscore, a.codkpi;
-    
+
     v2_bscchk       varchar2(100 char):= '!@#$%$'; 
 
  begin

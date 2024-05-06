@@ -360,8 +360,8 @@
       global_v_batch_pathfile := p_file_path || p_filename;
 
 --redmine #1934
-      obj_row       :=    json_object_t;
-      obj_result    :=    json_object_t;
+      obj_row       :=    json_object_t; 
+      obj_result    :=    json_object_t; 
       if nvl(v_numerr,0) > 0 then
           for i in c_error loop
                 v_rcnt      := v_rcnt + 1;
@@ -370,7 +370,7 @@
                 obj_data.put('codempid', i.item01);
                 obj_data.put('desc_codempid', get_temploy_name(i.item01,global_v_lang));
                 obj_data.put('codpay', i.item02);
-                if nvl(i.item03,'N') <> 'N' then
+                if nvl(i.item03,'N') <> 'N' then		
                     obj_data.put('desc_codpay', get_tinexinf_name(i.item02,global_v_lang));
                 else
                     obj_data.put('desc_codpay', get_tinexinf_name(i.item02,global_v_lang));
@@ -386,7 +386,7 @@
 --redmine #1934
       param_msg_error   := get_error_msg_php('HR2715',global_v_lang);
       v_response        := get_response_message(null,param_msg_error,global_v_lang);
-      obj_main          :=    json_object_t;
+      obj_main          :=    json_object_t;  
       obj_main.put('coderror', '200');
       obj_main.put('detail', obj_detail);
       obj_main.put('message', p_file_path || p_filename);
@@ -508,7 +508,7 @@
             obj_data.put('codempid', i.item01);
             obj_data.put('codempid_desc', get_temploy_name(i.item01,global_v_lang));
             obj_data.put('codpay', i.item02);
-            if nvl(i.item03,'N') <> 'N' then
+            if nvl(i.item03,'N') <> 'N' then		
                 obj_data.put('codpay_desc', get_tinexinf_name(i.item02,global_v_lang));
             else
                 obj_data.put('codpay_desc', get_tinexinf_name(i.item02,global_v_lang));
@@ -540,7 +540,7 @@
         from ttemprpt
        where codapp   = v_codapp
          and codempid = v_codapp;
-    end;
+    end;     		 
     v_numseq  := nvl(v_numseq,0) + 1;
     insert into ttemprpt (codempid,codapp,numseq, item1)
                    values(v_codapp,v_codapp,v_numseq, p_error);

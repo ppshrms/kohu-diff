@@ -68,7 +68,7 @@
         obj_data.put('codexam',r1.codexam);
         obj_data.put('namexam',r1.namexam);
         obj_data.put('qtyexam',r1.qtyexam);
-        
+
         --> Peerasak || Issue#9294 || 04042023
         begin
           select 
@@ -82,10 +82,10 @@
         exception when others then 
           null;
         end;
-        
+
         obj_data.put('flgDisableDelete', v_flg_disable_delete);
         --> Peerasak || Issue#9294 || 04042023
-        
+
         obj_row.put(to_char(v_row), obj_data);
         v_row := v_row + 1;
     end loop;
@@ -275,20 +275,20 @@
         obj_data.put('codquest', '');
         obj_data.put('namsubj','');   
         obj_data.put('desc_typeexam','');   
-        
+
         if v_codquest_prev <> r1.codquest or v_codquest_prev is null then
            obj_data.put('codquest', r1.codquest);
         end if;
-        
+
         if v_namsubj_old <> r1.namsubj or v_namsubj_old is null then
             obj_data.put('namsubj',r1.namsubj);
         end if;
-        
+
         if (v_typeexam2 <> r1.typeexam or v_typeexam2 is null) or v_codquest_prev <> r1.codquest or v_codquest_prev is null then
           obj_data.put('desc_typeexam',get_tlistval_name('TYPEEXAM2',r1.typeexam,global_v_lang));
         end if;
         --<< End >>   Peerasak || 29/07/2022 || issue#4576
-        
+
         obj_data.put('namsubje',r1.namsubje);
         obj_data.put('namsubjt',r1.namsubj2);
         obj_data.put('namsubj3',r1.namsubj3);
@@ -307,7 +307,7 @@
         v_namsubj_old     := r1.namsubj;
         v_typeexam2       := r1.typeexam;
         v_codquest_prev   := r1.codquest;                                       --> Peerasak || 25/07/2022 issue#4576
-        
+
         begin
             select count(*)
               into v_qtyexam
@@ -325,7 +325,7 @@
 
     v_row       := 0;
     obj_tab3    := json_object_t();
-    
+
     for r2 in c_tvtesta loop
         obj_data    := json_object_t();
         obj_data.put('coderror','200');

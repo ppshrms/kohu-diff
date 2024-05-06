@@ -371,5 +371,4 @@
   end save_detail;
 end HRRC1HE;
 
-
 /

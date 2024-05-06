@@ -601,8 +601,8 @@ begin
                       p_numperiod ,p_dtemthpay,p_dteyrepay,
                       p_codcomp ,p_typpayroll,p_codempid,
                       p_newflag,p_flag,p_flgretro,global_v_lang );
-                      
-                      
+
+
     begin
       select to_char(trunc(extract( hour   from timediff )),'FM00')||':'||
              to_char(trunc(extract( minute from timediff )),'FM00')||':'||

@@ -554,7 +554,7 @@ begin
                    exit;
                  end if;
             end if;
-            
+
             begin
                 insert into tsetcomp
                        (numseq, qtycode, dtecreate, codcreate, dteupd, coduser)
@@ -568,7 +568,7 @@ begin
                        coduser    = global_v_coduser
                  where numseq  = v_numseqOld ;
             end;
-            
+
         else
 --           delete from tsetcomp
 --           where numseq = v_numseq;

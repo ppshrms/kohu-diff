@@ -512,7 +512,7 @@ end;
     --<<user36 KOHU-SM2301 02/12/2023
     type a_char is table of varchar2(20 char) index by binary_integer; 
       a_codappr     a_char;
-    
+
     v_cnt           number := 0;
     -->>user36 KOHU-SM2301 02/12/2023
 
@@ -1240,7 +1240,6 @@ function  check_privilege(p_codapp     in varchar2,
     v_codcomp       varchar2(40);
     v_codpos        varchar2(4);
     v_codappr       varchar2(20);
-
     cursor c_codcomp is
         select codcomp,codpos
           from (select codcomp,codpos
@@ -1291,6 +1290,7 @@ function  check_privilege(p_codapp     in varchar2,
 
   begin
     v_chkpri := 'N';
+ 
     for i in c_codcomp loop
         v_codappr := p_codappr;
         v_codcomp := i.codcomp;

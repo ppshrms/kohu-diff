@@ -65,7 +65,7 @@
     if param_where is not null then
       v_where := ' where ' || param_where;
     end if;
-    
+
     v_stmt := ' select codcodec, descode, descodt, descod3, descod4, descod5, flgact
                 from tcodexam '||v_where||
               ' order by codcodec';
@@ -600,7 +600,7 @@
     json_str_output := obj_data.to_clob;
    return json_str_output;
   end;
-  
+
     -- List of Examination Position --
   function get_examination_position(json_str_input in clob) return clob is
     obj_row         json_object_t;
@@ -630,7 +630,7 @@
                   from texampos a,tcodexam b
                  where a.codexam = b.codcodec '||v_where||
                 ' order by a.codexam desc';
-                
+
     begin
         select  char_length
           into  v_length

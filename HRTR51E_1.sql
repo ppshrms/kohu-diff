@@ -439,7 +439,7 @@
                         obj_data.put('qtytrmin',rpad(v_hr,length(v_hr)+1,'0'));
                     end if;
                 end if;
-                
+
                 obj_data.put('qtytrday',nvl(v_qtytrday,0));                     --> Peerasak || #8964 || 22032023
                 obj_data.put('qtyemp',i.qtyemp);        
 

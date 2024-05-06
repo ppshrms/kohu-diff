@@ -741,7 +741,7 @@ cursor c_HRMS72U_c2 is
     std_bf.get_medlimit(tmedreq_rec.codempid, tmedreq_rec.dtereq, tmedreq_rec.dtecrest, 'xyz', tmedreq_rec.typamt, v2_typrel,
                                                          v_amtwidrwy, v_qtywidrwy, v_amtwidrwt, v_amtacc, v_amtacc_typ,
                                                          v_qtyacc, v_qtyacc_typ, v_amtbal);     
-         
+
     --obj_data.put('amtalw', nvl(tapmedrq_rec.amtalw, v_amtbal)); -- obj_data.put('amtalw', tmedreq_rec.amtalw);        
     obj_data.put('amtalw',     least(nvl(tapmedrq_rec.amtalw,  tmedreq_rec.amtalw), nvl(v_amtbal,0)) ); -- obj_data.put('amtalw', tmedreq_rec.amtalw);
 -->>user14||11/02/2023|| 15:17   redmine752

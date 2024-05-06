@@ -91,7 +91,7 @@
     if p_dteeffec >= trunc(sysdate) and p_dteeffec > p_dteeffecTo then
       v_flg_add   := true;
     end if;
-    
+
     obj_rows    := json_object_t();
     for i in c1 loop
       v_rcnt      := v_rcnt + 1;

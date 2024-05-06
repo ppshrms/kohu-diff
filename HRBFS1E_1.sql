@@ -329,7 +329,7 @@
     v_dteyear	      ttobfcde.dteyear%type;
     v_codobf	      ttobfcde.codobf%type;
     v_dteeffec	    ttobfcde.dteeffec%type;
-    
+
   begin
     initial_value(json_str_input);
     param_json  := hcm_util.get_json_t(json_object_t(json_str_input),'param_json');
@@ -349,7 +349,7 @@
              and dteeffec = v_dteeffec
              and codobf = v_codobf;
         end;
-        
+
         --> Peerasak || Issue#8743 || 30/11/2022
          begin
           delete ttobfinf
@@ -361,7 +361,7 @@
         --> Peerasak || Issue#8743 || 30/11/2022
       end if;
     end loop;
-    
+
     if param_msg_error is null then
       param_msg_error := get_error_msg_php('HR2401',global_v_lang);
       commit;
@@ -515,7 +515,7 @@
     v_statement         := hcm_util.get_string_t(obj_syncond,'statement');
 
     check_save(json_str_input);
-    
+
     if param_msg_error is not null then
       json_str_output := get_response_message(null,param_msg_error,global_v_lang);
       return;
@@ -553,7 +553,7 @@
            and codobf = p_codbenefit;
       end;
     end;
-    
+
     for i in 0..param_tab2.get_size-1 loop
       param_row     := hcm_util.get_json_t(param_tab2,to_char(i));
       v_flg     	  := hcm_util.get_string_t(param_row, 'flg');
@@ -564,7 +564,7 @@
       v_syncond		  := hcm_util.get_string_t(obj_syncond, 'code');
       v_statement	  := hcm_util.get_string_t(obj_syncond, 'statement');
       v_statement	  := hcm_util.get_string_t(obj_syncond, 'statement');
-      
+
       if v_flg in ('add','edit') then
         if v_flg = 'add' then--User37 #6847 09/09/2021  
           begin
@@ -578,7 +578,7 @@
             v_numobf := 1;
           end;
         end if;
-        
+
         begin
           insert into ttobfcdet (codcompy, dteyear, codobf, dteeffec,numobf,
                                  syncond,statement,qtyalw,qtytalw,
@@ -602,7 +602,7 @@
                and numobf = v_numobf;
           end;
         end;
-        
+
 --      elsif v_flg = 'edit' then
 --        begin
 --          update ttobfcdet

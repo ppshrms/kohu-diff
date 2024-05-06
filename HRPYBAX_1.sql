@@ -117,7 +117,7 @@
     order by decode(p_codcomp,null,t1.codempid,t1.codcomp),t1.codempid;
 
   begin
-   
+
     for r1 in c1 loop
       v_flg_exist := true;
       v_flg_secure := secur_main.secur3(r1.codcomp,r1.codempid,global_v_coduser,global_v_numlvlsalst,global_v_numlvlsalen,v_zupdsal);
@@ -155,7 +155,7 @@
             obj_data.put('memberstatus' ,get_tlistval_name('FLGEMP',r1.flgemp,global_v_lang));
             obj_data.put('codpfinf' ,r1.codpfinf);
             obj_data.put('desc_codpfinf' ,get_tcodec_name('TCODPFINF', r1 .codpfinf,global_v_lang));
-            
+
             obj_data.put('coderror'     ,'200');
             obj_rows.put(to_char(v_count),obj_data);
             v_count := v_count + 1;

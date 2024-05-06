@@ -79,7 +79,7 @@
 
   procedure get_flg_status (json_str_input in clob, json_str_output out clob);
   procedure gen_flg_status;
-  
+
   function chk_flgtran(p_codcompy in varchar2, p_codpay in varchar2, p_dteeffec in date) return boolean;
 end HRAL9DE;
 

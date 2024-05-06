@@ -45,7 +45,7 @@
     v_numclseq          := hcm_util.get_string_t(json_obj,'numclseq');
     v_codcours          := hcm_util.get_string_t(json_obj,'codcours');
     v_codempid          := hcm_util.get_string_t(json_obj,'codempid');
-    
+
     select count(*)
       into v_count_tpotentp
       from tpotentp
@@ -55,12 +55,12 @@
        and codcours = v_codcours
        and codempid = v_codempid
        and flgatend not in ('Y','C');
-       
+
     if v_count_tpotentp = 0 then
         param_msg_error := get_error_msg_php('HR2010', global_v_lang,'TPOTENTP');
         return;
     end if;
-    
+
     begin
         select codtparg
           into p_codtparg
@@ -73,9 +73,9 @@
     exception when no_data_found then
         p_codtparg := null;
     end;
-       
+
   end check_save;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob) as
     obj_row json_object_t;
   begin
@@ -159,7 +159,7 @@
     v_rcnt          number := 0;
     v_tyrtrsch      tyrtrsch%rowtype;
     max_numseq      number;
-    
+
 	cursor c1 is
 		select *
           from ttrncerq
@@ -338,7 +338,7 @@
     obj_detail.put('codinstruc', v_tyrtrsch.codinst);
     obj_detail.put('codinsts', v_tyrtrsch.codinsts);
     obj_detail.put('codhotel', v_tyrtrsch.codhotel);
-    
+
     json_str_output := obj_detail.to_clob;
   end;  
 
@@ -433,7 +433,7 @@
     v_codinst               ttrncanrq.codinst%type;
     v_codinsts              ttrncanrq.codinsts%type;
     v_tyrtrsch              tyrtrsch%rowtype;
-    
+
     v_codcompy              ttrncerq.codcompy%type;
   begin
     json_obj            := json_object_t(json_str_input);
@@ -501,7 +501,7 @@
     p_dtereq            := to_date(hcm_util.get_string_t(json_obj,'dtereq'),'dd/mm/yyyy');
     p_numseq            := hcm_util.get_string_t(json_obj,'numseq');    
     p_dtereq2save       := p_dtereq; 
-    
+
 --    check_save(json_str_input);
     if param_msg_error is null then
       insert_next_step;

@@ -131,7 +131,7 @@
         obj_data.put('desc_codjobpost', get_tcodec_name('TCODJOBPOST', v_codjobpost, global_v_lang));
         obj_data.put('dtepost', to_char(v_dtepost, 'DD/MM/YYYY'));
         obj_data.put('dteclose', to_char(i.dteclose, 'DD/MM/YYYY'));
-        
+
         if i.flgrecut = 'E' then
           begin
             select count(numappl)

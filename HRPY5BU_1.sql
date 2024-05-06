@@ -22,7 +22,7 @@
     p_dteyrepay         := hcm_util.get_string_t(json_obj, 'p_year');
 
     hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
-    
+
   end initial_value;
 
   procedure check_index is
@@ -82,7 +82,7 @@
     param_msg_error     := dbms_utility.format_error_stack || ' ' || dbms_utility.format_error_backtrace;
     json_str_output     := get_response_message('400', param_msg_error, global_v_lang);
   end gen_index;
-  
+
   procedure get_index (json_str_input in clob, json_str_output out clob) is
   begin
     initial_value(json_str_input);
@@ -96,12 +96,12 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end get_index;
-  
+
   procedure save_detail (json_str_input in clob, json_str_output out clob) is
     obj_param_json json_object_t;
     -- get param json
     v_flg           varchar2(100 char);
-    
+
     tmp_amtdedstu		number;
     v_amtdedstu		  tdedlnslf.amtdedstu%type;
     v_chequeno		  tdedlnslf.chequeno%type;
@@ -119,7 +119,7 @@
     initial_value(json_str_input);
 --    check_index;
     obj_param_json  := json_object_t(json_str_input);
-    
+
     p_codcompy      := hcm_util.get_string_t(obj_param_json, 'codcompy');
     p_dtemthpay     := hcm_util.get_string_t(obj_param_json, 'dtemthpay');
     p_dteyrepay     := hcm_util.get_string_t(obj_param_json, 'dteyrepay');
@@ -135,7 +135,7 @@
     v_filename2     := hcm_util.get_string_t(obj_param_json, 'filename2');
     v_receiptno     := hcm_util.get_string_t(obj_param_json, 'receiptno');
     v_typdedstu     := hcm_util.get_string_t(obj_param_json, 'typdedstu');
-    
+
     v_dteconfirm    := to_date(to_char(v_dteconfirm,'dd/mm/yyyy')||v_timconfirm,'dd/mm/yyyyhh24mi');
     v_amtdedstu :=  stdenc(tmp_amtdedstu, p_codcompy, v_chken);
     if param_msg_error is null then

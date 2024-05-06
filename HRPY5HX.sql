@@ -50,7 +50,7 @@
 
   isInsertReport            boolean := false;
   json_index_rows           json_object_t;
-  
+
   v_tab_numseq      number := 0;
 
   --

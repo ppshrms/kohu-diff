@@ -3060,7 +3060,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                     exit cal_loop;
              end if;
           end if;
-          
+
           if v_codbank2 is not null and (v_codbank is not null and v_numbank is not null and v_amtbank is not null) then 
             if v_amtbank > 100 then
                 v_error   := true;
@@ -3069,7 +3069,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 exit cal_loop;
             end if;
          end if;
-         
+
           if v_codbank is not null and v_numbank is not null and v_amtbank is not null then
             --pass
             null;
@@ -3077,16 +3077,16 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_error   := true;
                         v_err_code  := 'HR2045';
                         v_err_field := v_field(18); --v_codbank is null
-                        
+
                         if v_numbank is null then 
                              v_err_field := v_field(19);
                         elsif   v_amtbank is null then 
                              v_err_field := v_field(20);
                         end if;
-                        
+
                         exit cal_loop;
          end if;
-         
+
           if  (v_codbank is not null and v_numbank is not null and v_amtbank is not null) then 
             if (v_amtbank < 100 and v_codbank2 is null) then
                 v_error   := true;
@@ -5419,7 +5419,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
               exit cal_loop;
             end;
           end if;
-          
+
           --check numappl,codempid
           v_chk_exists := 0;
           begin 
@@ -5433,7 +5433,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
             v_err_table := 'TEMPLOY1';
             exit cal_loop;
           end;
-           
+
           --check codempref
           if v_tapplref.codempref is not null or length(trim(v_tapplref.codempref)) is not null then    
             v_chk_exists := 0;
@@ -5711,7 +5711,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
             v_err_table := 'TEMPLOY1';
             exit cal_loop;
           end;
-          
+
           --check numappl,codempid
           v_chk_exists := 0;
           begin 
@@ -5726,7 +5726,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
             exit cal_loop;
           end;
 
-          
+
 
           --check v_ttrainbf.dtetren
           if((v_ttrainbf.dtetren is not null) or length(trim(v_ttrainbf.dtetren)) is not null) then
@@ -6195,7 +6195,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;  
-  
+
   procedure get_process_pm_tcolltrl(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -7915,7 +7915,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         end;
                     end if;
 
-         
+
           --check flgblist  
           if v_flgblist is not null or length(trim(v_flgblist)) is not null then          
             if v_flgblist not in ('Y','N') then
@@ -7964,7 +7964,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 
                     end;
 
-          
+
           v_staupd    := 'U';
 
                     begin 
@@ -8019,7 +8019,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;  
-  
+
   procedure get_process_pm_tbcklst (json_str_input  in clob,
                                                    json_str_output out clob) is
       p_rec_tran number := 0;
@@ -8415,7 +8415,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;    
-  
+
    procedure get_process_pm_tlegalexe(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -8641,7 +8641,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 		  v_tlegalexe.dteyrded := to_number(nvl(v_text(19),0));
           v_tlegalexe.dtemthded  := to_number(nvl(v_text(20),0));
 		  v_tlegalexe.numprdded := to_number(nvl(v_text(21),0));
-          		  
+
            --check incorrect data 
 		  --check codempid        
                     v_chk_exists := 0;
@@ -8655,7 +8655,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_err_table := 'TEMPLOY1';
                         exit cal_loop;
                     end;  
-					
+
 		  --check codlegald
             v_chk_exists := 0;
             begin 
@@ -8683,7 +8683,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if; 
-				
+
             --check stacaselw    
             if v_tlegalexe.stacaselw not in ('P','C') then
               v_error   := true;
@@ -8698,7 +8698,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 --2.crud table--
                 if not v_error then      
                     p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
             delete from tlegalexe where codempid  = v_tlegalexe.codempid  and numcaselw  = v_tlegalexe.numcaselw ;
 
@@ -8838,7 +8838,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 v_text(3)   := hcm_util.get_string_t(param_json_row,'col-3');
 				v_text(4)   := hcm_util.get_string_t(param_json_row,'col-4');
                 v_text(5)   := hcm_util.get_string_t(param_json_row,'col-5');
-						
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -8867,7 +8867,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-                       
+
                         --check number format     
                         if i in (4,5) then    
                             if check_number(v_text(i)) then                         
@@ -8885,13 +8885,13 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;                    
                             end if; 
                         end if;
-						
-						
-						
-						
+
+
+
+
                     end loop; 
 
-	
+
 				  --assign value to var
 				  v_tlegalexd.codempid 		:= v_text(1);
 				  v_tlegalexd.numcaselw   	:= v_text(2);
@@ -8900,7 +8900,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                   v_amtdmin                    := to_number(nvl(v_text(5), 0),'999999999.99');
 				  v_tlegalexd.pctded  	    := v_pctded;
 				  v_tlegalexd.amtdmin  	    := stdenc(v_amtdmin, v_tlegalexd.codempid, v_chken);                           
-                           
+
 				  --check incorrect data 
 				  --check codempid        
                     v_chk_exists := 0;
@@ -8914,7 +8914,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_err_table := 'TEMPLOY1';
                         exit cal_loop;
                     end;  
-					
+
 				  --check numcaselw
 					v_chk_exists := 0;
 					begin 
@@ -8927,7 +8927,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 					  v_err_table := 'TLEGALEXE';
 					  exit cal_loop;
 					end;       
-                
+
                     --check codpay
                     v_chk_exists := 0;
                     begin 
@@ -8940,7 +8940,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_err_table := 'TINEXINF';
                         exit cal_loop;
                     end;                      
-                        
+
                     exit cal_loop;
                 end loop;
 
@@ -10464,7 +10464,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 
     type leng is table of number index by binary_integer;       
     chk_len          leng;--เก็บความกว้างของแต่ละคอลัมน์ 
-    
+
 	cursor c_tpfeinf is --สาหรับเก็บเงื่อนไขของกองทุน
 		select numseq, syncond, flgconded
 		  from tpfeinf t
@@ -10540,7 +10540,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 v_text(14)  := hcm_util.get_string_t(param_json_row,'col-14');
                 v_text(15)  := hcm_util.get_string_t(param_json_row,'col-15');
                 v_text(16)  := hcm_util.get_string_t(param_json_row,'col-16');
-                
+
 
                 <<cal_loop>> loop      
                     --concat all data values each rows 
@@ -10573,7 +10573,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                     --check employee in temploy1
                     v_chk_in := 0;
 					v_dteempmt := null;
-					
+
                     begin 	
                         select 1,dteempmt, codcomp, typpayroll, months_between(sysdate, dteempmt) , codempid, codcomp, codpos, typemp, codempmt, typpayroll, staemp, dteempmt, numlvl, jobgrade  
 							into v_chk_in, v_dteempmt, v_codcomp, v_typpayroll, v_qtywken, temploy1_codempid, temploy1_codcomp, temploy1_codpos, temploy1_typemp, temploy1_codempmt, temploy1_typpayroll, temploy1_staemp, temploy1_dteempmt, temploy1_numlvl, temploy1_jobgrade 
@@ -10628,7 +10628,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_err_field := v_field(7);
                         exit cal_loop;                    
                     end if; 
-					
+
 					--check dtereti, codreti must require if flgemp be 2
 					if (v_text(6) = '2') then
 						if(((v_text(7) is null) or length(trim(v_text(7))) is null)) then                         
@@ -10699,15 +10699,15 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 						  exit cal_loop;                    
 						end if;  
 					end if;
-                  			
+
 					v_codcompy := hcm_util.get_codcomp_level(v_codcomp,1);
-				
+
 					--find tpfeinf_numseq
 					v_chk_in := 0;
 					for r2 in c_tpfeinf loop		
-							
+
 						if r2.syncond is not null then	
-							
+
 							v_cond := r2.syncond;
 							v_cond := replace(v_cond,'V_TEMPLOY.CODEMPID',''''||temploy1_codempid||'''');
 							v_cond := replace(v_cond,'V_TEMPLOY.CODCOMP',''''||temploy1_codcomp||'''');
@@ -10724,18 +10724,18 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 							--v_cond := replace(v_cond,'TPFMEMB.CODPFINF',''''||r_tpfmemb.codpfinf||'''');
 							v_stmt := 'select count(*) from dual where '||v_cond;
 							v_flgfound := execute_stmt(v_stmt);
-							
+
 						end if;
-						
+
 						if v_flgfound then
 							v_tpfeinf_numseq 	:= r2.numseq;
 							v_tpfeinf_flgconded := r2.flgconded; 
 							v_chk_in			:= 1;
 							exit;				
 						end if;
-						 
+
 					end loop;		
-				
+
 					--check not found tpfeinf
 					if v_chk_in = 0 then 
 						v_error   := true;
@@ -10744,7 +10744,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 						v_err_table := 'TPFEINF';			
 						exit cal_loop;	
 					end if;
-					
+
 					if v_tpfeinf_flgconded = '1' then
 						begin 
                             select  months_between(sysdate, check_dteyre(v_text(3)))  into v_qtywken from dual;
@@ -10752,7 +10752,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                             null;
                         end; 
 					end if;
-				
+
 					--do here if flgdpvf be 1 - policy
 					if (v_text(15) = '1') then
 						--find tpfmemrt.ratecsbt, tpfmemrt.rateesbt with policy 
@@ -10776,7 +10776,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 							exit cal_loop;
 						end;  					
 					end if;
-				
+
 					--find tpfmemb.ratecsbt with policy 
 					begin
 					  select ratecsbt
@@ -10797,7 +10797,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 						v_err_table := 'TPFCINF';
 						exit cal_loop;
 					end;  
-				
+
                     exit cal_loop;
                 end loop;
 
@@ -10847,11 +10847,11 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 					  if (((v_text(14) is not null) or length(trim(v_text(14))) is not null)) then
 						v_amtintaccu  := to_number(v_text(14));
 					  end if;
-					  
+
 					  v_flgconded     		:= v_tpfeinf_flgconded;                    
 					  v_flgdpvf   			:= v_text(15);              
 					  v_tpfmemrt_ratecret   := to_number(v_text(16));
-		  	  
+
 					v_dtecal    := null;
                     v_tpfmemb_rateeret  := 100;
                     v_tpfmemb_ratecret  := v_tpfcinf_ratecsbt;              
@@ -11261,9 +11261,9 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_err_field := v_field(1);
                         v_err_table := 'TEMPLOY3';
                         exit cal_loop;
-                      
+
           end;
-          
+
            exit cal_loop;
                 end loop;
 
@@ -11302,7 +11302,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 v_err_table := 'TINEXINF';
                                */
                               null;
-                              
+
                             end;
 
 
@@ -11410,7 +11410,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                         v_err_field := v_codcompy;
                         v_err_table := 'TCONTRPY';
                        -- return ;
-                    
+
                     p_rec_tran := p_rec_tran - 1;    
                     p_rec_error := p_rec_error + 1;                   
                     v_cnt := v_cnt + 1;                    
@@ -12044,7 +12044,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
         v_text(20) := hcm_util.get_string_t(param_json_row,'col-20');
         v_text(21) := hcm_util.get_string_t(param_json_row,'col-21');
         v_text(22) := hcm_util.get_string_t(param_json_row,'col-22');
-        
+
         -- push row values
         data_file := null; ----
         for i in 1..v_column loop
@@ -12493,7 +12493,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-            
+
         end if; --not v_error
         commit;
       exception when others then      
@@ -12839,7 +12839,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-            
+
         end if; --not v_error
         commit;
       exception when others then        
@@ -13106,7 +13106,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                           where codempid = v_tleavsum.codempid
                             and dteyear  = v_tleavsum.dteyear
                             and codleave = v_tleavsum.codleave;
-          
+
           end;
 
           --Save Previous Year TLEAVSUM--
@@ -13149,7 +13149,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then        
@@ -13386,7 +13386,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                v_tempawrd2.dteyrepay,v_tempawrd2.dtemthpay,v_tempawrd2.numperiod,
                                v_tempawrd2.qtyoldacc,v_tempawrd2.qtyaccaw,                               
                                trunc(sysdate),global_v_coduser,trunc(sysdate),global_v_coduser);
-           
+
           end;
 
           --Save TEMPAWRD--
@@ -13425,7 +13425,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then      
@@ -13921,7 +13921,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -14293,7 +14293,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-            
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -14742,7 +14742,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-            
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -15050,7 +15050,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then        
@@ -15357,7 +15357,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-            
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -15748,7 +15748,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -16015,7 +16015,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then        
@@ -16214,7 +16214,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 v_err_field := v_field(i);
                 exit cal_loop;
               end if;
-              
+
               if to_number(v_text(i)) <= 0 then
                 v_error	 	  := true;
                 v_err_code  := 'HR2020';
@@ -16358,7 +16358,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -16548,7 +16548,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 v_err_field := v_field(i);
                 exit cal_loop;
               end if;
-              
+
               if to_number(v_text(i)) <= 0 then
                 v_error	 	  := true;
                 v_err_code  := 'HR2020';
@@ -16720,7 +16720,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then        
@@ -16853,14 +16853,14 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
               v_err_field := v_field(i);
               exit cal_loop;
             end if;
-            
+
             if i = 4 and check_number(v_text(i)) then
               v_error	 	  := true;
               v_err_code  := 'HR2020';
               v_err_field := v_field(i);
               exit cal_loop;
             end if; 
-            
+
             if i = 4 and to_number(v_text(i)) <= 0 then
               v_error	 	  := true;
               v_err_code  := 'HR2020';
@@ -16880,7 +16880,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
             v_err_table := 'TCOURSE';
             exit cal_loop;
           end;                        
-                                            
+
           ----
           exit cal_loop;
         end loop; -- cal_loop
@@ -16896,14 +16896,14 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           --Save TCOURSUB--
           begin
             delete tcoursub where codcours = v_tcoursub.codcours and codsubj = v_tcoursub.codsubj;
-            
+
             insert into tcoursub(codcours,codsubj,
                                  codinst,qtytrhr,                                
                                  dtecreate,codcreate,dteupd,coduser)
                         values( v_tcoursub.codcours,v_tcoursub.codsubj,
                                 v_tcoursub.codinst,v_tcoursub.qtytrhr,                                
                                 trunc(sysdate),global_v_coduser,trunc(sysdate),global_v_coduser);
-          
+
           end;
 
         else
@@ -16913,7 +16913,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           p_error_code(v_cnt) := replace(get_error_msg_php(v_err_code, global_v_lang, v_err_table, null, false), '@#$%400', null)
                                  ||'['|| v_err_field||']';    
           p_numseq(v_cnt) := i;
-           
+
         end if; --not v_error
         commit;
       exception when others then       
@@ -17032,7 +17032,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(11)   := hcm_util.get_string_t(param_json_row,'col-11');
 				v_text(12)   := hcm_util.get_string_t(param_json_row,'col-12');
 				v_text(13)   := hcm_util.get_string_t(param_json_row,'col-13');
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -17061,7 +17061,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-                        
+
                     end loop; 
 
 
@@ -17080,7 +17080,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           v_tvcourse.flgdata  := v_text(12);
 		  v_tvcourse.flgdashboard  := v_text(13);
 		  v_tvcourse.filemedia	:= null;
-          		  
+
           --check incorrect data 
 		  --check codcours        
 			v_chk_exists := 0;
@@ -17094,7 +17094,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TCOURSE';
 				exit cal_loop;
 			end;  
-					
+
 		  --check codcate
             v_chk_exists := 0;
             begin 
@@ -17122,8 +17122,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if; 
-				
-				
+
+
 			--check codexampo 
              if v_tvcourse.codexampo is not null or length(trim(v_tvcourse.codexampo)) is not null then    
                 v_chk_exists := 0;
@@ -17138,7 +17138,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if; 	
-				
+
 			--check codcatpre 
              if v_tvcourse.codcatpre is not null or length(trim(v_tvcourse.codcatpre)) is not null then    
                 v_chk_exists := 0;
@@ -17153,7 +17153,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if; 
-				
+
 			--check codcatpo 
              if v_tvcourse.codcatpo is not null or length(trim(v_tvcourse.codcatpo)) is not null then    
                 v_chk_exists := 0;
@@ -17168,7 +17168,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if; 
-							
+
             --check flgpreteset   
 			if v_tvcourse.flgpreteset is not null or length(trim(v_tvcourse.flgpreteset)) is not null then    
 				if v_tvcourse.flgpreteset not in ('Y','N') then
@@ -17235,7 +17235,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 --2.crud table--
                 if not v_error then      
                     p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
             delete from tvcourse where codcours  = v_tvcourse.codcours  and codcate  = v_tvcourse.codcate ;
 
@@ -17369,7 +17369,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(6)   := hcm_util.get_string_t(param_json_row,'col-6');   
 				v_text(7)   := hcm_util.get_string_t(param_json_row,'col-7');   
 				v_text(8)   := hcm_util.get_string_t(param_json_row,'col-8');   
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -17398,7 +17398,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-                        
+
                     end loop; 
 
           --assign value to var
@@ -17410,7 +17410,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           v_tvsubject.codcatexm  := v_text(6);
 		  v_tvsubject.staexam  := v_text(7);
 		  v_tvsubject.dessubj  := v_text(8);
-	  
+
           --check incorrect data 
 		  --check codcours        
 			v_chk_exists := 0;
@@ -17424,7 +17424,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TVCOURSE';
 				exit cal_loop;
 			end;  
-			
+
 			--check codsubj        
 			v_chk_exists := 0;
 			begin 
@@ -17437,7 +17437,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TCOURSUB';
 				exit cal_loop;
 			end;  
-				
+
 			--check flglearn   
 			if v_tvsubject.flglearn is not null or length(trim(v_tvsubject.flglearn)) is not null then    
 				if v_tvsubject.flglearn not in (1,2) then
@@ -17447,7 +17447,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end if;   
 			end if; 
-			
+
 			--check flgexam   
 			if v_tvsubject.flgexam is not null or length(trim(v_tvsubject.flgexam)) is not null then    
 				if v_tvsubject.flgexam not in (1,2,3) then
@@ -17457,7 +17457,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end if;   
 			end if; 
-				
+
 			--check codexam 
              if v_tvsubject.codexam is not null or length(trim(v_tvsubject.codexam)) is not null then    
                 v_chk_exists := 0;
@@ -17472,7 +17472,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if;	
-				
+
 			if v_tvsubject.codexam is null then
 				if v_tvsubject.flgexam in (1,2) then
 					v_error   := true;
@@ -17481,7 +17481,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                     exit cal_loop;
 				end if;
 			end if;	
-				
+
 		  --check codcatexm
 			if v_tvsubject.codcatexm is not null or length(trim(v_tvsubject.codcatexm)) is not null then    
             v_chk_exists := 0;
@@ -17496,7 +17496,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;       
 			end if;	
-			
+
 			if v_tvsubject.codcatexm is null then
 				if v_tvsubject.flgexam in (1,2) then
 					v_error   := true;
@@ -17515,7 +17515,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end if;   
 			end if; 	
-			
+
 			if v_tvsubject.staexam is null then
 				if v_tvsubject.flgexam in (1,2) then
 					v_error   := true;
@@ -17531,7 +17531,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 --2.crud table--
                 if not v_error then      
                     p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
             delete from tvsubject where codcours  = v_tvsubject.codcours  and codsubj = v_tvsubject.codsubj  ;
 
@@ -17541,11 +17541,11 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                       values(v_tvsubject.codcours, v_tvsubject.codsubj, v_tvsubject.flglearn, v_tvsubject.flgexam, 
 								v_tvsubject.codexam, v_tvsubject.codcatexm, v_tvsubject.staexam, v_tvsubject.dessubj, 
 								trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-					
+
 					update tvcourse 
 					 set qtysubj = nvl(qtysubj, 0) + 1
 					where codcours  = v_tvsubject.codcours  ;		
-					
+
 					end;
 
                 else        
@@ -17564,8 +17564,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;
-  
-  
+
+
    procedure get_process_el_tvchapter(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -17683,7 +17683,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(15)   := hcm_util.get_string_t(param_json_row,'col-15');
 				v_text(16)   := hcm_util.get_string_t(param_json_row,'col-16');   
 				v_text(17)   := hcm_util.get_string_t(param_json_row,'col-17'); 
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -17712,7 +17712,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-						
+
 						--check number format     
                         if i in (3,6,14) then
                             if v_text(i) is not null or length(trim(v_text(i))) is not null then
@@ -17732,7 +17732,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 end if; 
                             end if;
                         end if;
-                        
+
                     end loop; 
 
           --assign value to var
@@ -17758,7 +17758,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 		  v_tvchapter.namefiled  := v_text(17);
 		  v_tvchapter.filemedia  := null;
 		  v_tvchapter.filedoc  := null;
-	  
+
           --check incorrect data 
 		  --check codcours and codsubj       
 			v_chk_exists := 0;
@@ -17772,7 +17772,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TVSUBJECT';
 				exit cal_loop;
 			end;  
-							
+
 			--check flgexam   
 			if v_tvchapter.flgexam is not null or length(trim(v_tvchapter.flgexam)) is not null then    
 				if v_tvchapter.flgexam not in (1,2) then
@@ -17782,7 +17782,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end if;   
 			end if; 
-				
+
 			--check codexam 
              if v_tvchapter.codexam is not null or length(trim(v_tvchapter.codexam)) is not null then    
                 v_chk_exists := 0;
@@ -17797,7 +17797,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;          
 			end if;	
-			
+
 			if v_tvchapter.codexam is null then
 				if v_tvchapter.flgexam in (1,2) then
 					v_error   := true;
@@ -17806,7 +17806,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                     exit cal_loop;
 				end if;
 			end if;
-				
+
 		  --check codcatexm
 			if v_tvchapter.codcatexm is not null or length(trim(v_tvchapter.codcatexm)) is not null then    
             v_chk_exists := 0;
@@ -17821,7 +17821,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end;       
 			end if;	
-			
+
 			if v_tvchapter.codcatexm is null then
 				if v_tvchapter.flgexam in (1,2) then
 					v_error   := true;
@@ -17840,7 +17840,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end if;   
 			end if; 	
-			
+
 			if v_tvchapter.staexam is null then
 				if v_tvchapter.flgexam in (1,2) then
 					v_error   := true;
@@ -17849,7 +17849,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                     exit cal_loop;
 				end if;
 			end if;
-		
+
 			--check typfile   
 			if v_tvchapter.typfile is not null or length(trim(v_tvchapter.typfile)) is not null then    
 				if v_tvchapter.typfile not in ('V','F','L') then
@@ -17867,7 +17867,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 --2.crud table--
                 if not v_error then      
                     p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
              delete from tvchapter where codcours = v_tvchapter.codcours and codsubj = v_tvchapter.codsubj and chaptno = v_tvchapter.chaptno ;
 
@@ -17879,11 +17879,11 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 								v_tvchapter.qtytrainm, v_tvchapter.flgexam, v_tvchapter.codexam, v_tvchapter.codcatexm, v_tvchapter.staexam, v_tvchapter.namemedia, v_tvchapter.namelink, 
 								v_tvchapter.typfile, v_tvchapter.qtytrmin, v_tvchapter.desclink, v_tvchapter.namefiled, v_tvchapter.filemedia, v_tvchapter.filedoc, v_tvchapter.deschaptt, 
 								trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-					
+
 					update tvsubject  
 					 set qtychapt  = nvl(qtychapt , 0) + 1
 					where codcours  = v_tvchapter.codcours and codsubj = v_tvchapter.codsubj  ;		
-					
+
 					end;
 
                 else        
@@ -17902,8 +17902,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;
-  
-  
+
+
    procedure get_process_el_tvtest(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -18015,7 +18015,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(9)   := hcm_util.get_string_t(param_json_row,'col-9'); 
 				v_text(10)   := hcm_util.get_string_t(param_json_row,'col-10'); 
 				v_text(11)   := hcm_util.get_string_t(param_json_row,'col-11');
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -18044,7 +18044,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-						
+
 						--check number format     
                         if i in (5,6,7,8,9) then
                             if v_text(i) is not null or length(trim(v_text(i))) is not null then
@@ -18064,7 +18064,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 end if; 
                             end if;
                         end if;
-                        
+
                     end loop; 
 
           --assign value to var
@@ -18082,8 +18082,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 		  v_tvtest.qtyexam  := to_number(nvl(v_text(9),0), '99999');
           v_tvtest.desexam := v_text(10);
           v_tvtest.flgmeasure  := v_text(11);
-		    
-	  
+
+
           --check incorrect data 
 		  --check codcatexm
 			if v_tvtest.codcatexm is not null or length(trim(v_tvtest.codcatexm)) is not null then    
@@ -18109,14 +18109,14 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				  exit cal_loop;
 				end if;   
 			end if; 	
-		
+
                     exit cal_loop;
                 end loop;
 
                 --2.crud table--
                 if not v_error then      
                     p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
             delete from tvtest where codexam = v_tvtest.codexam ;
 
@@ -18126,8 +18126,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                       values(v_tvtest.codexam, v_tvtest.namexame, v_tvtest.namexam2, v_tvtest.namexam3, v_tvtest.namexam4, v_tvtest.namexam5, v_tvtest.codcatexm,
 								v_tvtest.qtyscore, v_tvtest.qtyscrpass, v_tvtest.qtyexammin, v_tvtest.qtyalrtmin, v_tvtest.qtyexam, v_tvtest.desexam, v_tvtest.flgmeasure,
 								trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-					
-					
+
+
 					end;
 
                 else        
@@ -18146,7 +18146,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;
-  
+
   procedure get_process_el_tvquest(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -18252,7 +18252,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(5)   := hcm_util.get_string_t(param_json_row,'col-5');
 				v_text(6)   := hcm_util.get_string_t(param_json_row,'col-6');   
 				v_text(7)   := hcm_util.get_string_t(param_json_row,'col-7');    
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -18281,7 +18281,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-						
+
 						--check number format     
                         if i in (5,7) then
                             if v_text(i) is not null or length(trim(v_text(i))) is not null then
@@ -18301,7 +18301,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 end if; 
                             end if;
                         end if;
-                        
+
                     end loop; 
 
 
@@ -18316,7 +18316,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 		  v_tvquest.qtyscore  := to_number(nvl(v_text(5),0));
 		  v_tvquest.typeexam  := v_text(6);
 		  v_tvquest.qtyexam	:= to_number(nvl(v_text(7),0));
-          		  
+
           --check incorrect data 
 		  --check codexam        
 			v_chk_exists := 0;
@@ -18330,7 +18330,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TVTEST';
 				exit cal_loop;
 			end;  
-					
+
 		  --check typeexam   
 			if v_tvquest.typeexam not in ('1','2','3','4') then
 			  v_error   := true;
@@ -18338,7 +18338,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 			  v_err_field := v_field(6);
 			  exit cal_loop;
 			end if;   
-			  
+
 
                     exit cal_loop;
                 end loop;
@@ -18346,7 +18346,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 --2.crud table--
                 if not v_error then      
                    	p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
 						delete from tvquest where codexam = v_tvquest.codexam and codquest = v_tvquest.codquest;
 
@@ -18356,9 +18356,9 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 									   values(v_tvquest.codexam, v_tvquest.codquest, v_tvquest.namsubje, v_tvquest.namsubj2, v_tvquest.namsubj3, 
 												v_tvquest.namsubj4, v_tvquest.namsubj5, v_tvquest.qtyscore, v_tvquest.typeexam, v_tvquest.qtyexam,
 												trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-						
+
 					end;
-										
+
                 else        
                     p_rec_error := p_rec_error + 1;                   
                     v_cnt := v_cnt + 1;                    
@@ -18482,7 +18482,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(5)   := hcm_util.get_string_t(param_json_row,'col-5');
 				v_text(6)   := hcm_util.get_string_t(param_json_row,'col-6');   
 				v_text(7)   := hcm_util.get_string_t(param_json_row,'col-7');   
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -18511,7 +18511,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-                        
+
 						--check number format     
                         if i in (3,6,7) then
                             if v_text(i) is not null or length(trim(v_text(i))) is not null then
@@ -18531,7 +18531,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 end if; 
                             end if;
                         end if;
-						
+
                     end loop; 
 
 
@@ -18547,7 +18547,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 		  v_tvquestd1.qtyscore  := to_number(nvl(v_text(6),0));
           v_tvquestd1.numans  := to_number(nvl(v_text(7),0), '9');
 		  v_tvquestd1.filename	:= null;
-          		  
+
           --check incorrect data 
 		  --check codexam        
 			v_chk_exists := 0;
@@ -18561,7 +18561,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TVQUEST';
 				exit cal_loop;
 			end;  
-			
+
 			 --check codquest
             v_chk_exists := 0;
             begin 
@@ -18574,7 +18574,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
               v_err_table := 'TVQUEST';
               exit cal_loop;
             end;  
-		     
+
 
                     exit cal_loop;
                 end loop;
@@ -18582,7 +18582,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 --2.crud table--
                 if not v_error then      
                    	p_rec_tran := p_rec_tran + 1; 
-					
+
                     begin 
 						delete from tvquestd1 where codexam = v_tvquestd1.codexam and codquest = v_tvquestd1.codquest and numques = v_tvquestd1.numques ;
 
@@ -18598,8 +18598,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 						where codexam = v_tvquestd1.codexam and codquest = v_tvquestd1.codquest;
 						*/
 					end;
-					
-					
+
+
                 else        
                     p_rec_error := p_rec_error + 1;                   
                     v_cnt := v_cnt + 1;                    
@@ -18616,8 +18616,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;
-  
-  
+
+
    procedure get_process_el_tvquestd2(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -18723,7 +18723,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(5)   := hcm_util.get_string_t(param_json_row,'col-5');
 				v_text(6)   := hcm_util.get_string_t(param_json_row,'col-6');   
 				v_text(7)   := hcm_util.get_string_t(param_json_row,'col-7');   
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -18752,7 +18752,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-                        
+
 						--check number format     
                         if i in (3,4,7) then
                             if v_text(i) is not null or length(trim(v_text(i))) is not null then
@@ -18772,7 +18772,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 end if; 
                             end if;
                         end if;
-						
+
                     end loop; 
 
 
@@ -18788,7 +18788,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 		  v_tvquestd2.desans5  := v_text(5);
           v_tvquestd2.score  := to_number(nvl(v_text(7),0));
 		  v_tvquestd2.filename	:= null;
-          		  
+
           --check incorrect data 
 		  --check codexam        
 			v_chk_exists := 0;
@@ -18802,7 +18802,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TVQUESTD1';
 				exit cal_loop;
 			end;  
-					
+
 		  --check codquest
             v_chk_exists := 0;
             begin 
@@ -18844,9 +18844,9 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 									   values(v_tvquestd2.codexam, v_tvquestd2.codquest, v_tvquestd2.numques, v_tvquestd2.numans, v_tvquestd2.desanse, v_tvquestd2.desans2, 
 												v_tvquestd2.desans3, v_tvquestd2.desans4, v_tvquestd2.desans5, v_tvquestd2.score, v_tvquestd2.filename, 
 												trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-					
+
 					end;
-										
+
                 else        
                     p_rec_error := p_rec_error + 1;                   
                     v_cnt := v_cnt + 1;                    
@@ -18863,8 +18863,8 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;
-  
-  
+
+
    procedure get_process_el_tvtesta(json_str_input    in clob,
                                       json_str_output   out clob) is
     p_rec_tran number := 0;
@@ -18962,7 +18962,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_text(2)   := hcm_util.get_string_t(param_json_row,'col-2');
 				v_text(3)   := hcm_util.get_string_t(param_json_row,'col-3');
 				v_text(4)   := hcm_util.get_string_t(param_json_row,'col-4');
-				
+
                 <<cal_loop>> loop      
                     --concat all data values each rows 
                     data_file := v_text(1);
@@ -18991,7 +18991,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 exit cal_loop;
                             end if;   
                         end if;
-                        
+
 						--check number format     
                         if i in (2,3) then
                             if v_text(i) is not null or length(trim(v_text(i))) is not null then
@@ -19011,7 +19011,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 end if; 
                             end if;
                         end if;
-						
+
                     end loop; 
 
 
@@ -19020,7 +19020,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           v_tvtesta.scorest := to_number(nvl(v_text(2),0));
 		  v_tvtesta.scoreen  := to_number(nvl(v_text(3),0));
           v_tvtesta.remark  := v_text(4);
-          		  
+
           --check incorrect data 
 		  --check codexam        
 			v_chk_exists := 0;
@@ -19034,7 +19034,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 				v_err_table := 'TVTEST';
 				exit cal_loop;
 			end;  
-					
+
 		  --check scorest
             if v_tvtesta.scorest > v_tvtesta.scoreen then            
               v_error   := true;
@@ -19056,9 +19056,9 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
 												dtecreate, codcreate, dteupd, coduser)
 									   values(v_tvtesta.codexam, v_tvtesta.scorest, v_tvtesta.scoreen, v_tvtesta.remark,  
 												trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-					
+
 					end;					
-					
+
                 else        
                     p_rec_error := p_rec_error + 1;                   
                     v_cnt := v_cnt + 1;                    
@@ -19075,9 +19075,9 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     end loop;  
 
   end;
-  
-   
-  
+
+
+
 --RP----------------------------------------------------------------------------------------------------------  
 
   --RP--
@@ -19120,7 +19120,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     v_empnumseq     tposplnd.numseq%type;
     v_maxnumseq     tposplnd.numseq%type;
     v_nextnumseq    tposplnd.numseq%type;
-    
+
     v_dteefpos	    temploy1.dteefpos%type;
     v_dteposdue		  date;
     v_codcomp_next	temploy1.codcomp%type;
@@ -19130,7 +19130,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
     v_grade_emp		  tposempctc.grdemp%type;
     v_grade			    tposempctc.grade%type;
     v_gap			      number;
-	
+
     type text is table of varchar2(1000 char) index by binary_integer;
       v_text           text;
       v_field          text;
@@ -19155,7 +19155,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
        where codcomp  = v_codcomp_next
          and codpos   = v_codpos_next
 		order by codtency, codskill;
-				
+
     cursor c_tposempctc	is
       select codskill, grdemp, grade
         from tposempctc
@@ -19163,14 +19163,14 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
          and codcomp  = v_codcomp_next
          and codpos   = v_codpos_next
     order by codskill;
-		
+
     cursor c_tcomptcr is
       select distinct codcours
         from tcomptcr
        where codskill = v_codskill
          and grade    between (v_grade_emp + 1) and v_grade 
 		order by codcours;
-		  
+
     cursor c_tcomptdev is
       select distinct coddevp  
         from tcomptdev
@@ -19197,7 +19197,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
         chk_len(i) := 6;         
       end if;
     end loop;       
-        
+
     --default transaction success and error
 		p_rec_tran  := 0;
     p_rec_error := 0;
@@ -19266,7 +19266,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 exit cal_loop;
               end if;   
             end if;  
-            
+
             if i = 3 and check_date(v_text(i)) then
               v_error	 	  := true;
               v_err_code  := 'HR2020';
@@ -19289,7 +19289,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
           v_tposemph.descthreat   := v_text(11);
           v_tposemph.descdevp     := v_text(12);
           v_numpath               := v_text(13);
-		            		  
+
           --check incorrect data 
           --check codempid        
           begin 
@@ -19304,7 +19304,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
             v_err_table := 'TEMPLOY1';
             exit cal_loop;
           end;
-          
+
           --check codreview        
           begin 
             select 1
@@ -19318,7 +19318,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
             v_err_table := 'TEMPLOY1';
             exit cal_loop;
           end;
-					
+
           --check numpath
           begin
             select max(dteeffec) into v_dteeffec
@@ -19347,7 +19347,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
         end loop; -- cal_loop
 
         if not v_error then                                  
-          
+
           begin 
 						--Save TPOSEMPH--
             delete from tposemph where codempid = v_tposemph.codempid;
@@ -19364,10 +19364,10 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                 v_tposemph.descstr, v_tposemph.descweek, v_tposemph.descoop, 
                                 v_tposemph.descthreat, v_tposemph.descdevp, 
                                 trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
-								
+
 						--Save TPOSEMPD--
             delete from tposempd where codempid = v_tposemph.codempid;
-						
+
             for r in c_career_path loop						
 							v_dteefpos  := null;
               v_dteposdue := null;
@@ -19382,7 +19382,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 end;
                 v_dteposdue := add_months(v_dteefpos, r.agepos);
               end if;
-							
+
 							insert into tposempd (codempid, numseq, 
                                     codlinef, codcomp, 
                                     codpos, agepos, dteefpos, dteposdue,
@@ -19392,12 +19392,12 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                     r.codpos, r.agepos, v_dteefpos, v_dteposdue,
                                     trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);							
 						end loop;
-					
+
             --Save TPOSEMPCTC--
             delete from tposempctc where codempid = v_tposemph.codempid; 
             delete from tposemptr  where codempid = v_tposemph.codempid;            
             delete from tposempdev where codempid = v_tposemph.codempid;
-            
+
             begin
               select max(numseq) into v_maxnumseq
                 from tposplnd
@@ -19424,7 +19424,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                    and numseq   = v_nextnumseq; ----(v_empnumseq + 1);
               exception when no_data_found then null;
               end;              
-						
+
               for r in c_competency loop						
                 begin
                   select grade 
@@ -19435,7 +19435,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                 exception when no_data_found then 
                   v_grdemp := 0;
                 end;
-						
+
                 insert into tposempctc (codempid, codcomp, codpos, codskill,
                                         codtency, grade, grdemp,
                                         dtecreate, codcreate, dteupd, coduser)
@@ -19443,13 +19443,13 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                         r.codtency, r.grade, v_grdemp, 
                                         trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
               end loop;
-              
+
               --Save TPOSEMPTR, TPOSEMPDEV--
               for r1 in c_tposempctc loop
                 v_codskill 	:= r1.codskill; 
                 v_grade_emp	:= r1.grdemp;
                 v_grade		  := r1.grade;				
-                          
+
                 for r2 in c_tcomptcr loop
                   insert into tposemptr (codempid, codcomp, codpos, codcours, 
                                         dtestr, dteend, dtetrst, dtetren,
@@ -19458,7 +19458,7 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                         null, null, null, null,
                                         trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);
                 end loop;	
-                
+
                 for r3 in c_tcomptdev loop	
                   insert into tposempdev (codempid, codcomp, codpos, coddevp, 
                                           desdevp, targetdev, dtestr, dteend, desresults,
@@ -19467,12 +19467,12 @@ procedure get_process_pm_temploy2 (json_str_input  in clob,
                                           null, null, null, null, null,
                                           trunc(sysdate), global_v_coduser, trunc(sysdate), global_v_coduser);																		
                 end loop;
-              
+
               end loop; --c_competency
             end if; --v_maxnumseq > v_empnumseq 
 					end;					
 					p_rec_tran := p_rec_tran + 1; 
-          
+
         else        
           p_rec_error := p_rec_error + 1;                   
           v_cnt := v_cnt + 1;                    

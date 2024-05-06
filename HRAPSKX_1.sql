@@ -24,9 +24,9 @@
         b_index_codcomp     := hcm_util.get_string_t(json_obj,'p_codcomp');
         b_index_codkpino    := hcm_util.get_string_t(json_obj,'p_codkpi');
         b_index_kpides      := hcm_util.get_string_t(json_obj,'p_kpides'); ----
-        
+
         p_index_rows        := hcm_util.get_json_t(json_obj,'p_index_rows'); ----
-        
+
         hcm_secur.get_global_secur(global_v_coduser,global_v_zminlvl,global_v_zwrklvl,global_v_numlvlsalst,global_v_numlvlsalen);
       end initial_value;
   --
@@ -404,7 +404,7 @@ begin
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end;
   --
-  
+
 
   procedure get_report(json_str_input in clob, json_str_output out clob) as
     obj_row json_object_t;
@@ -451,7 +451,7 @@ begin
         v_codcomp   := hcm_util.get_string_t(obj_data,'codcomp');
         v_codkpi    := hcm_util.get_string_t(obj_data,'codkpi');
         v_kpides    := hcm_util.get_string_t(obj_data,'kpides');
-        
+
         v_numseq := v_numseq + 1;
         insert into ttemprpt(codempid, codapp, numseq,
                              item1, item2, item3)
@@ -476,7 +476,7 @@ begin
         end loop;
     end loop;
     commit;
-    
+
   exception when others then
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
   end;  

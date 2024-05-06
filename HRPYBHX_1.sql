@@ -74,7 +74,7 @@
     v_flg_exist         boolean := false;
     v_flg_secure        boolean := false;
     v_flg_permission    boolean := false;
-    
+
     cursor c1 is
       select dteedit    ,numpage    ,fldedit ,
              typkey     ,desold     ,desnew  ,
@@ -167,12 +167,12 @@
     v_data_type varchar2(4000 char);
     v_chk_data  number := 0;
     v_chk_num   varchar2(1 char);
-    
+
   begin
     if p_code is null then
       return v_desc;
     end if;
-    
+
     begin
       select funcdesc  ,data_type
         into v_funcdesc,v_data_type
@@ -184,7 +184,7 @@
     exception when no_data_found then
       v_funcdesc := null;
     end;
-    
+
     if v_funcdesc is not null then
       v_stament := 'select ' || v_funcdesc || 'from dual';
       v_stament := replace(v_stament,'P_CODE','''' || p_code || '''');
@@ -202,7 +202,7 @@
                      exception when others  then 
                       v_chk_num := 'N';
                 end;
-              
+
                 if v_chk_num = 'Y' then 
                     v_desc := p_code;
                 else

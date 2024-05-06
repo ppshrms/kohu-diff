@@ -111,8 +111,8 @@
       v_flgdata := 'Y';
       flgpass := secur_main.secur3(i.codcompe,i.codempid,global_v_coduser,global_v_zminlvl,global_v_zwrklvl,v_zupdsal,global_v_numlvlsalst,global_v_numlvlsalen);
       if flgpass then
-      
-      
+
+
           v_rcnt := v_rcnt+1;
           obj_data := json_object_t();
           obj_data.put('coderror', '200');

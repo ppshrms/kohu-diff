@@ -94,7 +94,7 @@
     v_flgselect     varchar2(2 char);
     v_flgExist      varchar2(2 char);
     v_pathworkphp   varchar2(1000) := get_tsetup_value('PATHWORKPHP');
-    
+
     cursor c1 is
       select codobf
         from tobfcompy

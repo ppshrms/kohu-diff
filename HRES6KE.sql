@@ -10,10 +10,10 @@
   json_long           long;
 
   type arr is table of varchar2(600) index by binary_integer;
-    
+
 --  type a_dtestr is table of varchar2(10) index by binary_integer;
 --  type a_qtyotstr is table of varchar2(10) index by binary_integer;
-  
+
   v_data_type_arr   arr;
   v_column_name_arr arr;
   v_type_arr        arr;
@@ -110,7 +110,7 @@
   ttotreq_staovrot      ttotreq.staovrot%type;
   v_msgerror            varchar2(4000);
   p_flgconfirm          varchar2(1);
-  
+
   a_dtestweek           std_ot.a_dtestr;
   a_dteenweek           std_ot.a_dtestr;
   a_sumwork             std_ot.a_qtyotstr;

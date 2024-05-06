@@ -61,7 +61,7 @@
     global_v_codempid       := hcm_util.get_string_t(json_obj,'p_codempid');
     global_v_empid          := hcm_util.get_string_t(json_obj,'codinput');
     global_v_lang           := hcm_util.get_string_t(json_obj,'p_lang');
-    
+
     --block b_index
     b_index_codempid        := hcm_util.get_string_t(json_obj,'p_codempid_query');
     if b_index_codempid is null then
@@ -74,7 +74,7 @@
     b_index_dtereq_st       := to_date(hcm_util.get_string_t(json_obj,'p_dtereq_st'),'dd/mm/yyyy');
     b_index_dtereq_en       := to_date(hcm_util.get_string_t(json_obj,'p_dtereq_en'),'dd/mm/yyyy');
     b_index_dtework         := to_date(hcm_util.get_string_t(json_obj,'p_dtework'),'dd/mm/yyyy');
-    
+
     --block tleaverq
     tleaverq_codempid       := hcm_util.get_string_t(json_obj,'codempid_query');
     tleaverq_seqno          := to_number(hcm_util.get_string_t(json_obj,'seqno'));
@@ -109,7 +109,7 @@
     tleaverq_dteinput       := to_date(trim(hcm_util.get_string_t(json_obj,'dteinput')),'dd/mm/yyyy');
     tleaverq_desleave       := null;
     tleaverq_param_json     := hcm_util.get_json_t(json_obj, 'param_json');
-    
+
     -- paternity leave --
     tleaverq_timprgnt       := hcm_util.get_string_t(json_obj,'timprgnt');
     tleaverq_dteprgntst     := to_date(trim(hcm_util.get_string_t(json_obj,'dteprgntst')),'dd/mm/yyyy');
@@ -197,7 +197,7 @@
         p_day := nvl(v_day,0); p_hour := nvl(v_hour,0); p_min := nvl(v_min,0);
   end;
 --
-  
+
   procedure check_data is
     v_numlvl      temploy1.numlvl%type;
     v_dteeffex    temploy1.dteeffex%type;
@@ -1452,7 +1452,7 @@
       exception when others then
         v_dteprgntst := null;
       end;
-      
+
       if v_flgtype = 'M' then
         obj_row.put('flgleaveprgnt','Y');
         obj_row.put('dteprgntst',to_char(v_dteprgntst,'dd/mm/yyyy'));

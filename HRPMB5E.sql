@@ -64,7 +64,7 @@
 
     procedure getIndex (json_str_input in clob, json_str_output out clob);
     procedure genIndex (json_str_output out clob);
-    
+
     procedure getDetail (json_str_input in clob, json_str_output out clob);
     procedure genDetail (json_str_output out clob);
 
@@ -73,7 +73,7 @@
 
     procedure save_index (json_str_input in clob, json_str_output out clob);
     procedure save_index_data (json_str_input in clob, json_str_output out clob);
-    
+
     procedure gen_flg_status;
 
 end HRPMB5E ;

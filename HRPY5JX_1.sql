@@ -597,7 +597,7 @@
         and typincexp in(''1'', ''2'', ''3'', ''4'', ''5'', ''6'')
         group by codcomp,codempid,numlvl
         order by codcomp,codempid,numlvl';
-        
+
     /*v_stmt := v_stmt || '
         from tsincexp
       where dteyrepay = ''' || to_char(p_dteyrepay) || '''
@@ -695,7 +695,7 @@
         exception when no_data_found then
           v_numbank := null;
         end;
-        
+
        begin
           select amtmax1,amtmax2,amtmax3,amtmax4,amtmax5,
                   amtmax6,amtmax7,amtmax8,amtmax9,amtmax10

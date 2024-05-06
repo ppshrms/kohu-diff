@@ -1297,9 +1297,9 @@
         end if;
         data_file := replace(data_file, fparam_fparam, fparam_value);
       end loop;
-      
+
       data_file := replace(data_file, rec_tapplcfm.amtincom1, to_char(stddec(rec_tapplcfm.amtincom1, rec_tapplcfm.numappl, v_chken),'fm999,999,990.00')); -- softberry || 29/03/2023 || #9249
-      
+
       data_file := replace(data_file, '\t', '&nbsp;&nbsp;&nbsp;');
       data_file := replace(data_file, chr(9), '&nbsp;');
       list_msg_html(i) := data_file;

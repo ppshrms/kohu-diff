@@ -163,7 +163,7 @@ procedure get_process (json_str_input in clob, json_str_output out clob) is
            and dteyrepay = p_dteyrepay
            and dtemthpay = p_dtemthpay
            and numperiod = p_numperiod
-        order by codempid;
+        order by codempid;  
       /*select codempid,codcomp,numlvl
         from temploy1
         where ((p_codempid is not null) and

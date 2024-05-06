@@ -36,11 +36,11 @@
   procedure get_default_period(json_str_input in clob, json_str_output out clob);
 
   procedure get_flggen(json_str_input in clob, json_str_output out clob);
-  
+
   procedure get_qtynumpay(json_str_input in clob, json_str_output out clob);
-  
+
   procedure get_copy_flggen(json_str_input in clob, json_str_output out clob);
-  
+
   procedure get_copy_qtynumpay(json_str_input in clob, json_str_output out clob);
 
 end HRPY1DE;

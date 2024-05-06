@@ -187,7 +187,7 @@
   procedure validate_excel_pm_tlegalexe(json_str_input in clob,
                                                         p_rec_tran     out number,
                                                         p_rec_error    out number) ;
-                                                        
+
   procedure get_process_pm_tlegalexd(json_str_input  in clob,
                                                      json_str_output out clob);
 
@@ -322,7 +322,7 @@
   procedure validate_excel_bf_thisheal(json_str_input in clob,
                                        v_rec_tran     out number,
                                        v_rec_error    out number);
-  
+
   procedure get_process_bf_tloaninf(json_str_input    in clob,
                                     json_str_output   out clob);
 
@@ -366,56 +366,56 @@
   procedure validate_excel_el_tvcourse(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);
-                                       
+
   procedure get_process_el_tvsubject(json_str_input    in clob,
                                     json_str_output   out clob);
 
   procedure validate_excel_el_tvsubject(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);
-                                       
+
   procedure get_process_el_tvchapter(json_str_input    in clob,
                                     json_str_output   out clob);
 
   procedure validate_excel_el_tvchapter(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);
-            
+
   procedure get_process_el_tvtest(json_str_input    in clob,
                                     json_str_output   out clob);
 
   procedure validate_excel_el_tvtest(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);
-                                       
+
   procedure get_process_el_tvquest(json_str_input    in clob,
                                     json_str_output   out clob);
 
   procedure validate_excel_el_tvquest(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);               
-                                       
+
   procedure get_process_el_tvquestd1(json_str_input    in clob,
                                     json_str_output   out clob);
 
   procedure validate_excel_el_tvquestd1(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);          
-                                       
+
   procedure get_process_el_tvquestd2(json_str_input    in clob,
                                         json_str_output   out clob);
 
   procedure validate_excel_el_tvquestd2(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);   
-                                       
+
   procedure get_process_el_tvtesta(json_str_input    in clob,
                                     json_str_output   out clob);
 
   procedure validate_excel_el_tvtesta(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);
- 
+
 -- RP
 
   procedure get_process_rp_tposemph(json_str_input    in clob,
@@ -424,7 +424,7 @@
   procedure validate_excel_rp_tposemph(json_str_input in clob,
                                        p_rec_tran     out number,
                                        p_rec_error    out number);
-                                       
+
 end hrcocvb_batch;
 
 /

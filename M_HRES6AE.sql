@@ -68,4 +68,5 @@
   function get_codcodec(json_str_input in clob) return clob;
 END M_HRES6AE;
 
+
 /

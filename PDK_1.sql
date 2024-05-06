@@ -951,7 +951,7 @@ BEGIN
                 v_desc := rec_c0.descrip5;
             END IF;
          CLOSE c0;
-    
+
     FOR i IN c2 LOOP
          v_desc     := v_desc || '<br>' ||i.comments ;
     END LOOP;

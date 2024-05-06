@@ -167,7 +167,7 @@
     v_longitude   tcust.longitude%type;
     v_radius      tcust.radius%type;
     v_radiuso     tcust.radiuso%type;
-    
+
     v_count_chk     number;
     ----------------------------------
   begin
@@ -379,7 +379,7 @@
         v_road5       := v_road;
         --v_adrcust5    := v_building || ' ' || v_roomno || ' ' || v_floor || ' ' ||  v_addrno || ' ' || v_moo || ' ' || v_soi || ' ' || v_road ;
       end if;
-      
+
       -- check exists
       if param_msg_error is null then
           begin
@@ -391,12 +391,12 @@
           exception when others then
             v_count_chk := 0;
           end;
-          
+
           if v_count_chk = 0 then
             param_msg_error := get_error_msg_php('HR2010', global_v_lang,'TCODDIST');
           end if;
       end if;
-      
+
       if param_msg_error is null then
           begin
               select count(*)
@@ -408,12 +408,12 @@
           exception when others then
             v_count_chk := 0;
           end;
-      
+
           if v_count_chk = 0 then
             param_msg_error := get_error_msg_php('HR2010', global_v_lang,'TSUBDIST');
           end if;
       end if;
-      
+
       if param_msg_error is null then
           begin
                 insert into tcust

@@ -41,5 +41,4 @@
   procedure insert_ttemprpt (v_table varchar2, json_str_input clob);
 END HRBF5AX;
 
-
 /

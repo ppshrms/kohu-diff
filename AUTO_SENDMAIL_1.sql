@@ -259,9 +259,9 @@
     exception when others then
         v_count_row := 0;
     end;
-    
+
     v_count_round := ceil(v_count_row/v_limit_row);
-    
+
     for round in 1..v_count_round loop
         -- TABLE HEADER
         v_data_table := '<table width="100%" border="0" cellpadding="0" cellspacing="1" bordercolor="#FFFFFF">';
@@ -271,7 +271,7 @@
           v_data_table  := v_data_table||'<td width="'||p_column_width(x + 1)||'%" align="center"><font color="#FFFFFF">'||p_column_label(x)||'</font></td>';
         end loop;
         v_data_table  := v_data_table||'</tr>';
-    
+
         -- TABLE BODY
         v_num      := 0;
         v_chkmax   := 'N';
@@ -301,12 +301,12 @@
         end loop;--for j in c3 loop
         v_data_table     := v_data_table||'</table>';
         -- ## LOOP DATA END ## --
-    
+
         /*if v_chkmax = 'Y' then
           v_data_table := null;
           replace_text(p_codapp,p_loop_no,v_num,v_msg);
         end if;*/
-    
+
         begin
           select email
             into v_email
@@ -314,9 +314,9 @@
            where codempid = p_codappr;
         exception when no_data_found then null;
         end;
-    
+
         replace_text_app(v_msg,v_template,p_loop_no,v_func_appr,p_codappr,v_email,v_data_table,v_data_list,get_tsetup_value('MAILEMAIL'),v_subject);
-    
+
         begin
           v_error := send_mail(v_email,v_msg,p_codappr,v_func_appr);
         exception when others then
@@ -2739,7 +2739,7 @@
     if data_file like ('%[PARAM-TO]%') then
       data_file  := replace_with_clob(data_file  ,'[PARAM-TO]', get_temploy_dear(p_codappr,p_lang_mail));      
       --data_file  := replace(data_file  ,'[PARAM-TO]', get_temploy_name(p_codappr,p_lang_mail));
-      
+
     end if;
     if data_file like ('%[PARAM-SUBJECT]%') then
       data_file  := replace_with_clob(data_file  ,'[PARAM-SUBJECT]', get_tappprof_name(p_func_appr,1,p_lang_mail));
@@ -3084,7 +3084,7 @@
     if v_lang not in ('101','102','103','104','105') or v_lang is null then
       v_lang  := '101';
     end if;
-  
+
     p_lang_mail := v_lang;
   end;
 

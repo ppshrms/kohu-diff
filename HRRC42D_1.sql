@@ -94,7 +94,7 @@
         obj_row.put(to_char(v_rcnt-1),obj_data);
       end if;
     end loop;
-    
+
     if v_data and v_rcnt = 0 then
         param_msg_error := get_error_msg_php('HR3007',global_v_lang);
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
@@ -104,7 +104,7 @@
         json_str_output := get_response_message('400',param_msg_error,global_v_lang);
         return;
     end if;
-    
+
     json_str_output := obj_row.to_clob;
 
   end gen_index;

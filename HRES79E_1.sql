@@ -52,7 +52,7 @@
          where codempid = global_v_codempid
            and dtetest between b_index_dtereq_st and b_index_dtereq_en           
       order by dtereq,numseq desc;
-      
+
   begin
     v_rcnt := 0;
     obj_row := json_object_t();
@@ -78,8 +78,8 @@
 
     json_str_output := obj_row.to_clob;
   end;
-  
-  
+
+
   procedure get_detail_create(json_str_input in clob, json_str_output out clob) as
     obj_row json_object_t;
   begin
@@ -112,7 +112,7 @@
         max_numseq := 0;
     end;
     max_numseq := nvl(max_numseq,0) + 1;
-    
+
     obj_detail.put('coderror', '200');
     obj_detail.put('codempid', global_v_codempid);
     obj_detail.put('dtereq', to_char(sysdate,'dd/mm/yyyy'));
@@ -121,7 +121,7 @@
     obj_detail.put('result', '');
     obj_detail.put('remark', '');
     obj_detail.put('filename', '');
-    
+
     json_str_output := obj_detail.to_clob;
   end;
 
@@ -149,7 +149,7 @@
          where codempid = global_v_codempid
            and dtereq = p_dtereq     
            and numseq = p_numseq;
-    
+
   begin
     obj_detail  := json_object_t();
     for r1 in c1 loop  
@@ -165,13 +165,13 @@
     end loop;
 
     json_str_output := obj_detail.to_clob;
-    
+
   end;
-  
+
   procedure post_save(json_str_input in clob,json_str_output out clob) as
   begin
     initial_value(json_str_input);
-    
+
     if param_msg_error is null then
       save_tatkpcr(json_str_input ,json_str_output);
     end if;
@@ -186,7 +186,7 @@
     param_msg_error := dbms_utility.format_error_stack||' '||dbms_utility.format_error_backtrace;
     json_str_output := get_response_message('400',param_msg_error,global_v_lang);
   end;
- 
+
   procedure save_tatkpcr(json_str_input in clob,json_str_output out clob) as
   begin
     begin

@@ -14,17 +14,17 @@
 	global_v_numlvlsalst	    number;
 	global_v_numlvlsalen	    number;
 	global_v_zupdsal		      varchar2(4 char);
-  
+
   p_year                    number;
   p_codcomp                 tcenter.codcomp%type;         
   p_dteeffec                date;
   p_codselect               temploy1.codempid%type;
   p_codcompy                tninebox.codcompy%type;
   p_codgroup                tninebox.codgroup%type;
-  
+
   procedure initial_value (json_str in clob);
   procedure check_index;
-  
+
   procedure get_index(json_str_input in clob, json_str_output out clob);
   procedure get_detail1(json_str_input in clob, json_str_output out clob);
   procedure post_process(json_str_input in clob, json_str_output out clob);

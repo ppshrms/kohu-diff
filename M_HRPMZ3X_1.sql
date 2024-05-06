@@ -175,27 +175,23 @@
           obj_col.put('coderror', '200');
           obj_col.put('numseq', r1.numseq);
           obj_col.put('datafile', r1.datafile);
-          if r1.typedata = '50' then -- ข้อมูลการเคลื่อนไหว
+          if r1.typedata = 50 then -- ข้อมูลการเคลื่อนไหว
             obj_col.put('tcodmove', get_tcodec_name('TCODMOVE', r1.codtrn, global_v_lang));
             obj_col.put('dteeffec', r1.dteeffec);
-          elsif r1.typedata = '60' then -- ข้อมูลพ้นสภาพ
-            obj_col.put('tcodretm', get_tcodec_name('TCODEXEM', r1.codexemp, global_v_lang));
+          elsif r1.typedata = 60 then -- ข้อมูลพ้นสภาพ
+            obj_col.put('tcodretm', get_tcodec_name('TCODRETM', r1.codexemp, global_v_lang));
             obj_col.put('dteeffec', r1.dteeffec);
-          elsif r1.typedata = '70' then -- ข้อมูลกลับเข้าทำงานใหม่ 
+          elsif r1.typedata = 70 then -- ข้อมูลกลับเข้าทำงานใหม่ 
             obj_col.put('dteeffec', r1.dteeffec);
             obj_col.put('tcodmove', get_tcodec_name('TCODMOVE', r1.codtrn, global_v_lang));
             obj_col.put('dtereemp', r1.dteeffec);
-          elsif r1.typedata = '80' then -- ข้อมูลรายได้อื่นๆ 
+          elsif r1.typedata = 80 then -- ข้อมูลรายได้อื่นๆ 
             obj_col.put('codpay', get_tinexinf_name(r1.codpay, global_v_lang));
-            if r1.numperiod is not null then
-                obj_col.put('installment', r1.numperiod|| '/' ||r1.dtemthpay|| '/' ||r1.dteyrepay);
-            else
-                obj_col.put('installment', '');
-            end if;
+            obj_col.put('installment', r1.numperiod|| '/' ||r1.dtemthpay|| '/' ||r1.dteyrepay);
           end if;
-        
+
           obj_col.put('statusid', r1.status);
-          obj_col.put('status', get_tlistval_name('STATEST', to_char(r1.status), global_v_lang));
+          obj_col.put('status', get_tlistval_name('STATUS', to_char(r1.status), global_v_lang));
           obj_col.put('remark', r1.remark);
           obj_col.put('flgbreak', 'Y');
 

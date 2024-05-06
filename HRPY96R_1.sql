@@ -209,7 +209,7 @@
     v_tmp_amt           number;
 
     v_codcompy          tcompny.codcompy%type;
-    
+
     v_qtychldb          temploy3.qtychldb%type;
     v_qtychlda          temploy3.qtychlda%type;
     v_qtychldd          temploy3.qtychldd%type;
@@ -341,13 +341,13 @@
         else
             v_item(59)          := null;
         end if;    
-        
+
         begin
             select stalife,staincom,dtedthsp
               into spouse_stalife,spouse_staincom,spouse_dtedthsp
               from tspouse
              where codempid = i.codempid;     
-             
+
             if spouse_stalife = 'N' and to_char(spouse_dtedthsp,'YYYY') = v_year then
                 v_item(61)          := 'X';
             else
@@ -366,7 +366,7 @@
 --            v_item(62)          := null;
 --            v_item(63)          := null;
         end;
-       
+
         if i.stamarry = 'M' then
             if i.typtax = '1' then
                 v_item(62)          := 'X';
@@ -380,7 +380,7 @@
             v_item(63)          := null;
         end if;
     --<< user18 req.p'Bint 2021/04/29 
-    
+
         begin
             select defaultval
               into v_amtchldb
@@ -451,7 +451,7 @@
         else
           v_item(72)            := null;
         end if;
-        
+
         -->> user18 req.p'Bint 2021/04/29
         if v_item(55) = 'X' then -- if married
             if v_item(63) = 'X' then
@@ -465,7 +465,7 @@
                 else
                   v_item(74)            := null;
                 end if; 
-                
+
                 v_item(77)              := hcm_util.get_split_decimal(nvl(get_amtdedemp(i.codempid,'S',p_dteyrepay,get_formula(v_codcompy, p_dteyrepay, 4)),0),'I');
                 v_item(78)              := hcm_util.get_split_decimal(nvl(get_amtdedemp(i.codempid,'S',p_dteyrepay,get_formula(v_codcompy, p_dteyrepay, 4)),0),'D');
             else

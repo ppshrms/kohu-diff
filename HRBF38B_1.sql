@@ -550,7 +550,7 @@
     v_dteyear         TDEPLTDTE.DTEYEAR%type;
   begin
     initial_value(json_str_input);
-    
+
 --    begin
 --      select dtemonth, dteyear into v_dtemonth, v_dteyear
 --        from tdepltdte
@@ -579,19 +579,19 @@
          and typpayroll = p_typpayroll
          order by dteyear desc,dtemonth desc 
          fetch first 1 row only;
-      
+
     exception when no_data_found then
       v_dtemonth := to_char(sysdate, 'mm');
       v_dteyear := to_char(sysdate, 'yyyy');
     end;
-    
+
     if v_dtemonth = 12 then
         v_dtemonth := 1;
         v_dteyear := v_dteyear + 1;
     else
         v_dtemonth := v_dtemonth + 1;
     end if;
-    
+
     -->>wanlapa #8813 01/02/2023
 
     obj_data := json_object_t();
